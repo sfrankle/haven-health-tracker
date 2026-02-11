@@ -286,30 +286,4 @@ AND t.name = 'dairy'
 
 ---
 
-## Development Phases
-
-### Phase 0 — Project setup
-- This spec document
-- Implementation plan
-- GitHub repo
-- Project scaffolding (Kotlin + Compose, Room, navigation shell with placeholder pages)
-
-### Phase 1 — "I can log and see my logs"
-- Room database with seed data (all tables, initial labels/tags for Food, Sleep, Hydration)
-- Tend page with entry type grid
-- Sleep logging (tier 1 — enter hours)
-- Hydration logging (tier 1 — quick-add oz/ml)
-- Food logging (tier 2 — search/select labels with tags)
-- Basic Trace page (logs grouped by day, chronological)
-
-### Phase 2+ (deferred, rough order)
-- Emotion entry type (nested valence → emotions)
-- Symptom entry type (body part → symptoms + severity)
-- Activity entry type (category-organized, label + category)
-- Reflect mode (end-of-day logging)
-- Anchor page (activity suggestions → log flow)
-- Settings page (toggles, preferences)
-- Notification system (meal reminders, hydration, symptom follow-up, end-of-day)
-- Weave page (correlation engine)
-- Google Drive backup
-- Health Connect integration (optional)
+See `docs/roadmap.md` for development phases and feature scope.
