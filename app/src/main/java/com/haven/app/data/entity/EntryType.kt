@@ -11,7 +11,7 @@ import androidx.room.PrimaryKey
     foreignKeys = [
         ForeignKey(entity = MeasurementType::class, parentColumns = ["id"], childColumns = ["measurement_type_id"])
     ],
-    indices = [Index("measurement_type_id")]
+    indices = [Index(value = ["name"], unique = true), Index("measurement_type_id")]
 )
 data class EntryType(
     @PrimaryKey(autoGenerate = true)

@@ -94,7 +94,7 @@ object SeedData {
         LabelTag(labelId = 19, tagId = 5), LabelTag(labelId = 19, tagId = 4), // Chocolate -> sugar, caffeine
         LabelTag(labelId = 20, tagId = 1), LabelTag(labelId = 20, tagId = 5), // Ice Cream -> dairy, sugar
         LabelTag(labelId = 22, tagId = 3), LabelTag(labelId = 22, tagId = 8), // Beans -> FODMAP, high protein
-        LabelTag(labelId = 23, tagId = 2),                                      // Oats -> gluten
+        LabelTag(labelId = 23, tagId = 3),                                      // Oats -> FODMAP
         LabelTag(labelId = 24, tagId = 5), LabelTag(labelId = 24, tagId = 4), // Soda -> sugar, caffeine
         LabelTag(labelId = 25, tagId = 6),                                      // Alcohol -> alcohol
     )

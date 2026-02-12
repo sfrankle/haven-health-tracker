@@ -1,7 +1,7 @@
 package com.haven.app.data.repository
 
 import com.haven.app.data.dao.EntryDao
-import com.haven.app.data.dao.EntryWithDetails
+import com.haven.app.data.model.EntryWithDetails
 import com.haven.app.data.entity.Entry
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

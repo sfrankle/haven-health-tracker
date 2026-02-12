@@ -6,20 +6,8 @@ import androidx.room.Query
 import androidx.room.Transaction
 import com.haven.app.data.entity.Entry
 import com.haven.app.data.entity.EntryLabel
+import com.haven.app.data.model.EntryWithDetails
 import kotlinx.coroutines.flow.Flow
-
-data class EntryWithDetails(
-    val id: Long,
-    val entryTypeId: Long,
-    val entryTypeName: String,
-    val entryTypeIcon: String?,
-    val sourceType: String,
-    val timestamp: String,
-    val createdAt: String,
-    val numericValue: Double?,
-    val notes: String?,
-    val labelNames: String?
-)
 
 @Dao
 interface EntryDao {
@@ -66,6 +54,21 @@ interface EntryDao {
         ORDER BY e.timestamp DESC
     """)
     fun getByTypeWithDetails(entryTypeId: Long): Flow<List<EntryWithDetails>>
+
+    @Query("""
+        SELECT e.id, e.entry_type_id AS entryTypeId, et.name AS entryTypeName, et.icon AS entryTypeIcon,
+               e.source_type AS sourceType, e.timestamp, e.created_at AS createdAt,
+               e.numeric_value AS numericValue, e.notes,
+               GROUP_CONCAT(l.name, ', ') AS labelNames
+        FROM entry e
+        JOIN entry_type et ON e.entry_type_id = et.id
+        LEFT JOIN entry_label el ON e.id = el.entry_id
+        LEFT JOIN label l ON el.label_id = l.id
+        WHERE e.timestamp BETWEEN :startDate AND :endDate
+        GROUP BY e.id
+        ORDER BY e.timestamp DESC
+    """)
+    fun getByDateRangeWithDetails(startDate: String, endDate: String): Flow<List<EntryWithDetails>>
 
     @Query("""
         SELECT COALESCE(SUM(e.numeric_value), 0)

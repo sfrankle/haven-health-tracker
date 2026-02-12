@@ -20,6 +20,7 @@ data class AnchorActivity(
     val labelId: Long,
     val title: String,
     val icon: String? = null,
+    // TODO: Add CHECK constraints (BETWEEN 1 AND 5) for defaultEffort and userEffort in Phase 3
     @ColumnInfo(name = "default_effort")
     val defaultEffort: Int,
     @ColumnInfo(name = "user_effort")
