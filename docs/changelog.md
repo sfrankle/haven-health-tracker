@@ -7,5 +7,7 @@
 ## Phase 1 — "I can log and see my logs"
 
 ### PR 1: Project Scaffolding + Database Layer
-- **2026-02-11** — All 10 Room entities, DAOs, repositories, seed data, Hilt DI, bottom nav shell, instrumented tests
-- **2026-02-13** — Haven design system theme, seed callback race condition fix, Tag unique index
+- All 10 Room entities, DAOs, repositories, Hilt DI wiring, and seed data
+- Bottom nav shell with 5 destinations
+- Haven design system theme (sage/lavender/off-white, Philosopher + Quicksand fonts)
+- Instrumented DAO tests

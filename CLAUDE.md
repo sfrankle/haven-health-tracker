@@ -31,7 +31,7 @@ The Android project has not been scaffolded yet — commands work after project 
 ## Workflow
 
 - PRs should be small, self-contained units of work — one logical feature or change per PR
-- Each PR gets a corresponding entry in `docs/changelog.md`
+- Each PR gets one entry in `docs/changelog.md` with 1–5 concise bullet points covering the most important changes
 - As roadmap features are completed, collapse them in `docs/roadmap.md` and move the detail to the changelog
 
 ## Coding Conventions
