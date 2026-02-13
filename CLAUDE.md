@@ -49,6 +49,6 @@ Seed data uses `seedVersion` column for safe migrations across app updates. Deli
 ## Design System
 
 - **Colors:** Sage green (primary), lavender (secondary), off-white (background)
-- **Fonts:** Philosopher (headers), Quicksand (body) — bundled as TTF in assets
+- **Fonts:** Philosopher (headers and body) — bundled as TTF in assets
 - **Components:** Pill-shaped buttons, rounded cards, soft shadows
 - **Tone:** Non-judgmental. No scores, streaks, or "good/bad" framing in any user-facing text

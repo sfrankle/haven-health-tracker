@@ -256,7 +256,7 @@ AND t.name = 'dairy'
 |---|---|
 | Color palette | Soft sage green, lavender, off-white |
 | Header font | Philosopher |
-| Body font | Quicksand |
+| Body font | Philosopher |
 | Buttons | Pill-shaped with soft shadows |
 | Layout | Rounded grid for entry type buttons |
 | Animations | Smooth transitions |
