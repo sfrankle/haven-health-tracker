@@ -7,7 +7,7 @@ Scaffolding + 3 entry types + 2 pages. Proves the data model end-to-end.
 ### Project scaffolding
 - Android project with Kotlin + Compose + Room + Hilt
 - Bottom navigation shell with 5 destinations (Tend, Trace active; Weave, Anchor, Settings as placeholders)
-- Design system: sage green / lavender / off-white palette, Philosopher + Quicksand fonts, pill-shaped button component
+- Design system: sage green / lavender / off-white palette, Philosopher font, pill-shaped button component
 
 ### Database
 - All 10 tables from schema.sql implemented as Room entities

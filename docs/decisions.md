@@ -13,7 +13,7 @@ Decisions made during Haven's design phase, with rationale.
 | 7 | **Seed data migration** | Wipe and re-seed, migration scripts | `seedVersion` column + addMigrations() | Never touch user-created data (`isDefault = false`). New app versions insert rows where `seedVersion > lastSeen`. Safe and additive. |
 | 8 | **Activity as EntryType** | Separate Activity entry type, Exercise as its own type | Activity entry type with Category grouping | Exercise is a Category within Activity, not its own entry type. Categories (Connect, Move, Reflect, Breathe, etc.) organize Activity labels. |
 | 9 | **Anchor suggestions** | Separate suggestion model, reuse Activity labels | AnchorActivity links to Activity Labels via FK | Tap a suggestion → creates an Entry of type Activity. No duplicate data — suggestions are a view layer on top of the Activity label system. |
-| 10 | **Body font** | Quicksand, Nunito | Quicksand | Readable, rounded, matches the gentle aesthetic. Bundled as TTF (offline-first). |
+| 10 | **Body font** | Philosopher | Philosopher (unified) | Philosopher works well for both headers and body, simplifying the font stack to a single family. |
 | 11 | **DI framework** | Manual DI, Koin, Hilt | Hilt | Standard for Jetpack Compose projects. ViewModel injection works out of the box. |
 
 ## Lessons from Prior Iterations

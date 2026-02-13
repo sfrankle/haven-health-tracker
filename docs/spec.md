@@ -252,22 +252,7 @@ AND t.name = 'dairy'
 
 ## Design System
 
-| Element | Value |
-|---|---|
-| Color palette | Soft sage green, lavender, off-white |
-| Header font | Philosopher |
-| Body font | Quicksand |
-| Buttons | Pill-shaped with soft shadows |
-| Layout | Rounded grid for entry type buttons |
-| Animations | Smooth transitions |
-| Assets | All local (offline-first, no external dependencies) |
-
-### Principles
-- No scores, streaks, or pressure indicators
-- Low-friction logging (minimal taps)
-- Progressive disclosure (start simple, expand via Settings)
-- Non-judgmental language throughout
-- Accessible: clear navigation, readable fonts, intuitive icons
+See [design.md](design.md) for colors, typography, components, and design principles.
 
 ---
 

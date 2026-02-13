@@ -27,15 +27,9 @@ com.haven.app/
 ./gradlew lint                   # Run lint checks
 ```
 
-> The Android project has not been scaffolded yet — these commands will work after initial project setup.
-
 ## Design System
 
-Haven uses a soft, calming visual language:
-
-- **Colors:** Sage green, lavender, off-white
-- **Fonts:** Philosopher (headers), Quicksand (body)
-- **Components:** Pill-shaped buttons, rounded cards, soft shadows
+See [design.md](design.md) for colors, typography, components, and design principles.
 
 ## Key Design Decision
 
