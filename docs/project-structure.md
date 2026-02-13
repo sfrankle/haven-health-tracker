@@ -29,11 +29,7 @@ com.haven.app/
 
 ## Design System
 
-Haven uses a soft, calming visual language:
-
-- **Colors:** Sage green, lavender, off-white
-- **Fonts:** Philosopher (headers and body)
-- **Components:** Pill-shaped buttons, rounded cards, soft shadows
+See [design.md](design.md) for colors, typography, components, and design principles.
 
 ## Key Design Decision
 

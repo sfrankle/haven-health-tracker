@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Haven — private-first Android health tracking app. Kotlin + Jetpack Compose + Room. All data local to device.
 
-Key docs: `docs/spec.md` (feature spec), `docs/roadmap.md` (what's next), `docs/changelog.md` (what's done), `docs/schema.sql` (database schema), `docs/decisions.md` (design rationale).
+Key docs: `docs/spec.md` (feature spec), `docs/roadmap.md` (what's next), `docs/changelog.md` (what's done), `docs/schema.sql` (database schema), `docs/decisions.md` (design rationale), `docs/design.md` (visual design system).
 
 ## Build Commands
 
@@ -48,7 +48,4 @@ Seed data uses `seedVersion` column for safe migrations across app updates. Deli
 
 ## Design System
 
-- **Colors:** Sage green (primary), lavender (secondary), off-white (background)
-- **Fonts:** Philosopher (headers and body) — bundled as TTF in assets
-- **Components:** Pill-shaped buttons, rounded cards, soft shadows
-- **Tone:** Non-judgmental. No scores, streaks, or "good/bad" framing in any user-facing text
+See `docs/design.md` for colors, typography, components, and principles. Key constraint: non-judgmental tone — no scores, streaks, or "good/bad" framing in any user-facing text.
