@@ -13,4 +13,6 @@ class EntryTypeRepository @Inject constructor(
     fun getEnabled(): Flow<List<EntryType>> = entryTypeDao.getEnabled()
 
     suspend fun getById(id: Long): EntryType? = entryTypeDao.getById(id)
+
+    suspend fun getByName(name: String): EntryType? = entryTypeDao.getByName(name)
 }
