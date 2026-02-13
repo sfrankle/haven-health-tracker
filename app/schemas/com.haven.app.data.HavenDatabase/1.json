@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "b7f77ef86be4d78ac7c71b612090d1c5",
+    "identityHash": "3006259de24d06631d9a9f3be6b1cadc",
     "entities": [
       {
         "tableName": "measurement_type",
@@ -348,7 +348,18 @@
             "id"
           ]
         },
-        "indices": [],
+        "indices": [
+          {
+            "name": "index_tag_name_tag_group",
+            "unique": true,
+            "columnNames": [
+              "name",
+              "tag_group"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_tag_name_tag_group` ON `${TABLE_NAME}` (`name`, `tag_group`)"
+          }
+        ],
         "foreignKeys": []
       },
       {
@@ -752,7 +763,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b7f77ef86be4d78ac7c71b612090d1c5')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3006259de24d06631d9a9f3be6b1cadc')"
     ]
   }
 }
