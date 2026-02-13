@@ -13,12 +13,6 @@ val Philosopher = FontFamily(
     Font(R.font.philosopher_bold, FontWeight.Bold)
 )
 
-val Quicksand = FontFamily(
-    Font(R.font.quicksand_regular, FontWeight.Normal),
-    Font(R.font.quicksand_medium, FontWeight.Medium),
-    Font(R.font.quicksand_semibold, FontWeight.SemiBold)
-)
-
 val HavenTypography = Typography(
     displayLarge = TextStyle(
         fontFamily = Philosopher,
@@ -46,43 +40,43 @@ val HavenTypography = Typography(
         fontSize = 20.sp
     ),
     titleMedium = TextStyle(
-        fontFamily = Quicksand,
-        fontWeight = FontWeight.SemiBold,
+        fontFamily = Philosopher,
+        fontWeight = FontWeight.Bold,
         fontSize = 16.sp
     ),
     titleSmall = TextStyle(
-        fontFamily = Quicksand,
-        fontWeight = FontWeight.Medium,
+        fontFamily = Philosopher,
+        fontWeight = FontWeight.Normal,
         fontSize = 14.sp
     ),
     bodyLarge = TextStyle(
-        fontFamily = Quicksand,
+        fontFamily = Philosopher,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp
     ),
     bodyMedium = TextStyle(
-        fontFamily = Quicksand,
+        fontFamily = Philosopher,
         fontWeight = FontWeight.Normal,
         fontSize = 14.sp
     ),
     bodySmall = TextStyle(
-        fontFamily = Quicksand,
+        fontFamily = Philosopher,
         fontWeight = FontWeight.Normal,
         fontSize = 12.sp
     ),
     labelLarge = TextStyle(
-        fontFamily = Quicksand,
-        fontWeight = FontWeight.SemiBold,
+        fontFamily = Philosopher,
+        fontWeight = FontWeight.Bold,
         fontSize = 14.sp
     ),
     labelMedium = TextStyle(
-        fontFamily = Quicksand,
-        fontWeight = FontWeight.Medium,
+        fontFamily = Philosopher,
+        fontWeight = FontWeight.Normal,
         fontSize = 12.sp
     ),
     labelSmall = TextStyle(
-        fontFamily = Quicksand,
-        fontWeight = FontWeight.Medium,
+        fontFamily = Philosopher,
+        fontWeight = FontWeight.Normal,
         fontSize = 10.sp
     )
 )

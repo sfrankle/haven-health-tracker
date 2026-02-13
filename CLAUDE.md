@@ -18,8 +18,6 @@ Key docs: `docs/spec.md` (feature spec), `docs/roadmap.md` (what's next), `docs/
 ./gradlew lint                                             # Lint
 ```
 
-The Android project has not been scaffolded yet — commands work after project scaffolding.
-
 ## Architecture
 
 - **Single activity** (`MainActivity.kt`) hosts Compose, with bottom nav across 5 pages: Tend, Trace, Weave, Anchor, Settings
@@ -44,9 +42,9 @@ The Android project has not been scaffolded yet — commands work after project 
 
 ## Data Model
 
-Tags go on **Labels, not Entries** — this is the key design decision. It enables retroactive correlation (tag a food label "dairy" and all past entries using it are automatically included in correlation queries).
+Tags go on **Labels, not Entries** — this is the key design decision. It enables retroactive correlation (tag a food label "dairy" and all past entries using it are automatically included in correlation queries). See `docs/decisions.md` #3 for rationale.
 
-Seed data uses `seedVersion` column for safe migrations across app updates. Delivered in `RoomDatabase.Callback.onCreate`.
+Seed data uses `seedVersion` column for safe migrations across app updates. Delivered in `RoomDatabase.Callback.onCreate`. See `docs/schema.sql` for full schema and seed data reference.
 
 ## Design System
 
