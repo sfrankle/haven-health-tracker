@@ -11,3 +11,10 @@
 - Bottom nav shell with 5 destinations
 - Haven design system theme (sage/lavender/off-white, Philosopher + Quicksand fonts)
 - Instrumented DAO tests
+
+### PR 2: Tend Page + Sleep & Hydration Logging
+- Tend page with entry type button grid (reads enabled types from DB)
+- Sleep logging form with hours input and optional notes
+- Hydration logging with quick-add buttons (+8oz/+16oz) and running daily total
+- Navigation routing from Tend to logging forms (no hardcoded IDs)
+- Icon mapper, TendViewModel, SleepLoggingViewModel, HydrationLoggingViewModel
