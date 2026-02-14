@@ -15,6 +15,7 @@ Decisions made during Haven's design phase, with rationale.
 | 9 | **Anchor suggestions** | Separate suggestion model, reuse Activity labels | AnchorActivity links to Activity Labels via FK | Tap a suggestion → creates an Entry of type Activity. No duplicate data — suggestions are a view layer on top of the Activity label system. |
 | 10 | **Body font** | Philosopher | Philosopher (unified) | Philosopher works well for both headers and body, simplifying the font stack to a single family. |
 | 11 | **DI framework** | Manual DI, Koin, Hilt | Hilt | Standard for Jetpack Compose projects. ViewModel injection works out of the box. |
+| 12 | **Repository layer** | Generic base repo, skip repos (inject DAOs directly), thin pass-through repos | Use-case-oriented repos | Repos expose what ViewModels need, not mirror every DAO method. DAOs are query-oriented; repos are domain-oriented (e.g., `insertWithLabels`). One-liner delegation is fine when a ViewModel needs it — don't add methods preemptively. Room DAOs already fill the generic-CRUD role, so no `BaseRepository<T>` needed. |
 
 ## Lessons from Prior Iterations
 

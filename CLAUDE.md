@@ -38,7 +38,7 @@ Key docs: `docs/spec.md` (feature spec), `docs/roadmap.md` (what's next), `docs/
 - PascalCase for classes and composable functions, camelCase for properties/functions
 - SNAKE_CASE for database column names
 - One ViewModel per major screen, injected via Hilt
-- Repositories wrap DAOs — ViewModels never access DAOs directly
+- Repositories wrap DAOs — ViewModels never access DAOs directly. Repos are use-case-oriented (not DAO mirrors); only expose methods ViewModels need. See `docs/decisions.md` #12.
 
 ## Data Model
 
