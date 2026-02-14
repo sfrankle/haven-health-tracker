@@ -8,8 +8,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
-    name: Build
+  test-and-lint:
+    name: Unit Tests & Lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -21,59 +21,10 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v4
 
-      - run: ./gradlew assembleDebug compileDebugUnitTestKotlin lintAnalyzeDebug
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: build-outputs
-          path: |
-            app/build
-            .gradle
-          retention-days: 1
-
-  unit-tests:
-    name: Unit Tests
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 17
-
-      - uses: gradle/actions/setup-gradle@v4
-
-      - uses: actions/download-artifact@v4
-        with:
-          name: build-outputs
-
-      - run: ./gradlew testDebugUnitTest
-
-  lint:
-    name: Lint
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 17
-
-      - uses: gradle/actions/setup-gradle@v4
-
-      - uses: actions/download-artifact@v4
-        with:
-          name: build-outputs
-
-      - run: ./gradlew lintDebug
+      - run: ./gradlew testDebugUnitTest lintDebug
 
   instrumented-tests:
     name: Instrumented Tests
-    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -84,10 +35,6 @@ jobs:
           java-version: 17
 
       - uses: gradle/actions/setup-gradle@v4
-
-      - uses: actions/download-artifact@v4
-        with:
-          name: build-outputs
 
       - name: Enable KVM
         run: |
