@@ -21,8 +21,11 @@ import androidx.navigation.compose.rememberNavController
 import com.haven.app.ui.navigation.HavenDestination
 import com.haven.app.ui.theme.HavenTheme
 import com.haven.app.ui.placeholder.PlaceholderScreen
+import com.haven.app.ui.logging.LoggingRoute
 import com.haven.app.ui.tend.TendScreen
 import com.haven.app.ui.trace.TraceScreen
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -70,11 +73,28 @@ fun HavenApp() {
             startDestination = HavenDestination.Tend.route,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable(HavenDestination.Tend.route) { TendScreen() }
+            composable(HavenDestination.Tend.route) {
+                TendScreen(
+                    onEntryTypeClick = { entryType ->
+                        navController.navigate("log/${entryType.id}")
+                    }
+                )
+            }
             composable(HavenDestination.Trace.route) { TraceScreen() }
             composable(HavenDestination.Weave.route) { PlaceholderScreen("Weave") }
             composable(HavenDestination.Anchor.route) { PlaceholderScreen("Anchor") }
             composable(HavenDestination.Settings.route) { PlaceholderScreen("Settings") }
+            composable(
+                route = "log/{entryTypeId}",
+                arguments = listOf(navArgument("entryTypeId") { type = NavType.LongType })
+            ) { backStackEntry ->
+                val entryTypeId = backStackEntry.arguments?.getLong("entryTypeId") ?: return@composable
+                LoggingRoute(
+                    entryTypeId = entryTypeId,
+                    onSaved = { navController.popBackStack() },
+                    onBack = { navController.popBackStack() }
+                )
+            }
         }
     }
 }

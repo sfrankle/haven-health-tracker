@@ -11,6 +11,8 @@ import javax.inject.Singleton
 class EntryRepository @Inject constructor(
     private val entryDao: EntryDao
 ) {
+    suspend fun insert(entry: Entry): Long = entryDao.insert(entry)
+
     suspend fun insertWithLabels(entry: Entry, labelIds: List<Long>): Long =
         entryDao.insertWithLabels(entry, labelIds)
 

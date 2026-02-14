@@ -2,6 +2,7 @@ package com.haven.app.data
 
 import com.haven.app.data.entity.Category
 import com.haven.app.data.entity.EntryType
+import com.haven.app.data.entity.EntryTypeIcon
 import com.haven.app.data.entity.Label
 import com.haven.app.data.entity.LabelTag
 import com.haven.app.data.entity.MeasurementType
@@ -28,12 +29,12 @@ object SeedData {
     )
 
     val entryTypes = listOf(
-        EntryType(id = 1, name = "Food", measurementTypeId = 2, prompt = "What did you eat?", icon = "food", sortOrder = 1),
-        EntryType(id = 2, name = "Emotion", measurementTypeId = 2, prompt = "How are you feeling?", icon = "emotion", sortOrder = 2),
-        EntryType(id = 3, name = "Hydration", measurementTypeId = 1, prompt = "How much did you drink?", icon = "hydration", sortOrder = 3),
-        EntryType(id = 4, name = "Sleep", measurementTypeId = 1, prompt = "How many hours did you sleep?", icon = "sleep", sortOrder = 4),
-        EntryType(id = 5, name = "Symptom", measurementTypeId = 3, prompt = "What are you experiencing?", icon = "symptom", sortOrder = 5),
-        EntryType(id = 6, name = "Activity", measurementTypeId = 4, prompt = "What did you do?", icon = "activity", sortOrder = 6),
+        EntryType(id = 1, name = "Food", measurementTypeId = 2, prompt = "What did you eat?", icon = EntryTypeIcon.FOOD, sortOrder = 1),
+        EntryType(id = 2, name = "Emotion", measurementTypeId = 2, prompt = "How are you feeling?", icon = EntryTypeIcon.EMOTION, sortOrder = 2),
+        EntryType(id = 3, name = "Hydration", measurementTypeId = 1, prompt = "How much did you drink?", icon = EntryTypeIcon.HYDRATION, sortOrder = 3),
+        EntryType(id = 4, name = "Sleep", measurementTypeId = 1, prompt = "How many hours did you sleep?", icon = EntryTypeIcon.SLEEP, sortOrder = 4),
+        EntryType(id = 5, name = "Symptom", measurementTypeId = 3, prompt = "What are you experiencing?", icon = EntryTypeIcon.SYMPTOM, sortOrder = 5),
+        EntryType(id = 6, name = "Activity", measurementTypeId = 4, prompt = "What did you do?", icon = EntryTypeIcon.ACTIVITY, sortOrder = 6),
     )
 
     // Food labels (entryTypeId = 1) — flat, no parents

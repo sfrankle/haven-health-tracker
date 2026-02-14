@@ -4,31 +4,11 @@
 
 Scaffolding + 3 entry types + 2 pages. Proves the data model end-to-end.
 
-### Project scaffolding
-- Android project with Kotlin + Compose + Room + Hilt
-- Bottom navigation shell with 5 destinations (Tend, Trace active; Weave, Anchor, Settings as placeholders)
-- Design system: sage green / lavender / off-white palette, Philosopher font, pill-shaped button component
-
-### Database
-- All 10 tables from schema.sql implemented as Room entities
-- Seed data for Phase 1 entry types: Food (with ~20-30 labels and tags), Sleep, Hydration
-- Seed data for MeasurementTypes, Categories
-- DAOs for entry creation, querying by date/type, label lookup
-
-### Tend page
-- Grid of pill buttons, one per enabled EntryType (reads from DB)
-- Tap → navigates to the entry type's logging form
-
-### Sleep logging
-- Numeric input for hours slept
-- Timestamp (defaults to now, editable)
-- Optional notes
-- Creates an Entry with numericValue
-
-### Hydration logging
-- Numeric input with quick-add buttons (+8oz, +16oz, custom)
-- Shows running daily total
-- Each tap creates a separate Entry
+### ~~Project scaffolding~~ ✓ PR 1
+### ~~Database~~ ✓ PR 1
+### ~~Tend page~~ ✓ PR 2
+### ~~Sleep logging~~ ✓ PR 2
+### ~~Hydration logging~~ ✓ PR 2
 
 ### Food logging
 - Search bar + scrollable label grid

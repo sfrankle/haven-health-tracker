@@ -2,6 +2,7 @@ package com.haven.app.data
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.haven.app.data.dao.CategoryDao
 import com.haven.app.data.dao.EntryDao
 import com.haven.app.data.dao.EntryTypeDao
@@ -19,6 +20,7 @@ import com.haven.app.data.entity.LabelTag
 import com.haven.app.data.entity.MeasurementType
 import com.haven.app.data.entity.Tag
 
+@TypeConverters(Converters::class)
 @Database(
     entities = [
         MeasurementType::class,

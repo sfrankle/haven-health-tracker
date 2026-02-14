@@ -14,6 +14,9 @@ interface EntryTypeDao {
     @Query("SELECT * FROM entry_type WHERE id = :id")
     suspend fun getById(id: Long): EntryType?
 
+    @Query("SELECT * FROM entry_type WHERE name = :name")
+    suspend fun getByName(name: String): EntryType?
+
     @Insert
     suspend fun insertAll(entryTypes: List<EntryType>)
 }
