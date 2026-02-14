@@ -8,13 +8,14 @@ import androidx.compose.material.icons.rounded.Mood
 import androidx.compose.material.icons.rounded.Restaurant
 import androidx.compose.material.icons.rounded.WaterDrop
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.haven.app.data.entity.EntryTypeIcon
 
-fun entryTypeIcon(iconKey: String?): ImageVector = when (iconKey) {
-    "food" -> Icons.Rounded.Restaurant
-    "emotion" -> Icons.Rounded.Mood
-    "hydration" -> Icons.Rounded.WaterDrop
-    "sleep" -> Icons.Rounded.Bedtime
-    "symptom" -> Icons.Rounded.MonitorHeart
-    "activity" -> Icons.Rounded.FitnessCenter
-    else -> Icons.Rounded.FitnessCenter
+fun entryTypeIcon(icon: EntryTypeIcon?): ImageVector = when (icon) {
+    EntryTypeIcon.FOOD -> Icons.Rounded.Restaurant
+    EntryTypeIcon.EMOTION -> Icons.Rounded.Mood
+    EntryTypeIcon.HYDRATION -> Icons.Rounded.WaterDrop
+    EntryTypeIcon.SLEEP -> Icons.Rounded.Bedtime
+    EntryTypeIcon.SYMPTOM -> Icons.Rounded.MonitorHeart
+    EntryTypeIcon.ACTIVITY -> Icons.Rounded.FitnessCenter
+    null -> Icons.Rounded.FitnessCenter
 }

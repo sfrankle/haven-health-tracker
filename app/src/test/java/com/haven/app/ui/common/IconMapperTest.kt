@@ -7,24 +7,19 @@ import androidx.compose.material.icons.rounded.MonitorHeart
 import androidx.compose.material.icons.rounded.Mood
 import androidx.compose.material.icons.rounded.Restaurant
 import androidx.compose.material.icons.rounded.WaterDrop
+import com.haven.app.data.entity.EntryTypeIcon
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class IconMapperTest {
     @Test
     fun `maps known icon keys to correct icons`() {
-        assertEquals(Icons.Rounded.Restaurant, entryTypeIcon("food"))
-        assertEquals(Icons.Rounded.Mood, entryTypeIcon("emotion"))
-        assertEquals(Icons.Rounded.WaterDrop, entryTypeIcon("hydration"))
-        assertEquals(Icons.Rounded.Bedtime, entryTypeIcon("sleep"))
-        assertEquals(Icons.Rounded.MonitorHeart, entryTypeIcon("symptom"))
-        assertEquals(Icons.Rounded.FitnessCenter, entryTypeIcon("activity"))
-    }
-
-    @Test
-    fun `returns default icon for unknown key`() {
-        val icon = entryTypeIcon("unknown")
-        assertEquals(Icons.Rounded.FitnessCenter, icon)
+        assertEquals(Icons.Rounded.Restaurant, entryTypeIcon(EntryTypeIcon.FOOD))
+        assertEquals(Icons.Rounded.Mood, entryTypeIcon(EntryTypeIcon.EMOTION))
+        assertEquals(Icons.Rounded.WaterDrop, entryTypeIcon(EntryTypeIcon.HYDRATION))
+        assertEquals(Icons.Rounded.Bedtime, entryTypeIcon(EntryTypeIcon.SLEEP))
+        assertEquals(Icons.Rounded.MonitorHeart, entryTypeIcon(EntryTypeIcon.SYMPTOM))
+        assertEquals(Icons.Rounded.FitnessCenter, entryTypeIcon(EntryTypeIcon.ACTIVITY))
     }
 
     @Test

@@ -20,7 +20,7 @@ data class EntryType(
     @ColumnInfo(name = "measurement_type_id")
     val measurementTypeId: Long,
     val prompt: String? = null,
-    val icon: String? = null,
+    val icon: EntryTypeIcon? = null,
     @ColumnInfo(name = "is_enabled", defaultValue = "1")
     val isEnabled: Boolean = true,
     @ColumnInfo(name = "is_default", defaultValue = "1")

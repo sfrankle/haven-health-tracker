@@ -2,6 +2,7 @@ package com.haven.app.ui.tend
 
 import app.cash.turbine.test
 import com.haven.app.data.entity.EntryType
+import com.haven.app.data.entity.EntryTypeIcon
 import com.haven.app.data.repository.EntryTypeRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -37,8 +38,8 @@ class TendViewModelTest {
     @Test
     fun `entryTypes emits enabled entry types from repository`() = runTest {
         val types = listOf(
-            EntryType(id = 1, name = "Food", measurementTypeId = 2, icon = "food", sortOrder = 1),
-            EntryType(id = 3, name = "Hydration", measurementTypeId = 1, icon = "hydration", sortOrder = 3),
+            EntryType(id = 1, name = "Food", measurementTypeId = 2, icon = EntryTypeIcon.FOOD, sortOrder = 1),
+            EntryType(id = 3, name = "Hydration", measurementTypeId = 1, icon = EntryTypeIcon.HYDRATION, sortOrder = 3),
         )
         `when`(entryTypeRepository.getEnabled()).thenReturn(flowOf(types))
 
