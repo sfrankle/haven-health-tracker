@@ -8,8 +8,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  test-and-lint:
-    name: Unit Tests & Lint
+  build:
+    name: Build, Lint, Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -21,4 +21,8 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v4
 
-      - run: ./gradlew testDebugUnitTest lintDebug
+      - run: ./gradlew assembleDebug
+
+      - run: ./gradlew lintDebug
+
+      - run: ./gradlew testDebugUnitTest
