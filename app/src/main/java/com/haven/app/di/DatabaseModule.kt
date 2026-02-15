@@ -15,7 +15,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Provider
 import javax.inject.Singleton
 
 @Module
@@ -25,15 +24,14 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun provideDatabase(
-        @ApplicationContext context: Context,
-        databaseProvider: Provider<HavenDatabase>
+        @ApplicationContext context: Context
     ): HavenDatabase {
         return Room.databaseBuilder(
             context,
             HavenDatabase::class.java,
             HavenDatabase.NAME
         )
-            .addCallback(SeedDatabaseCallback(databaseProvider))
+            .addCallback(SeedDatabaseCallback())
             .build()
     }
 
