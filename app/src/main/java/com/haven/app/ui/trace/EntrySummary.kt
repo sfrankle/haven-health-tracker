@@ -2,23 +2,29 @@ package com.haven.app.ui.trace
 
 import com.haven.app.data.model.EntryWithDetails
 
-fun entrySummary(entry: EntryWithDetails): String {
+data class EntrySummaryParts(val prefix: String, val bold: String) {
+    val full: String get() = "$prefix$bold"
+}
+
+fun entrySummaryParts(entry: EntryWithDetails): EntrySummaryParts {
     val value = entry.numericValue
     val labels = entry.labelNames
 
     return when (entry.entryTypeName) {
-        "Sleep" -> "I slept ${formatNumber(value)} hours"
-        "Hydration" -> "I drank ${formatNumber(value)} oz"
-        "Food" -> "I ate ${labels ?: "something"}"
-        "Emotion" -> "I felt ${labels ?: "something"}"
-        "Symptom" -> "I experienced ${labels ?: "something"}"
+        "Sleep" -> EntrySummaryParts("I slept ", "${formatNumber(value)} hours")
+        "Hydration" -> EntrySummaryParts("I drank ", "${formatNumber(value)} oz")
+        "Food" -> EntrySummaryParts("I ate ", labels ?: "something")
+        "Emotion" -> EntrySummaryParts("I felt ", labels ?: "something")
+        "Symptom" -> EntrySummaryParts("I experienced ", labels ?: "something")
         "Activity" -> formatActivity(labels)
-        else -> "Logged ${entry.entryTypeName}"
+        else -> EntrySummaryParts("", "Logged ${entry.entryTypeName}")
     }
 }
 
+fun entrySummary(entry: EntryWithDetails): String = entrySummaryParts(entry).full
+
 private fun formatNumber(value: Double?): String {
-    if (value == null) return "0"
+    if (value == null) return "\u2014"
     return if (value == value.toLong().toDouble()) {
         value.toLong().toString()
     } else {
@@ -26,11 +32,11 @@ private fun formatNumber(value: Double?): String {
     }
 }
 
-private fun formatActivity(labels: String?): String {
-    if (labels == null) return "I did something"
-    return if (',' in labels) {
-        "I did $labels"
+private fun formatActivity(labels: String?): EntrySummaryParts {
+    if (labels == null) return EntrySummaryParts("I did ", "something")
+    return if (", " in labels) {
+        EntrySummaryParts("I did ", labels)
     } else {
-        "I ${labels.lowercase()}"
+        EntrySummaryParts("I ", labels.lowercase())
     }
 }

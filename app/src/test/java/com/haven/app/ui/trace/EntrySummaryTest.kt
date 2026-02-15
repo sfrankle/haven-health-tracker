@@ -96,4 +96,52 @@ class EntrySummaryTest {
             entrySummary(entry("Custom"))
         )
     }
+
+    @Test
+    fun `sleep entry with null value shows em dash`() {
+        assertEquals(
+            "I slept \u2014 hours",
+            entrySummary(entry("Sleep"))
+        )
+    }
+
+    @Test
+    fun `hydration entry with null value shows em dash`() {
+        assertEquals(
+            "I drank \u2014 oz",
+            entrySummary(entry("Hydration"))
+        )
+    }
+
+    @Test
+    fun `food entry with null labels shows something`() {
+        assertEquals(
+            "I ate something",
+            entrySummary(entry("Food"))
+        )
+    }
+
+    @Test
+    fun `emotion entry with null labels shows something`() {
+        assertEquals(
+            "I felt something",
+            entrySummary(entry("Emotion"))
+        )
+    }
+
+    @Test
+    fun `activity entry with null labels shows something`() {
+        assertEquals(
+            "I did something",
+            entrySummary(entry("Activity"))
+        )
+    }
+
+    @Test
+    fun `entrySummaryParts returns correct prefix and bold`() {
+        val parts = entrySummaryParts(entry("Sleep", numericValue = 7.5))
+        assertEquals("I slept ", parts.prefix)
+        assertEquals("7.5 hours", parts.bold)
+        assertEquals("I slept 7.5 hours", parts.full)
+    }
 }

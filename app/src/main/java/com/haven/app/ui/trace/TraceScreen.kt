@@ -1,6 +1,7 @@
 package com.haven.app.ui.trace
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -148,6 +149,7 @@ private fun DayHeader(label: String) {
         color = MaterialTheme.colorScheme.primary,
         modifier = Modifier
             .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.surface)
             .padding(horizontal = 16.dp, vertical = 8.dp)
     )
 }
@@ -157,7 +159,7 @@ private fun EntryRow(entry: EntryWithDetails) {
     val time = OffsetDateTime.parse(entry.timestamp)
         .format(DateTimeFormatter.ofPattern("h:mm a"))
 
-    val parts = splitSummaryForBold(entry)
+    val parts = entrySummaryParts(entry)
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -180,46 +182,12 @@ private fun EntryRow(entry: EntryWithDetails) {
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = buildAnnotatedString {
-                append(parts.first)
+                append(parts.prefix)
                 withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
-                    append(parts.second)
+                    append(parts.bold)
                 }
             },
             style = MaterialTheme.typography.bodyMedium
         )
-    }
-}
-
-/**
- * Splits a summary into (prefix, boldPart) for display.
- * E.g., "I slept 7.5 hours" -> ("I slept ", "7.5 hours")
- */
-private fun splitSummaryForBold(entry: EntryWithDetails): Pair<String, String> {
-    val value = entry.numericValue
-    val labels = entry.labelNames
-
-    return when (entry.entryTypeName) {
-        "Sleep" -> "I slept " to "${formatNumberForDisplay(value)} hours"
-        "Hydration" -> "I drank " to "${formatNumberForDisplay(value)} oz"
-        "Food" -> "I ate " to (labels ?: "something")
-        "Emotion" -> "I felt " to (labels ?: "something")
-        "Symptom" -> "I experienced " to (labels ?: "something")
-        "Activity" -> {
-            if (labels != null && ',' !in labels) {
-                "I " to labels.lowercase()
-            } else {
-                "I did " to (labels ?: "something")
-            }
-        }
-        else -> "" to "Logged ${entry.entryTypeName}"
-    }
-}
-
-private fun formatNumberForDisplay(value: Double?): String {
-    if (value == null) return "0"
-    return if (value == value.toLong().toDouble()) {
-        value.toLong().toString()
-    } else {
-        value.toString()
     }
 }
