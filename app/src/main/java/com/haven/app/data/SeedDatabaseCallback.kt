@@ -1,14 +1,21 @@
 package com.haven.app.data
 
 import android.content.ContentValues
+import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 
-class SeedDatabaseCallback : RoomDatabase.Callback() {
+class SeedDatabaseCallback(
+    private val context: Context
+) : RoomDatabase.Callback() {
 
     override fun onOpen(db: SupportSQLiteDatabase) {
         super.onOpen(db)
+        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val appliedVersion = prefs.getInt(KEY_SEED_VERSION, 0)
+        if (appliedVersion >= SeedData.VERSION) return
+
         db.beginTransaction()
         try {
             seedMeasurementTypes(db)
@@ -21,6 +28,7 @@ class SeedDatabaseCallback : RoomDatabase.Callback() {
         } finally {
             db.endTransaction()
         }
+        prefs.edit().putInt(KEY_SEED_VERSION, SeedData.VERSION).apply()
     }
 
     private fun seedMeasurementTypes(db: SupportSQLiteDatabase) {
@@ -91,5 +99,10 @@ class SeedDatabaseCallback : RoomDatabase.Callback() {
                 put("tag_id", lt.tagId)
             })
         }
+    }
+
+    companion object {
+        private const val PREFS_NAME = "haven_seed"
+        private const val KEY_SEED_VERSION = "seed_version"
     }
 }

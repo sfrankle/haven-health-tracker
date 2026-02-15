@@ -31,7 +31,7 @@ object DatabaseModule {
             HavenDatabase::class.java,
             HavenDatabase.NAME
         )
-            .addCallback(SeedDatabaseCallback())
+            .addCallback(SeedDatabaseCallback(context))
             .build()
     }
 

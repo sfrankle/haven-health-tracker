@@ -10,6 +10,8 @@ import com.haven.app.data.entity.Tag
 
 object SeedData {
 
+    const val VERSION = 1
+
     val measurementTypes = listOf(
         MeasurementType(id = 1, name = "numeric", displayName = "Enter a number"),
         MeasurementType(id = 2, name = "label_select", displayName = "Select one or more"),

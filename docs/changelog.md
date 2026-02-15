@@ -13,7 +13,7 @@
 - Instrumented DAO tests
 
 ### PR 3: Idempotent Seed Data
-- Seed callback uses `onOpen` + `INSERT OR IGNORE` instead of `onCreate`, so missing seed data is filled in on every launch
+- Seed callback uses `onOpen` + `INSERT OR IGNORE` instead of `onCreate`, gated by `SeedData.VERSION` in SharedPreferences — runs once per version bump, not every launch
 - Eliminated `Provider<HavenDatabase>` / `runBlocking` / `withTransaction` deadlock risk
 
 ### PR 2: Tend Page + Sleep & Hydration Logging
