@@ -12,6 +12,10 @@
 - Haven design system theme (sage/lavender/off-white, Philosopher + Quicksand fonts)
 - Instrumented DAO tests
 
+### PR 3: Idempotent Seed Data
+- Seed callback uses `onOpen` + `INSERT OR IGNORE` instead of `onCreate`, so missing seed data is filled in on every launch
+- Eliminated `Provider<HavenDatabase>` / `runBlocking` / `withTransaction` deadlock risk
+
 ### PR 2: Tend Page + Sleep & Hydration Logging
 - Tend page with entry type button grid (reads enabled types from DB)
 - Sleep logging form with hours input and optional notes
