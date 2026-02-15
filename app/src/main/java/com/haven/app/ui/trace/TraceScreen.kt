@@ -37,7 +37,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.haven.app.data.model.EntryWithDetails
 import com.haven.app.ui.common.entryTypeIcon
-import java.time.LocalDate
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 
@@ -114,7 +113,7 @@ fun TraceScreen(
                 uiState.dayGroups.forEach { dayGroup ->
                     // Sticky day header
                     stickyHeader(key = dayGroup.date.toString()) {
-                        DayHeader(date = dayGroup.date)
+                        DayHeader(label = dayGroup.label)
                     }
                     items(
                         items = dayGroup.entries,
@@ -142,13 +141,7 @@ fun TraceScreen(
 }
 
 @Composable
-private fun DayHeader(date: LocalDate) {
-    val today = LocalDate.now()
-    val label = when (date) {
-        today -> "Today"
-        today.minusDays(1) -> "Yesterday"
-        else -> date.format(DateTimeFormatter.ofPattern("EEE, MMM d"))
-    }
+private fun DayHeader(label: String) {
     Text(
         text = label,
         style = MaterialTheme.typography.titleSmall,

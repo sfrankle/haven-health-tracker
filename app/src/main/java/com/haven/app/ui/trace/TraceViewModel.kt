@@ -7,6 +7,7 @@ import com.haven.app.data.model.EntryWithDetails
 import com.haven.app.data.repository.EntryRepository
 import com.haven.app.data.repository.EntryTypeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,10 +15,12 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 data class DayGroup(
     val date: LocalDate,
+    val label: String,
     val entries: List<EntryWithDetails>
 )
 
@@ -40,6 +43,7 @@ class TraceViewModel @Inject constructor(
 
     private var allEntries = mutableListOf<EntryWithDetails>()
     private var offset = 0
+    private var loadJob: Job? = null
 
     companion object {
         const val PAGE_SIZE = 50
@@ -55,6 +59,8 @@ class TraceViewModel @Inject constructor(
     }
 
     fun selectFilter(entryTypeId: Long?) {
+        if (entryTypeId == _uiState.value.selectedEntryTypeId) return
+        loadJob?.cancel()
         _uiState.update { it.copy(selectedEntryTypeId = entryTypeId) }
         allEntries.clear()
         offset = 0
@@ -63,7 +69,7 @@ class TraceViewModel @Inject constructor(
 
     fun loadMore() {
         if (_uiState.value.isLoading || !_uiState.value.hasMore) return
-        viewModelScope.launch {
+        loadJob = viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             val page = fetchPage(offset)
             if (page.isEmpty()) {
@@ -83,7 +89,7 @@ class TraceViewModel @Inject constructor(
     }
 
     private fun loadInitial() {
-        viewModelScope.launch {
+        loadJob = viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             val page = fetchPage(0)
             allEntries.addAll(page)
@@ -108,6 +114,9 @@ class TraceViewModel @Inject constructor(
     }
 
     private fun groupByDay(entries: List<EntryWithDetails>): List<DayGroup> {
+        val today = LocalDate.now()
+        val yesterday = today.minusDays(1)
+        val dateFormat = DateTimeFormatter.ofPattern("EEE, MMM d")
         return entries
             .groupBy { entry ->
                 OffsetDateTime.parse(entry.timestamp).toLocalDate()
@@ -115,6 +124,11 @@ class TraceViewModel @Inject constructor(
             .map { (date, dayEntries) ->
                 DayGroup(
                     date = date,
+                    label = when (date) {
+                        today -> "Today"
+                        yesterday -> "Yesterday"
+                        else -> date.format(dateFormat)
+                    },
                     entries = dayEntries.sortedBy { it.timestamp }
                 )
             }

@@ -21,6 +21,8 @@ import org.junit.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.times
+import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -68,7 +70,7 @@ class TraceViewModelTest {
     }
 
     @Test
-    fun `initial load groups entries by day`() = runTest {
+    fun `initial load groups entries by day with labels`() = runTest {
         whenever(entryRepository.getAllWithDetailsPaged(any(), eq(0))).thenReturn(sampleEntries)
 
         val viewModel = TraceViewModel(entryRepository, entryTypeRepository)
@@ -78,6 +80,8 @@ class TraceViewModelTest {
         assertEquals(2, state.dayGroups.size)
         assertEquals(2, state.dayGroups[0].entries.size) // Feb 14 has 2 entries
         assertEquals(1, state.dayGroups[1].entries.size) // Feb 13 has 1 entry
+        // Each day group has a non-empty label
+        assertTrue(state.dayGroups.all { it.label.isNotEmpty() })
     }
 
     @Test
@@ -180,6 +184,20 @@ class TraceViewModelTest {
         testDispatcher.scheduler.advanceUntilIdle()
 
         assertFalse(viewModel.uiState.value.hasMore)
+    }
+
+    @Test
+    fun `selectFilter with same value is a no-op`() = runTest {
+        whenever(entryRepository.getAllWithDetailsPaged(any(), eq(0))).thenReturn(sampleEntries)
+
+        val viewModel = TraceViewModel(entryRepository, entryTypeRepository)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        // Initial load calls getAllWithDetailsPaged once; selecting null again should not re-fetch
+        viewModel.selectFilter(null)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        verify(entryRepository, times(1)).getAllWithDetailsPaged(any(), eq(0))
     }
 
     @Test

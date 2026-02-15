@@ -887,3 +887,105 @@ In `docs/roadmap.md`, mark the Trace page item as done:
 ```
 docs: update changelog and roadmap for Trace page
 ```
+
+---
+
+## Post-Review Issues
+
+Issues identified during code review. Fix before merge.
+
+### Issue 1: Cancel in-flight coroutine on filter change (Critical)
+
+**Problem:** `selectFilter()` clears `allEntries` and calls `loadInitial()` but doesn't cancel any in-flight `loadMore()` coroutine. If `loadMore()` resumes after the clear, it appends stale data from the previous filter.
+
+**Files:** `app/src/main/java/com/haven/app/ui/trace/TraceViewModel.kt`
+
+**Fix:** Store a `Job` reference for the current loading coroutine. Cancel it in `selectFilter()` before starting a new load.
+
+```kotlin
+private var loadJob: Job? = null
+
+fun selectFilter(entryTypeId: Long?) {
+    if (entryTypeId == _uiState.value.selectedEntryTypeId) return
+    _uiState.update { it.copy(selectedEntryTypeId = entryTypeId) }
+    allEntries.clear()
+    offset = 0
+    loadJob?.cancel()
+    loadInitial()
+}
+
+private fun loadInitial() {
+    loadJob = viewModelScope.launch { ... }
+}
+
+fun loadMore() {
+    loadJob = viewModelScope.launch { ... }
+}
+```
+
+This also addresses Issue 5 (no early return when re-selecting the same filter).
+
+### Issue 2: Move today/yesterday labeling to ViewModel (Critical)
+
+**Problem:** `DayHeader` uses `LocalDate.now()` (system default TZ) for "Today"/"Yesterday" labels, but `groupByDay()` parses timestamps using their embedded offset. These can disagree across time zones, mislabeling day groups.
+
+**Files:**
+- `app/src/main/java/com/haven/app/ui/trace/TraceViewModel.kt` — add label to `DayGroup`
+- `app/src/main/java/com/haven/app/ui/trace/TraceScreen.kt` — `DayHeader` receives a string label instead of computing it
+
+**Fix:** In `groupByDay()`, compute the display label ("Today", "Yesterday", or formatted date) using a consistent `LocalDate.now()` call at grouping time. Add a `label: String` field to `DayGroup`. `DayHeader` just renders the label.
+
+### Issue 3: Handle null numericValue in entrySummary (Important)
+
+**Problem:** `formatNumber(null)` returns `"0"`, producing misleading text like "I slept 0 hours" for entries with null numeric values.
+
+**Files:** `app/src/main/java/com/haven/app/ui/trace/EntrySummary.kt`
+
+**Fix:** Return `"—"` (em dash) instead of `"0"` for null values. Add a test case for this edge.
+
+### Issue 4: Consolidate duplicated formatting logic (Important)
+
+**Problem:** `formatNumber()` is duplicated in `EntrySummary.kt` and `TraceScreen.kt`. `splitSummaryForBold()` re-implements the entire `when` dispatch from `entrySummary()`. Adding a new entry type requires updating both in lockstep.
+
+**Files:**
+- `app/src/main/java/com/haven/app/ui/trace/EntrySummary.kt` — return structured parts
+- `app/src/main/java/com/haven/app/ui/trace/TraceScreen.kt` — consume parts, delete local duplicate
+
+**Fix:** Have `entrySummary` return a structured object:
+
+```kotlin
+data class EntrySummaryParts(val prefix: String, val bold: String) {
+    val full: String get() = "$prefix$bold"
+}
+
+fun entrySummaryParts(entry: EntryWithDetails): EntrySummaryParts { ... }
+fun entrySummary(entry: EntryWithDetails): String = entrySummaryParts(entry).full
+```
+
+`TraceScreen` uses `entrySummaryParts()` for styled text. Delete `splitSummaryForBold()` and `formatNumberForDisplay()` from `TraceScreen.kt`. Update existing tests.
+
+### Issue 5: Add background to sticky DayHeader (Important)
+
+**Problem:** `DayHeader` has no background color, so entry rows scroll visibly behind the stuck header.
+
+**Files:** `app/src/main/java/com/haven/app/ui/trace/TraceScreen.kt`
+
+**Fix:** Add `.background(MaterialTheme.colorScheme.surface)` to the `DayHeader` modifier.
+
+### Issue 6: Use `", "` separator check for label count (Minor)
+
+**Problem:** The single-vs-multiple label check uses `',' in labels`, but a label name could contain a comma. The DAO's `GROUP_CONCAT` uses `', '` as separator.
+
+**Files:**
+- `app/src/main/java/com/haven/app/ui/trace/EntrySummary.kt`
+- `app/src/main/java/com/haven/app/ui/trace/TraceScreen.kt`
+
+**Fix:** Check for `", "` (with space) instead of `','`.
+
+### Issue 7: Add null-value edge case tests (Minor)
+
+**Problem:** No tests for null `numericValue` (Sleep/Hydration) or null `labelNames` (Food/Emotion/Symptom).
+
+**Files:** `app/src/test/java/com/haven/app/ui/trace/EntrySummaryTest.kt`
+
+**Fix:** Add test cases for null values after Issue 3 is fixed.
