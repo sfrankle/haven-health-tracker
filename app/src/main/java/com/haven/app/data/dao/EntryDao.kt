@@ -7,6 +7,7 @@ import androidx.room.Transaction
 import com.haven.app.data.entity.Entry
 import com.haven.app.data.entity.EntryLabel
 import com.haven.app.data.model.EntryWithDetails
+import com.haven.app.data.model.LabelFrequency
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -69,6 +70,24 @@ interface EntryDao {
         ORDER BY e.timestamp DESC
     """)
     fun getByDateRangeWithDetails(startDate: String, endDate: String): Flow<List<EntryWithDetails>>
+
+    @Query("""
+        SELECT el.label_id AS labelId, COUNT(*) AS count
+        FROM entry e
+        JOIN entry_label el ON e.id = el.entry_id
+        WHERE e.entry_type_id = :entryTypeId
+        AND CAST(strftime('%H', e.timestamp) AS INTEGER) >= :hourStart
+        AND CAST(strftime('%H', e.timestamp) AS INTEGER) < :hourEnd
+        GROUP BY el.label_id
+        ORDER BY count DESC
+        LIMIT :limit
+    """)
+    suspend fun getLabelFrequencyByTimeWindow(
+        entryTypeId: Long,
+        hourStart: Int,
+        hourEnd: Int,
+        limit: Int
+    ): List<LabelFrequency>
 
     @Query("""
         SELECT COALESCE(SUM(e.numeric_value), 0)
