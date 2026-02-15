@@ -66,7 +66,7 @@ class SeedDatabaseCallback(
     }
 
     private fun seedLabels(db: SupportSQLiteDatabase) {
-        SeedData.foodLabels.forEach { label ->
+        (SeedData.foodLabels + listOf(SeedData.mealSourceLabel) + SeedData.mealSourceChildren).forEach { label ->
             db.insert("label", SQLiteDatabase.CONFLICT_IGNORE, ContentValues().apply {
                 put("id", label.id)
                 put("entry_type_id", label.entryTypeId)

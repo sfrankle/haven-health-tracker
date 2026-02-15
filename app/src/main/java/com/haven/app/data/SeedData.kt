@@ -10,7 +10,7 @@ import com.haven.app.data.entity.Tag
 
 object SeedData {
 
-    const val VERSION = 1
+    const val VERSION = 2
 
     val measurementTypes = listOf(
         MeasurementType(id = 1, name = "numeric", displayName = "Enter a number"),
@@ -68,6 +68,13 @@ object SeedData {
         Label(id = 25, entryTypeId = 1, name = "Alcohol", sortOrder = 25),
     )
 
+    // Meal source labels (entryTypeId = 1) — parent + children
+    val mealSourceLabel = Label(id = 26, entryTypeId = 1, name = "Meal Source", sortOrder = 100)
+    val mealSourceChildren = listOf(
+        Label(id = 27, entryTypeId = 1, name = "Home Cooked", parentId = 26, sortOrder = 1),
+        Label(id = 28, entryTypeId = 1, name = "Eating Out", parentId = 26, sortOrder = 2),
+    )
+
     // Food tags
     val foodTags = listOf(
         Tag(id = 1, name = "dairy", tagGroup = "food"),
@@ -78,6 +85,7 @@ object SeedData {
         Tag(id = 6, name = "alcohol", tagGroup = "food"),
         Tag(id = 7, name = "processed", tagGroup = "food"),
         Tag(id = 8, name = "high protein", tagGroup = "food"),
+        Tag(id = 9, name = "meal_source", tagGroup = "food"),
     )
 
     // Food label -> tag mappings
@@ -100,5 +108,7 @@ object SeedData {
         LabelTag(labelId = 23, tagId = 3),                                      // Oats -> FODMAP
         LabelTag(labelId = 24, tagId = 5), LabelTag(labelId = 24, tagId = 4), // Soda -> sugar, caffeine
         LabelTag(labelId = 25, tagId = 6),                                      // Alcohol -> alcohol
+        LabelTag(labelId = 27, tagId = 9),                                      // Home Cooked -> meal_source
+        LabelTag(labelId = 28, tagId = 9),                                      // Eating Out -> meal_source
     )
 }
