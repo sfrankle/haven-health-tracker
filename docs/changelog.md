@@ -16,6 +16,13 @@
 - Seed callback uses `onOpen` + `INSERT OR IGNORE` instead of `onCreate`, gated by `SeedData.VERSION` in SharedPreferences — runs once per version bump, not every launch
 - Eliminated `Provider<HavenDatabase>` / `runBlocking` / `withTransaction` deadlock risk
 
+### PR 4: Trace Page
+- Trace page with entries grouped by day, most recent first
+- Journal-style entry summaries ("I slept 7.5 hours", "I ate Eggs, Toast")
+- Entry type filter chips (All, Food, Sleep, etc.)
+- Paginated lazy loading (50 entries at a time)
+- Sticky day headers (Today, Yesterday, then date format)
+
 ### PR 2: Tend Page + Sleep & Hydration Logging
 - Tend page with entry type button grid (reads enabled types from DB)
 - Sleep logging form with hours input and optional notes

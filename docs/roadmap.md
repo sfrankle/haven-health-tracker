@@ -17,11 +17,7 @@ Scaffolding + 3 entry types + 2 pages. Proves the data model end-to-end.
 - Creates 1 Entry + N EntryLabel rows
 - **This proves the Label → Tag correlation path works**
 
-### Trace page
-- Entries grouped by day, most recent first
-- Each entry shows: icon, type name, time, value summary (e.g., "8 hours", "Cheese, Bread")
-- Lazy-loaded scrolling
-- Optional: filter chips by entry type
+### ~~Trace page~~ ✓ PR 4
 
 ### Done when
 - Can log sleep, hydration, and food entries from the Tend page
