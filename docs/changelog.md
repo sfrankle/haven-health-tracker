@@ -16,6 +16,13 @@
 - Seed callback uses `onOpen` + `INSERT OR IGNORE` instead of `onCreate`, gated by `SeedData.VERSION` in SharedPreferences — runs once per version bump, not every launch
 - Eliminated `Provider<HavenDatabase>` / `runBlocking` / `withTransaction` deadlock risk
 
+### PR 3: Food Logging
+- Food logging screen with search bar, label chip grid, and multi-select
+- Time-of-day meal suggestions (morning/afternoon/evening/late-night frequency)
+- Meal source toggle (Home Cooked / Eating Out) stored as labels for correlation
+- Optional notes field
+- First label-based entry type proving insertWithLabels path end-to-end
+
 ### PR 2: Tend Page + Sleep & Hydration Logging
 - Tend page with entry type button grid (reads enabled types from DB)
 - Sleep logging form with hours input and optional notes

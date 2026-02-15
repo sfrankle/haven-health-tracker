@@ -10,12 +10,7 @@ Scaffolding + 3 entry types + 2 pages. Proves the data model end-to-end.
 ### ~~Sleep logging~~ ✓ PR 2
 ### ~~Hydration logging~~ ✓ PR 2
 
-### Food logging
-- Search bar + scrollable label grid
-- Multi-select labels (visual toggle)
-- Recently used labels shown first
-- Creates 1 Entry + N EntryLabel rows
-- **This proves the Label → Tag correlation path works**
+### ~~Food logging~~ ✓ PR 3
 
 ### Trace page
 - Entries grouped by day, most recent first
