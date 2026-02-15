@@ -49,6 +49,7 @@ fun LoggingRoute(
         else -> when (type.name) {
             "Sleep" -> SleepLoggingScreen(entryTypeId = type.id, onSaved = onSaved, onBack = onBack)
             "Hydration" -> HydrationLoggingScreen(entryTypeId = type.id, onSaved = onSaved, onBack = onBack)
+            "Food" -> FoodLoggingScreen(entryTypeId = type.id, onSaved = onSaved, onBack = onBack)
             else -> {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Text("${type.name} logging coming soon")
