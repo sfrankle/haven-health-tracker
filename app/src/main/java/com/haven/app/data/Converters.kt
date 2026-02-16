@@ -1,12 +1,12 @@
 package com.haven.app.data
 
 import androidx.room.TypeConverter
-import com.haven.app.data.entity.EntryTypeIcon
+import com.haven.app.data.entity.EntryType
 
 class Converters {
     @TypeConverter
-    fun fromEntryTypeIcon(value: EntryTypeIcon?): String? = value?.key
+    fun fromEntryType(value: EntryType?): String? = value?.dbKey
 
     @TypeConverter
-    fun toEntryTypeIcon(value: String?): EntryTypeIcon? = value?.let { EntryTypeIcon.fromKey(it) }
+    fun toEntryType(value: String?): EntryType? = value?.let { EntryType.fromDbKey(it) }
 }

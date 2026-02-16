@@ -27,7 +27,7 @@ interface EntryDao {
     }
 
     @Query("""
-        SELECT e.id, e.entry_type_id AS entryTypeId, et.name AS entryTypeName, et.icon AS entryTypeIcon,
+        SELECT e.id, e.entry_type_id AS entryTypeId, et.icon AS entryType,
                e.source_type AS sourceType, e.timestamp, e.created_at AS createdAt,
                e.numeric_value AS numericValue, e.notes,
                GROUP_CONCAT(l.name, ', ') AS labelNames
@@ -41,7 +41,7 @@ interface EntryDao {
     fun getAllWithDetails(): Flow<List<EntryWithDetails>>
 
     @Query("""
-        SELECT e.id, e.entry_type_id AS entryTypeId, et.name AS entryTypeName, et.icon AS entryTypeIcon,
+        SELECT e.id, e.entry_type_id AS entryTypeId, et.icon AS entryType,
                e.source_type AS sourceType, e.timestamp, e.created_at AS createdAt,
                e.numeric_value AS numericValue, e.notes,
                GROUP_CONCAT(l.name, ', ') AS labelNames
@@ -56,7 +56,7 @@ interface EntryDao {
     fun getByTypeWithDetails(entryTypeId: Long): Flow<List<EntryWithDetails>>
 
     @Query("""
-        SELECT e.id, e.entry_type_id AS entryTypeId, et.name AS entryTypeName, et.icon AS entryTypeIcon,
+        SELECT e.id, e.entry_type_id AS entryTypeId, et.icon AS entryType,
                e.source_type AS sourceType, e.timestamp, e.created_at AS createdAt,
                e.numeric_value AS numericValue, e.notes,
                GROUP_CONCAT(l.name, ', ') AS labelNames
@@ -71,7 +71,7 @@ interface EntryDao {
     suspend fun getAllWithDetailsPaged(limit: Int, offset: Int): List<EntryWithDetails>
 
     @Query("""
-        SELECT e.id, e.entry_type_id AS entryTypeId, et.name AS entryTypeName, et.icon AS entryTypeIcon,
+        SELECT e.id, e.entry_type_id AS entryTypeId, et.icon AS entryType,
                e.source_type AS sourceType, e.timestamp, e.created_at AS createdAt,
                e.numeric_value AS numericValue, e.notes,
                GROUP_CONCAT(l.name, ', ') AS labelNames
@@ -87,7 +87,7 @@ interface EntryDao {
     suspend fun getByTypeWithDetailsPaged(entryTypeId: Long, limit: Int, offset: Int): List<EntryWithDetails>
 
     @Query("""
-        SELECT e.id, e.entry_type_id AS entryTypeId, et.name AS entryTypeName, et.icon AS entryTypeIcon,
+        SELECT e.id, e.entry_type_id AS entryTypeId, et.icon AS entryType,
                e.source_type AS sourceType, e.timestamp, e.created_at AS createdAt,
                e.numeric_value AS numericValue, e.notes,
                GROUP_CONCAT(l.name, ', ') AS labelNames

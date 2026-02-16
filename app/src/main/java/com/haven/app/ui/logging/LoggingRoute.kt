@@ -13,6 +13,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.haven.app.data.entity.EntryType
+import com.haven.app.data.entity.EntryTypeEntity
 import com.haven.app.data.repository.EntryTypeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -26,7 +27,7 @@ class LoggingRouteViewModel @Inject constructor(
 ) : ViewModel() {
     private val entryTypeId: Long = savedStateHandle.get<Long>("entryTypeId") ?: 0L
 
-    val entryType: Flow<EntryType?> = flow {
+    val entryType: Flow<EntryTypeEntity?> = flow {
         emit(entryTypeRepository.getById(entryTypeId))
     }
 }
@@ -46,12 +47,12 @@ fun LoggingRoute(
                 CircularProgressIndicator()
             }
         }
-        else -> when (type.name) {
-            "Sleep" -> SleepLoggingScreen(entryTypeId = type.id, onSaved = onSaved, onBack = onBack)
-            "Hydration" -> HydrationLoggingScreen(entryTypeId = type.id, onSaved = onSaved, onBack = onBack)
+        else -> when (type.icon) {
+            EntryType.SLEEP -> SleepLoggingScreen(entryTypeId = type.id, onSaved = onSaved, onBack = onBack)
+            EntryType.HYDRATION -> HydrationLoggingScreen(entryTypeId = type.id, onSaved = onSaved, onBack = onBack)
             else -> {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text("${type.name} logging coming soon")
+                    Text("${type.icon?.displayName ?: type.name} logging coming soon")
                 }
             }
         }

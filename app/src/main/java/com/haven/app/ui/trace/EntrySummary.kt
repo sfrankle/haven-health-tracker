@@ -1,5 +1,6 @@
 package com.haven.app.ui.trace
 
+import com.haven.app.data.entity.EntryType
 import com.haven.app.data.model.EntryWithDetails
 
 data class EntrySummaryParts(val prefix: String, val bold: String) {
@@ -10,14 +11,14 @@ fun entrySummaryParts(entry: EntryWithDetails): EntrySummaryParts {
     val value = entry.numericValue
     val labels = entry.labelNames
 
-    return when (entry.entryTypeName) {
-        "Sleep" -> EntrySummaryParts("I slept ", "${formatNumber(value)} hours")
-        "Hydration" -> EntrySummaryParts("I drank ", "${formatNumber(value)} oz")
-        "Food" -> EntrySummaryParts("I ate ", labels ?: "something")
-        "Emotion" -> EntrySummaryParts("I felt ", labels ?: "something")
-        "Symptom" -> EntrySummaryParts("I experienced ", labels ?: "something")
-        "Activity" -> formatActivity(labels)
-        else -> EntrySummaryParts("", "Logged ${entry.entryTypeName}")
+    return when (entry.entryType) {
+        EntryType.SLEEP -> EntrySummaryParts("I slept ", "${formatNumber(value)} hours")
+        EntryType.HYDRATION -> EntrySummaryParts("I drank ", "${formatNumber(value)} oz")
+        EntryType.FOOD -> EntrySummaryParts("I ate ", labels ?: "something")
+        EntryType.EMOTION -> EntrySummaryParts("I felt ", labels ?: "something")
+        EntryType.SYMPTOM -> EntrySummaryParts("I experienced ", labels ?: "something")
+        EntryType.ACTIVITY -> formatActivity(labels)
+        null -> EntrySummaryParts("", "Logged entry")
     }
 }
 

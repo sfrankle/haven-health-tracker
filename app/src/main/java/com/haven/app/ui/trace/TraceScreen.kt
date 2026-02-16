@@ -174,8 +174,8 @@ private fun EntryRow(entry: EntryWithDetails) {
             modifier = Modifier.width(72.dp)
         )
         Icon(
-            imageVector = entryTypeIcon(entry.entryTypeIcon),
-            contentDescription = entry.entryTypeName,
+            imageVector = entryTypeIcon(entry.entryType),
+            contentDescription = entry.entryType?.displayName,
             modifier = Modifier.size(20.dp),
             tint = MaterialTheme.colorScheme.onSurfaceVariant
         )

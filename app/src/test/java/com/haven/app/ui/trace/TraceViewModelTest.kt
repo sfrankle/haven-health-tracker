@@ -1,7 +1,7 @@
 package com.haven.app.ui.trace
 
 import com.haven.app.data.entity.EntryType
-import com.haven.app.data.entity.EntryTypeIcon
+import com.haven.app.data.entity.EntryTypeEntity
 import com.haven.app.data.model.EntryWithDetails
 import com.haven.app.data.repository.EntryRepository
 import com.haven.app.data.repository.EntryTypeRepository
@@ -33,24 +33,24 @@ class TraceViewModelTest {
     private lateinit var entryTypeRepository: EntryTypeRepository
 
     private val sampleEntryTypes = listOf(
-        EntryType(id = 1, name = "Food", measurementTypeId = 2, icon = EntryTypeIcon.FOOD, sortOrder = 1),
-        EntryType(id = 3, name = "Hydration", measurementTypeId = 1, icon = EntryTypeIcon.HYDRATION, sortOrder = 3),
-        EntryType(id = 4, name = "Sleep", measurementTypeId = 1, icon = EntryTypeIcon.SLEEP, sortOrder = 4),
+        EntryTypeEntity(id = 1, name = "Food", measurementTypeId = 2, icon = EntryType.FOOD, sortOrder = 1),
+        EntryTypeEntity(id = 3, name = "Hydration", measurementTypeId = 1, icon = EntryType.HYDRATION, sortOrder = 3),
+        EntryTypeEntity(id = 4, name = "Sleep", measurementTypeId = 1, icon = EntryType.SLEEP, sortOrder = 4),
     )
 
     private val sampleEntries = listOf(
         EntryWithDetails(
-            id = 1, entryTypeId = 4, entryTypeName = "Sleep", entryTypeIcon = EntryTypeIcon.SLEEP,
+            id = 1, entryTypeId = 4, entryType = EntryType.SLEEP,
             sourceType = "log", timestamp = "2026-02-14T08:00:00-05:00",
             createdAt = "2026-02-14T08:00:00-05:00", numericValue = 7.5, notes = null, labelNames = null
         ),
         EntryWithDetails(
-            id = 2, entryTypeId = 3, entryTypeName = "Hydration", entryTypeIcon = EntryTypeIcon.HYDRATION,
+            id = 2, entryTypeId = 3, entryType = EntryType.HYDRATION,
             sourceType = "log", timestamp = "2026-02-14T07:30:00-05:00",
             createdAt = "2026-02-14T07:30:00-05:00", numericValue = 8.0, notes = null, labelNames = null
         ),
         EntryWithDetails(
-            id = 3, entryTypeId = 1, entryTypeName = "Food", entryTypeIcon = EntryTypeIcon.FOOD,
+            id = 3, entryTypeId = 1, entryType = EntryType.FOOD,
             sourceType = "log", timestamp = "2026-02-13T12:00:00-05:00",
             createdAt = "2026-02-13T12:00:00-05:00", numericValue = null, notes = null, labelNames = "Eggs, Toast"
         ),
@@ -98,7 +98,7 @@ class TraceViewModelTest {
 
     @Test
     fun `selectFilter with entry type filters entries`() = runTest {
-        val sleepOnly = sampleEntries.filter { it.entryTypeName == "Sleep" }
+        val sleepOnly = sampleEntries.filter { it.entryType == EntryType.SLEEP }
         whenever(entryRepository.getAllWithDetailsPaged(any(), eq(0))).thenReturn(sampleEntries)
         whenever(entryRepository.getByTypeWithDetailsPaged(eq(4L), any(), eq(0))).thenReturn(sleepOnly)
 
@@ -116,7 +116,7 @@ class TraceViewModelTest {
 
     @Test
     fun `selectFilter with null shows all entries`() = runTest {
-        val sleepOnly = sampleEntries.filter { it.entryTypeName == "Sleep" }
+        val sleepOnly = sampleEntries.filter { it.entryType == EntryType.SLEEP }
         whenever(entryRepository.getAllWithDetailsPaged(any(), eq(0))).thenReturn(sampleEntries)
         whenever(entryRepository.getByTypeWithDetailsPaged(eq(4L), any(), eq(0))).thenReturn(sleepOnly)
 
@@ -139,7 +139,7 @@ class TraceViewModelTest {
         // First page must have PAGE_SIZE entries so hasMore stays true
         val fullPage = (1..50).map { i ->
             EntryWithDetails(
-                id = i.toLong(), entryTypeId = 4, entryTypeName = "Sleep", entryTypeIcon = EntryTypeIcon.SLEEP,
+                id = i.toLong(), entryTypeId = 4, entryType = EntryType.SLEEP,
                 sourceType = "log", timestamp = "2026-02-14T08:00:00-05:00",
                 createdAt = "2026-02-14T08:00:00-05:00", numericValue = 7.0, notes = null, labelNames = null
             )
@@ -148,7 +148,7 @@ class TraceViewModelTest {
         whenever(entryRepository.getAllWithDetailsPaged(any(), eq(50))).thenReturn(
             listOf(
                 EntryWithDetails(
-                    id = 51, entryTypeId = 4, entryTypeName = "Sleep", entryTypeIcon = EntryTypeIcon.SLEEP,
+                    id = 51, entryTypeId = 4, entryType = EntryType.SLEEP,
                     sourceType = "log", timestamp = "2026-02-12T09:00:00-05:00",
                     createdAt = "2026-02-12T09:00:00-05:00", numericValue = 6.0, notes = null, labelNames = null
                 )
@@ -169,7 +169,7 @@ class TraceViewModelTest {
     fun `loadMore sets hasMore to false when no results returned`() = runTest {
         val fullPage = (1..50).map { i ->
             EntryWithDetails(
-                id = i.toLong(), entryTypeId = 4, entryTypeName = "Sleep", entryTypeIcon = EntryTypeIcon.SLEEP,
+                id = i.toLong(), entryTypeId = 4, entryType = EntryType.SLEEP,
                 sourceType = "log", timestamp = "2026-02-14T08:00:00-05:00",
                 createdAt = "2026-02-14T08:00:00-05:00", numericValue = 7.0, notes = null, labelNames = null
             )

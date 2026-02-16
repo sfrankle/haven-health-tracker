@@ -2,7 +2,7 @@ package com.haven.app.ui.trace
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.haven.app.data.entity.EntryType
+import com.haven.app.data.entity.EntryTypeEntity
 import com.haven.app.data.model.EntryWithDetails
 import com.haven.app.data.repository.EntryRepository
 import com.haven.app.data.repository.EntryTypeRepository
@@ -26,7 +26,7 @@ data class DayGroup(
 
 data class TraceUiState(
     val dayGroups: List<DayGroup> = emptyList(),
-    val entryTypes: List<EntryType> = emptyList(),
+    val entryTypes: List<EntryTypeEntity> = emptyList(),
     val selectedEntryTypeId: Long? = null,
     val isLoading: Boolean = false,
     val hasMore: Boolean = true

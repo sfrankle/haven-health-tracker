@@ -57,7 +57,7 @@ class SeedDatabaseCallback(
                 put("name", et.name)
                 put("measurement_type_id", et.measurementTypeId)
                 put("prompt", et.prompt)
-                put("icon", et.icon?.key)
+                put("icon", et.icon?.dbKey)
                 put("is_enabled", if (et.isEnabled) 1 else 0)
                 put("is_default", if (et.isDefault) 1 else 0)
                 put("sort_order", et.sortOrder)
