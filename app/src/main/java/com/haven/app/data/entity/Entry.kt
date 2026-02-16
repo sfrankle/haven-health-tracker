@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey
 @Entity(
     tableName = "entry",
     foreignKeys = [
-        ForeignKey(entity = EntryType::class, parentColumns = ["id"], childColumns = ["entry_type_id"])
+        ForeignKey(entity = EntryTypeEntity::class, parentColumns = ["id"], childColumns = ["entry_type_id"])
     ],
     indices = [Index("entry_type_id"), Index("timestamp"), Index("source_type")]
 )

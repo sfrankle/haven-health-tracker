@@ -1,7 +1,7 @@
 package com.haven.app.data.repository
 
 import com.haven.app.data.dao.EntryTypeDao
-import com.haven.app.data.entity.EntryType
+import com.haven.app.data.entity.EntryTypeEntity
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -10,9 +10,9 @@ import javax.inject.Singleton
 class EntryTypeRepository @Inject constructor(
     private val entryTypeDao: EntryTypeDao
 ) {
-    fun getEnabled(): Flow<List<EntryType>> = entryTypeDao.getEnabled()
+    fun getEnabled(): Flow<List<EntryTypeEntity>> = entryTypeDao.getEnabled()
 
-    suspend fun getById(id: Long): EntryType? = entryTypeDao.getById(id)
+    suspend fun getById(id: Long): EntryTypeEntity? = entryTypeDao.getById(id)
 
-    suspend fun getByName(name: String): EntryType? = entryTypeDao.getByName(name)
+    suspend fun getByName(name: String): EntryTypeEntity? = entryTypeDao.getByName(name)
 }

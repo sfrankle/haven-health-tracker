@@ -1,6 +1,6 @@
 package com.haven.app.ui.trace
 
-import com.haven.app.data.entity.EntryTypeIcon
+import com.haven.app.data.entity.EntryType
 import com.haven.app.data.model.EntryWithDetails
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -8,15 +8,13 @@ import org.junit.Test
 class EntrySummaryTest {
 
     private fun entry(
-        entryTypeName: String,
-        entryTypeIcon: EntryTypeIcon? = null,
+        entryType: EntryType? = null,
         numericValue: Double? = null,
         labelNames: String? = null
     ) = EntryWithDetails(
         id = 1,
         entryTypeId = 1,
-        entryTypeName = entryTypeName,
-        entryTypeIcon = entryTypeIcon,
+        entryType = entryType,
         sourceType = "log",
         timestamp = "2026-02-14T08:00:00-05:00",
         createdAt = "2026-02-14T08:00:00-05:00",
@@ -29,7 +27,7 @@ class EntrySummaryTest {
     fun `sleep entry shows hours`() {
         assertEquals(
             "I slept 7.5 hours",
-            entrySummary(entry("Sleep", numericValue = 7.5))
+            entrySummary(entry(EntryType.SLEEP, numericValue = 7.5))
         )
     }
 
@@ -37,7 +35,7 @@ class EntrySummaryTest {
     fun `sleep entry with whole number omits decimal`() {
         assertEquals(
             "I slept 8 hours",
-            entrySummary(entry("Sleep", numericValue = 8.0))
+            entrySummary(entry(EntryType.SLEEP, numericValue = 8.0))
         )
     }
 
@@ -45,7 +43,7 @@ class EntrySummaryTest {
     fun `hydration entry shows oz`() {
         assertEquals(
             "I drank 16 oz",
-            entrySummary(entry("Hydration", numericValue = 16.0))
+            entrySummary(entry(EntryType.HYDRATION, numericValue = 16.0))
         )
     }
 
@@ -53,7 +51,7 @@ class EntrySummaryTest {
     fun `food entry shows labels`() {
         assertEquals(
             "I ate Eggs, Toast",
-            entrySummary(entry("Food", labelNames = "Eggs, Toast"))
+            entrySummary(entry(EntryType.FOOD, labelNames = "Eggs, Toast"))
         )
     }
 
@@ -61,7 +59,7 @@ class EntrySummaryTest {
     fun `emotion entry shows labels`() {
         assertEquals(
             "I felt Content, Calm",
-            entrySummary(entry("Emotion", labelNames = "Content, Calm"))
+            entrySummary(entry(EntryType.EMOTION, labelNames = "Content, Calm"))
         )
     }
 
@@ -69,7 +67,7 @@ class EntrySummaryTest {
     fun `symptom entry shows labels`() {
         assertEquals(
             "I experienced Headache",
-            entrySummary(entry("Symptom", labelNames = "Headache"))
+            entrySummary(entry(EntryType.SYMPTOM, labelNames = "Headache"))
         )
     }
 
@@ -77,7 +75,7 @@ class EntrySummaryTest {
     fun `activity entry with single label shows as verb`() {
         assertEquals(
             "I hiked",
-            entrySummary(entry("Activity", labelNames = "Hiked"))
+            entrySummary(entry(EntryType.ACTIVITY, labelNames = "Hiked"))
         )
     }
 
@@ -85,15 +83,15 @@ class EntrySummaryTest {
     fun `activity entry with multiple labels`() {
         assertEquals(
             "I did Yoga, Stretching",
-            entrySummary(entry("Activity", labelNames = "Yoga, Stretching"))
+            entrySummary(entry(EntryType.ACTIVITY, labelNames = "Yoga, Stretching"))
         )
     }
 
     @Test
     fun `unknown entry type shows generic summary`() {
         assertEquals(
-            "Logged Custom",
-            entrySummary(entry("Custom"))
+            "Logged entry",
+            entrySummary(entry(null))
         )
     }
 
@@ -101,7 +99,7 @@ class EntrySummaryTest {
     fun `sleep entry with null value shows em dash`() {
         assertEquals(
             "I slept \u2014 hours",
-            entrySummary(entry("Sleep"))
+            entrySummary(entry(EntryType.SLEEP))
         )
     }
 
@@ -109,7 +107,7 @@ class EntrySummaryTest {
     fun `hydration entry with null value shows em dash`() {
         assertEquals(
             "I drank \u2014 oz",
-            entrySummary(entry("Hydration"))
+            entrySummary(entry(EntryType.HYDRATION))
         )
     }
 
@@ -117,7 +115,7 @@ class EntrySummaryTest {
     fun `food entry with null labels shows something`() {
         assertEquals(
             "I ate something",
-            entrySummary(entry("Food"))
+            entrySummary(entry(EntryType.FOOD))
         )
     }
 
@@ -125,7 +123,7 @@ class EntrySummaryTest {
     fun `emotion entry with null labels shows something`() {
         assertEquals(
             "I felt something",
-            entrySummary(entry("Emotion"))
+            entrySummary(entry(EntryType.EMOTION))
         )
     }
 
@@ -133,13 +131,13 @@ class EntrySummaryTest {
     fun `activity entry with null labels shows something`() {
         assertEquals(
             "I did something",
-            entrySummary(entry("Activity"))
+            entrySummary(entry(EntryType.ACTIVITY))
         )
     }
 
     @Test
     fun `entrySummaryParts returns correct prefix and bold`() {
-        val parts = entrySummaryParts(entry("Sleep", numericValue = 7.5))
+        val parts = entrySummaryParts(entry(EntryType.SLEEP, numericValue = 7.5))
         assertEquals("I slept ", parts.prefix)
         assertEquals("7.5 hours", parts.bold)
         assertEquals("I slept 7.5 hours", parts.full)

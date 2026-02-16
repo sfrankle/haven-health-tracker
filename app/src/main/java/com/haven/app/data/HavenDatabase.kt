@@ -14,7 +14,7 @@ import com.haven.app.data.entity.AnchorTag
 import com.haven.app.data.entity.Category
 import com.haven.app.data.entity.Entry
 import com.haven.app.data.entity.EntryLabel
-import com.haven.app.data.entity.EntryType
+import com.haven.app.data.entity.EntryTypeEntity
 import com.haven.app.data.entity.Label
 import com.haven.app.data.entity.LabelTag
 import com.haven.app.data.entity.MeasurementType
@@ -25,7 +25,7 @@ import com.haven.app.data.entity.Tag
     entities = [
         MeasurementType::class,
         Category::class,
-        EntryType::class,
+        EntryTypeEntity::class,
         Label::class,
         Tag::class,
         LabelTag::class,
