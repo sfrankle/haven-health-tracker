@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey
 @Entity(
     tableName = "label",
     foreignKeys = [
-        ForeignKey(entity = EntryType::class, parentColumns = ["id"], childColumns = ["entry_type_id"]),
+        ForeignKey(entity = EntryTypeEntity::class, parentColumns = ["id"], childColumns = ["entry_type_id"]),
         ForeignKey(entity = Label::class, parentColumns = ["id"], childColumns = ["parent_id"]),
         ForeignKey(entity = Category::class, parentColumns = ["id"], childColumns = ["category_id"])
     ],

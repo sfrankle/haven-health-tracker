@@ -24,13 +24,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.haven.app.data.entity.EntryType
+import com.haven.app.data.entity.EntryTypeEntity
 import com.haven.app.ui.common.entryTypeIcon
 
 @Composable
 fun TendScreen(
     viewModel: TendViewModel = hiltViewModel(),
-    onEntryTypeClick: (EntryType) -> Unit = {}
+    onEntryTypeClick: (EntryTypeEntity) -> Unit = {}
 ) {
     val entryTypes by viewModel.entryTypes.collectAsState(initial = emptyList())
 
@@ -63,7 +63,7 @@ fun TendScreen(
 
 @Composable
 private fun EntryTypeButton(
-    entryType: EntryType,
+    entryType: EntryTypeEntity,
     onClick: () -> Unit
 ) {
     Button(

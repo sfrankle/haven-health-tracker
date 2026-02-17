@@ -27,7 +27,7 @@ interface EntryDao {
     }
 
     @Query("""
-        SELECT e.id, e.entry_type_id AS entryTypeId, et.name AS entryTypeName, et.icon AS entryTypeIcon,
+        SELECT e.id, e.entry_type_id AS entryTypeId, et.icon AS entryType,
                e.source_type AS sourceType, e.timestamp, e.created_at AS createdAt,
                e.numeric_value AS numericValue, e.notes,
                GROUP_CONCAT(l.name, ', ') AS labelNames
@@ -41,7 +41,7 @@ interface EntryDao {
     fun getAllWithDetails(): Flow<List<EntryWithDetails>>
 
     @Query("""
-        SELECT e.id, e.entry_type_id AS entryTypeId, et.name AS entryTypeName, et.icon AS entryTypeIcon,
+        SELECT e.id, e.entry_type_id AS entryTypeId, et.icon AS entryType,
                e.source_type AS sourceType, e.timestamp, e.created_at AS createdAt,
                e.numeric_value AS numericValue, e.notes,
                GROUP_CONCAT(l.name, ', ') AS labelNames
@@ -56,7 +56,38 @@ interface EntryDao {
     fun getByTypeWithDetails(entryTypeId: Long): Flow<List<EntryWithDetails>>
 
     @Query("""
-        SELECT e.id, e.entry_type_id AS entryTypeId, et.name AS entryTypeName, et.icon AS entryTypeIcon,
+        SELECT e.id, e.entry_type_id AS entryTypeId, et.icon AS entryType,
+               e.source_type AS sourceType, e.timestamp, e.created_at AS createdAt,
+               e.numeric_value AS numericValue, e.notes,
+               GROUP_CONCAT(l.name, ', ') AS labelNames
+        FROM entry e
+        JOIN entry_type et ON e.entry_type_id = et.id
+        LEFT JOIN entry_label el ON e.id = el.entry_id
+        LEFT JOIN label l ON el.label_id = l.id
+        GROUP BY e.id
+        ORDER BY e.timestamp DESC
+        LIMIT :limit OFFSET :offset
+    """)
+    suspend fun getAllWithDetailsPaged(limit: Int, offset: Int): List<EntryWithDetails>
+
+    @Query("""
+        SELECT e.id, e.entry_type_id AS entryTypeId, et.icon AS entryType,
+               e.source_type AS sourceType, e.timestamp, e.created_at AS createdAt,
+               e.numeric_value AS numericValue, e.notes,
+               GROUP_CONCAT(l.name, ', ') AS labelNames
+        FROM entry e
+        JOIN entry_type et ON e.entry_type_id = et.id
+        LEFT JOIN entry_label el ON e.id = el.entry_id
+        LEFT JOIN label l ON el.label_id = l.id
+        WHERE e.entry_type_id = :entryTypeId
+        GROUP BY e.id
+        ORDER BY e.timestamp DESC
+        LIMIT :limit OFFSET :offset
+    """)
+    suspend fun getByTypeWithDetailsPaged(entryTypeId: Long, limit: Int, offset: Int): List<EntryWithDetails>
+
+    @Query("""
+        SELECT e.id, e.entry_type_id AS entryTypeId, et.icon AS entryType,
                e.source_type AS sourceType, e.timestamp, e.created_at AS createdAt,
                e.numeric_value AS numericValue, e.notes,
                GROUP_CONCAT(l.name, ', ') AS labelNames

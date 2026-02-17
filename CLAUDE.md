@@ -29,7 +29,7 @@ Key docs: `docs/spec.md` (feature spec), `docs/roadmap.md` (what's next), `docs/
 ## Workflow
 
 - PRs should be small, self-contained units of work — one logical feature or change per PR
-- Each PR gets one entry in `docs/changelog.md` with 1–5 concise bullet points covering the most important changes
+- Each PR gets one row in the `docs/changelog.md` table with the merge date, PR number, and a concise summary
 - As roadmap features are completed, collapse them in `docs/roadmap.md` and move the detail to the changelog
 
 ## Coding Conventions
