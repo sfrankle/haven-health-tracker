@@ -48,10 +48,26 @@ class EntrySummaryTest {
     }
 
     @Test
-    fun `food entry shows labels`() {
+    fun `food entry shows labels lowercase`() {
         assertEquals(
-            "I ate Eggs, Toast",
+            "I ate eggs, toast",
             entrySummary(entry(EntryType.FOOD, labelNames = "Eggs, Toast"))
+        )
+    }
+
+    @Test
+    fun `food entry with eating out shows context`() {
+        assertEquals(
+            "I ate cheese, rice, vegetables while eating out",
+            entrySummary(entry(EntryType.FOOD, labelNames = "Cheese, Rice, Vegetables, Eating Out"))
+        )
+    }
+
+    @Test
+    fun `food entry with home cooked shows at home`() {
+        assertEquals(
+            "I ate eggs, toast at home",
+            entrySummary(entry(EntryType.FOOD, labelNames = "Eggs, Toast, Home Cooked"))
         )
     }
 
