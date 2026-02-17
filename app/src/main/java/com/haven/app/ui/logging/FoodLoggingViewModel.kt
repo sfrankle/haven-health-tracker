@@ -7,10 +7,13 @@ import com.haven.app.data.entity.Label
 import com.haven.app.data.repository.EntryRepository
 import com.haven.app.data.repository.LabelRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.Instant
@@ -27,7 +30,7 @@ data class FoodUiState(
     val searchQuery: String = "",
     val notes: String = "",
     val suggestions: List<Label> = emptyList(),
-    val saved: Boolean = false
+    val error: String? = null
 ) {
     val canSave: Boolean get() = selectedLabelIds.isNotEmpty()
 
@@ -45,41 +48,52 @@ class FoodLoggingViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(FoodUiState())
     val uiState: StateFlow<FoodUiState> = _uiState.asStateFlow()
 
+    private val _savedEvent = Channel<Unit>(Channel.BUFFERED)
+    val savedEvent = _savedEvent.receiveAsFlow()
+
+    private var loadJob: Job? = null
+
     fun loadLabels(entryTypeId: Long) {
-        viewModelScope.launch {
-            val allLabels = labelRepository.getByEntryType(entryTypeId).first()
+        if (loadJob?.isActive == true) return
 
-            // Find parent IDs that have children
-            val parentIds = allLabels.mapNotNull { it.parentId }.toSet()
+        loadJob = viewModelScope.launch {
+            try {
+                val allLabels = labelRepository.getByEntryType(entryTypeId).first()
 
-            // Partition: group parents (have children), their children, and regular labels
-            val groupParents = allLabels.filter { it.id in parentIds }
-            val mealSourceParent = groupParents.firstOrNull()
-            val mealSourceOptions = if (mealSourceParent != null) {
-                allLabels.filter { it.parentId == mealSourceParent.id }
-            } else emptyList()
+                // Find meal source parent by name
+                val mealSourceParent = allLabels.find { it.name == "Meal Source" && it.parentId == null }
+                val mealSourceOptions = if (mealSourceParent != null) {
+                    allLabels.filter { it.parentId == mealSourceParent.id }
+                } else emptyList()
 
-            val foodLabels = allLabels.filter { it.parentId == null && it.id !in parentIds }
+                // Exclude meal source parent and its children from food labels
+                val mealSourceIds = setOfNotNull(mealSourceParent?.id) +
+                    mealSourceOptions.map { it.id }.toSet()
+                val foodLabels = allLabels.filter { it.id !in mealSourceIds }
 
-            // Load time-of-day suggestions
-            val (hourStart, hourEnd) = currentMealWindow()
-            val frequencies = entryRepository.getLabelFrequencyByTimeWindow(
-                entryTypeId, hourStart, hourEnd, 6
-            )
-
-            val suggestions = if (frequencies.isNotEmpty()) {
-                val freqLabelIds = frequencies.map { it.labelId }
-                freqLabelIds.mapNotNull { id -> foodLabels.find { it.id == id } }
-            } else {
-                foodLabels.take(6)
-            }
-
-            _uiState.update {
-                it.copy(
-                    foodLabels = foodLabels,
-                    mealSourceOptions = mealSourceOptions,
-                    suggestions = suggestions
+                // Load time-of-day suggestions
+                val (hourStart, hourEnd) = currentMealWindow()
+                val frequencies = entryRepository.getLabelFrequencyByTimeWindow(
+                    entryTypeId, hourStart, hourEnd, 6
                 )
+
+                val suggestions = if (frequencies.isNotEmpty()) {
+                    val freqLabelIds = frequencies.map { it.labelId }
+                    freqLabelIds.mapNotNull { id -> foodLabels.find { it.id == id } }
+                } else {
+                    foodLabels.take(6)
+                }
+
+                _uiState.update {
+                    it.copy(
+                        foodLabels = foodLabels,
+                        mealSourceOptions = mealSourceOptions,
+                        suggestions = suggestions,
+                        error = null
+                    )
+                }
+            } catch (e: Exception) {
+                _uiState.update { it.copy(error = "Failed to load food labels") }
             }
         }
     }
@@ -114,24 +128,32 @@ class FoodLoggingViewModel @Inject constructor(
         if (!state.canSave) return
 
         viewModelScope.launch {
-            val now = Instant.now().atZone(ZoneId.systemDefault())
-            val timestamp = DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(now)
+            try {
+                val now = Instant.now().atZone(ZoneId.systemDefault())
+                val timestamp = DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(now)
 
-            val allLabelIds = state.selectedLabelIds.toMutableList()
-            state.selectedMealSourceId?.let { allLabelIds.add(it) }
+                val allLabelIds = state.selectedLabelIds.toMutableList()
+                state.selectedMealSourceId?.let { allLabelIds.add(it) }
 
-            entryRepository.insertWithLabels(
-                Entry(
-                    entryTypeId = entryTypeId,
-                    sourceType = "log",
-                    timestamp = timestamp,
-                    createdAt = timestamp,
-                    notes = state.notes.ifBlank { null }
-                ),
-                allLabelIds
-            )
-            _uiState.update { it.copy(saved = true) }
+                entryRepository.insertWithLabels(
+                    Entry(
+                        entryTypeId = entryTypeId,
+                        sourceType = "log",
+                        timestamp = timestamp,
+                        createdAt = timestamp,
+                        notes = state.notes.ifBlank { null }
+                    ),
+                    allLabelIds
+                )
+                _savedEvent.send(Unit)
+            } catch (e: Exception) {
+                _uiState.update { it.copy(error = "Failed to save entry") }
+            }
         }
+    }
+
+    fun clearError() {
+        _uiState.update { it.copy(error = null) }
     }
 
     private fun currentMealWindow(): Pair<Int, Int> {

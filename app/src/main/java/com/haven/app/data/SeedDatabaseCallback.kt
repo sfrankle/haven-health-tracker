@@ -18,9 +18,9 @@ class SeedDatabaseCallback(
 
         db.beginTransaction()
         try {
-            seedMeasurementTypes(db, appliedVersion)
-            seedCategories(db, appliedVersion)
-            seedEntryTypes(db, appliedVersion)
+            seedMeasurementTypes(db)
+            seedCategories(db)
+            seedEntryTypes(db)
             seedLabels(db, appliedVersion)
             seedTags(db, appliedVersion)
             seedLabelTags(db, appliedVersion)
@@ -31,7 +31,7 @@ class SeedDatabaseCallback(
         prefs.edit().putInt(KEY_SEED_VERSION, SeedData.VERSION).apply()
     }
 
-    private fun seedMeasurementTypes(db: SupportSQLiteDatabase, appliedVersion: Int) {
+    private fun seedMeasurementTypes(db: SupportSQLiteDatabase) {
         SeedData.measurementTypes.forEach { mt ->
             db.insert("measurement_type", SQLiteDatabase.CONFLICT_IGNORE, ContentValues().apply {
                 put("id", mt.id)
@@ -41,7 +41,7 @@ class SeedDatabaseCallback(
         }
     }
 
-    private fun seedCategories(db: SupportSQLiteDatabase, appliedVersion: Int) {
+    private fun seedCategories(db: SupportSQLiteDatabase) {
         SeedData.categories.forEach { cat ->
             db.insert("category", SQLiteDatabase.CONFLICT_IGNORE, ContentValues().apply {
                 put("id", cat.id)
@@ -50,7 +50,7 @@ class SeedDatabaseCallback(
         }
     }
 
-    private fun seedEntryTypes(db: SupportSQLiteDatabase, appliedVersion: Int) {
+    private fun seedEntryTypes(db: SupportSQLiteDatabase) {
         SeedData.entryTypes.forEach { et ->
             db.insert("entry_type", SQLiteDatabase.CONFLICT_IGNORE, ContentValues().apply {
                 put("id", et.id)

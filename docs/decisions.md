@@ -16,6 +16,7 @@ Decisions made during Haven's design phase, with rationale.
 | 10 | **Body font** | Philosopher | Philosopher (unified) | Philosopher works well for both headers and body, simplifying the font stack to a single family. |
 | 11 | **DI framework** | Manual DI, Koin, Hilt | Hilt | Standard for Jetpack Compose projects. ViewModel injection works out of the box. |
 | 12 | **Repository layer** | Generic base repo, skip repos (inject DAOs directly), thin pass-through repos | Use-case-oriented repos | Repos expose what ViewModels need, not mirror every DAO method. DAOs are query-oriented; repos are domain-oriented (e.g., `insertWithLabels`). One-liner delegation is fine when a ViewModel needs it — don't add methods preemptively. Room DAOs already fill the generic-CRUD role, so no `BaseRepository<T>` needed. |
+| 13 | **One-shot navigation events** | Boolean flag in UI state (`saved = true`), SharedFlow, Channel | `Channel<Unit>` + `receiveAsFlow()` | Boolean flags in state are fragile — if the ViewModel is reused or the flag defaults to `true`, navigation fires immediately. Channel guarantees exactly-once delivery. Collect in `LaunchedEffect(Unit)`. |
 
 ## Lessons from Prior Iterations
 

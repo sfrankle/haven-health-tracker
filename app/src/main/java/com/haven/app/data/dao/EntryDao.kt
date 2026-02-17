@@ -107,8 +107,8 @@ interface EntryDao {
         FROM entry e
         JOIN entry_label el ON e.id = el.entry_id
         WHERE e.entry_type_id = :entryTypeId
-        AND CAST(strftime('%H', e.timestamp) AS INTEGER) >= :hourStart
-        AND CAST(strftime('%H', e.timestamp) AS INTEGER) < :hourEnd
+        AND CAST(substr(e.timestamp, 12, 2) AS INTEGER) >= :hourStart
+        AND CAST(substr(e.timestamp, 12, 2) AS INTEGER) < :hourEnd
         GROUP BY el.label_id
         ORDER BY count DESC
         LIMIT :limit
