@@ -32,6 +32,7 @@ object DatabaseModule {
             HavenDatabase.NAME
         )
             .addCallback(SeedDatabaseCallback(context))
+            .fallbackToDestructiveMigration()
             .build()
     }
 

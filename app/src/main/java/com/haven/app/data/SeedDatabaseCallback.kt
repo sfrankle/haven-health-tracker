@@ -18,12 +18,12 @@ class SeedDatabaseCallback(
 
         db.beginTransaction()
         try {
-            seedMeasurementTypes(db)
-            seedCategories(db)
-            seedEntryTypes(db)
-            seedLabels(db)
-            seedTags(db)
-            seedLabelTags(db)
+            seedMeasurementTypes(db, appliedVersion)
+            seedCategories(db, appliedVersion)
+            seedEntryTypes(db, appliedVersion)
+            seedLabels(db, appliedVersion)
+            seedTags(db, appliedVersion)
+            seedLabelTags(db, appliedVersion)
             db.setTransactionSuccessful()
         } finally {
             db.endTransaction()
@@ -31,7 +31,7 @@ class SeedDatabaseCallback(
         prefs.edit().putInt(KEY_SEED_VERSION, SeedData.VERSION).apply()
     }
 
-    private fun seedMeasurementTypes(db: SupportSQLiteDatabase) {
+    private fun seedMeasurementTypes(db: SupportSQLiteDatabase, appliedVersion: Int) {
         SeedData.measurementTypes.forEach { mt ->
             db.insert("measurement_type", SQLiteDatabase.CONFLICT_IGNORE, ContentValues().apply {
                 put("id", mt.id)
@@ -41,7 +41,7 @@ class SeedDatabaseCallback(
         }
     }
 
-    private fun seedCategories(db: SupportSQLiteDatabase) {
+    private fun seedCategories(db: SupportSQLiteDatabase, appliedVersion: Int) {
         SeedData.categories.forEach { cat ->
             db.insert("category", SQLiteDatabase.CONFLICT_IGNORE, ContentValues().apply {
                 put("id", cat.id)
@@ -50,7 +50,7 @@ class SeedDatabaseCallback(
         }
     }
 
-    private fun seedEntryTypes(db: SupportSQLiteDatabase) {
+    private fun seedEntryTypes(db: SupportSQLiteDatabase, appliedVersion: Int) {
         SeedData.entryTypes.forEach { et ->
             db.insert("entry_type", SQLiteDatabase.CONFLICT_IGNORE, ContentValues().apply {
                 put("id", et.id)
@@ -65,8 +65,9 @@ class SeedDatabaseCallback(
         }
     }
 
-    private fun seedLabels(db: SupportSQLiteDatabase) {
-        (SeedData.foodLabels + listOf(SeedData.mealSourceLabel) + SeedData.mealSourceChildren).forEach { label ->
+    private fun seedLabels(db: SupportSQLiteDatabase, appliedVersion: Int) {
+        val allLabels = SeedData.foodLabels + listOf(SeedData.mealSourceLabel) + SeedData.mealSourceChildren
+        allLabels.filter { it.seedVersion > appliedVersion }.forEach { label ->
             db.insert("label", SQLiteDatabase.CONFLICT_IGNORE, ContentValues().apply {
                 put("id", label.id)
                 put("entry_type_id", label.entryTypeId)
@@ -81,8 +82,8 @@ class SeedDatabaseCallback(
         }
     }
 
-    private fun seedTags(db: SupportSQLiteDatabase) {
-        SeedData.foodTags.forEach { tag ->
+    private fun seedTags(db: SupportSQLiteDatabase, appliedVersion: Int) {
+        SeedData.foodTags.filter { it.seedVersion > appliedVersion }.forEach { tag ->
             db.insert("tag", SQLiteDatabase.CONFLICT_IGNORE, ContentValues().apply {
                 put("id", tag.id)
                 put("name", tag.name)
@@ -92,11 +93,12 @@ class SeedDatabaseCallback(
         }
     }
 
-    private fun seedLabelTags(db: SupportSQLiteDatabase) {
-        SeedData.foodLabelTags.forEach { lt ->
+    private fun seedLabelTags(db: SupportSQLiteDatabase, appliedVersion: Int) {
+        SeedData.foodLabelTags.filter { it.seedVersion > appliedVersion }.forEach { lt ->
             db.insert("label_tag", SQLiteDatabase.CONFLICT_IGNORE, ContentValues().apply {
                 put("label_id", lt.labelId)
                 put("tag_id", lt.tagId)
+                put("seed_version", lt.seedVersion)
             })
         }
     }

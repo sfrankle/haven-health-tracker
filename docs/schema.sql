@@ -59,6 +59,7 @@ CREATE TABLE tag (
 CREATE TABLE label_tag (
     label_id INTEGER NOT NULL,
     tag_id INTEGER NOT NULL,
+    seed_version INTEGER NOT NULL DEFAULT 1,
     PRIMARY KEY (label_id, tag_id),
     FOREIGN KEY (label_id) REFERENCES label(id),
     FOREIGN KEY (tag_id) REFERENCES tag(id)
