@@ -22,6 +22,12 @@ class EntryRepository @Inject constructor(
     fun getByTypeWithDetails(entryTypeId: Long): Flow<List<EntryWithDetails>> =
         entryDao.getByTypeWithDetails(entryTypeId)
 
+    suspend fun getAllWithDetailsPaged(limit: Int, offset: Int): List<EntryWithDetails> =
+        entryDao.getAllWithDetailsPaged(limit, offset)
+
+    suspend fun getByTypeWithDetailsPaged(entryTypeId: Long, limit: Int, offset: Int): List<EntryWithDetails> =
+        entryDao.getByTypeWithDetailsPaged(entryTypeId, limit, offset)
+
     fun getDailyTotal(entryTypeId: Long, dayStart: String, dayEnd: String): Flow<Double> =
         entryDao.getDailyTotal(entryTypeId, dayStart, dayEnd)
 

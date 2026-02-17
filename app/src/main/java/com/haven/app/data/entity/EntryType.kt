@@ -1,30 +1,14 @@
 package com.haven.app.data.entity
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.Index
-import androidx.room.PrimaryKey
+enum class EntryType(val displayName: String, val dbKey: String) {
+    FOOD("Food", "food"),
+    EMOTION("Emotion", "emotion"),
+    HYDRATION("Hydration", "hydration"),
+    SLEEP("Sleep", "sleep"),
+    SYMPTOM("Symptom", "symptom"),
+    ACTIVITY("Activity", "activity");
 
-@Entity(
-    tableName = "entry_type",
-    foreignKeys = [
-        ForeignKey(entity = MeasurementType::class, parentColumns = ["id"], childColumns = ["measurement_type_id"])
-    ],
-    indices = [Index(value = ["name"], unique = true), Index("measurement_type_id")]
-)
-data class EntryType(
-    @PrimaryKey(autoGenerate = true)
-    val id: Long = 0,
-    val name: String,
-    @ColumnInfo(name = "measurement_type_id")
-    val measurementTypeId: Long,
-    val prompt: String? = null,
-    val icon: EntryTypeIcon? = null,
-    @ColumnInfo(name = "is_enabled", defaultValue = "1")
-    val isEnabled: Boolean = true,
-    @ColumnInfo(name = "is_default", defaultValue = "1")
-    val isDefault: Boolean = true,
-    @ColumnInfo(name = "sort_order", defaultValue = "0")
-    val sortOrder: Int = 0
-)
+    companion object {
+        fun fromDbKey(key: String): EntryType = entries.first { it.dbKey == key }
+    }
+}
