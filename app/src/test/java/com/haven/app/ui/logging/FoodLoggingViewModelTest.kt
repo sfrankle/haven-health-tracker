@@ -19,9 +19,11 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import app.cash.turbine.test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
@@ -240,5 +242,53 @@ class FoodLoggingViewModelTest {
         val viewModel = createViewModel()
         viewModel.updateNotes("Delicious meal")
         assertEquals("Delicious meal", viewModel.uiState.value.notes)
+    }
+
+    @Test
+    fun `save emits savedEvent on success`() = runTest {
+        whenever(entryRepository.getLabelFrequencyByTimeWindow(any(), any(), any(), any()))
+            .thenReturn(emptyList())
+        whenever(entryRepository.insertWithLabels(any(), any())).thenReturn(1L)
+
+        val viewModel = createViewModel()
+        viewModel.loadLabels(foodEntryTypeId)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        viewModel.savedEvent.test {
+            viewModel.toggleLabel(1L)
+            viewModel.save(foodEntryTypeId)
+            testDispatcher.scheduler.advanceUntilIdle()
+
+            awaitItem() // savedEvent emitted
+        }
+    }
+
+    @Test
+    fun `save sets error state when repository throws`() = runTest {
+        whenever(entryRepository.getLabelFrequencyByTimeWindow(any(), any(), any(), any()))
+            .thenReturn(emptyList())
+        whenever(entryRepository.insertWithLabels(any(), any()))
+            .thenThrow(RuntimeException("DB error"))
+
+        val viewModel = createViewModel()
+        viewModel.loadLabels(foodEntryTypeId)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        viewModel.toggleLabel(1L)
+        viewModel.save(foodEntryTypeId)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertEquals("Failed to save entry", viewModel.uiState.value.error)
+    }
+
+    @Test
+    fun `save does nothing when canSave is false`() = runTest {
+        val viewModel = createViewModel()
+        assertFalse(viewModel.uiState.value.canSave)
+
+        viewModel.save(foodEntryTypeId)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        verify(entryRepository, never()).insertWithLabels(any(), any())
     }
 }
