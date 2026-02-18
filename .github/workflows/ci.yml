@@ -26,9 +26,6 @@ jobs:
               - 'app/src/main/**'
               - '**/*.gradle*'
               - 'gradle/**'
-            tests:
-              - 'app/src/test/**'
-              - 'app/src/androidTest/**'
 
       - uses: actions/setup-java@v4
         with:
