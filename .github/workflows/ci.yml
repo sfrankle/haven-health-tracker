@@ -37,8 +37,23 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v4
 
+      - name: Restore build cache
+        id: build-cache
+        if: steps.filter.outputs.source == 'false'
+        uses: actions/cache/restore@v4
+        with:
+          path: app/build
+          key: build-${{ hashFiles('app/src/main/**', '**/*.gradle*', 'gradle/**') }}
+
       - run: ./gradlew assembleDebug
 
       - run: ./gradlew lintDebug
 
       - run: ./gradlew testDebugUnitTest
+
+      - name: Save build cache
+        if: steps.filter.outputs.source == 'true' || steps.build-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: app/build
+          key: build-${{ hashFiles('app/src/main/**', '**/*.gradle*', 'gradle/**') }}
