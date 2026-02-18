@@ -31,6 +31,7 @@ Key docs: `docs/spec.md` (feature spec), `docs/roadmap.md` (what's next), `docs/
 - PRs should be small, self-contained units of work — one logical feature or change per PR
 - Each PR gets one row in the `docs/changelog.md` table with the merge date, PR number, and a concise summary
 - As roadmap features are completed, collapse them in `docs/roadmap.md` and move the detail to the changelog
+- Link issues to PRs with `Closes #N` in the PR body — GitHub will auto-close the issue when the PR merges. Never close issues manually.
 
 ## Coding Conventions
 
