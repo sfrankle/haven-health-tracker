@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -30,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.haven.app.ui.common.PillButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -78,16 +78,14 @@ fun HydrationLoggingScreen(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Button(
+                PillButton(
                     onClick = { viewModel.quickAdd(entryTypeId, 8.0) },
-                    shape = MaterialTheme.shapes.large,
                     modifier = Modifier.weight(1f)
                 ) {
                     Text("+8 oz")
                 }
-                Button(
+                PillButton(
                     onClick = { viewModel.quickAdd(entryTypeId, 16.0) },
-                    shape = MaterialTheme.shapes.large,
                     modifier = Modifier.weight(1f)
                 ) {
                     Text("+16 oz")
@@ -121,9 +119,8 @@ fun HydrationLoggingScreen(
                 }
             }
             Spacer(modifier = Modifier.height(24.dp))
-            Button(
+            PillButton(
                 onClick = onBack,
-                shape = MaterialTheme.shapes.large,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Done")
