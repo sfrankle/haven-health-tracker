@@ -17,6 +17,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Detect changed paths
+        uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            source:
+              - 'app/src/main/**'
+              - '**/*.gradle*'
+              - 'gradle/**'
+            tests:
+              - 'app/src/test/**'
+              - 'app/src/androidTest/**'
+
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
