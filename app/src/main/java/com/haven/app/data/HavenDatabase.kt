@@ -34,7 +34,7 @@ import com.haven.app.data.entity.Tag
         AnchorActivity::class,
         AnchorTag::class,
     ],
-    version = 1,
+    version = 2,
     exportSchema = true
 )
 abstract class HavenDatabase : RoomDatabase() {

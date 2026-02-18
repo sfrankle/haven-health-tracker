@@ -21,9 +21,9 @@ class SeedDatabaseCallback(
             seedMeasurementTypes(db)
             seedCategories(db)
             seedEntryTypes(db)
-            seedLabels(db)
-            seedTags(db)
-            seedLabelTags(db)
+            seedLabels(db, appliedVersion)
+            seedTags(db, appliedVersion)
+            seedLabelTags(db, appliedVersion)
             db.setTransactionSuccessful()
         } finally {
             db.endTransaction()
@@ -65,8 +65,9 @@ class SeedDatabaseCallback(
         }
     }
 
-    private fun seedLabels(db: SupportSQLiteDatabase) {
-        SeedData.foodLabels.forEach { label ->
+    private fun seedLabels(db: SupportSQLiteDatabase, appliedVersion: Int) {
+        val allLabels = SeedData.foodLabels + listOf(SeedData.mealSourceLabel) + SeedData.mealSourceChildren
+        allLabels.filter { it.seedVersion > appliedVersion }.forEach { label ->
             db.insert("label", SQLiteDatabase.CONFLICT_IGNORE, ContentValues().apply {
                 put("id", label.id)
                 put("entry_type_id", label.entryTypeId)
@@ -81,8 +82,8 @@ class SeedDatabaseCallback(
         }
     }
 
-    private fun seedTags(db: SupportSQLiteDatabase) {
-        SeedData.foodTags.forEach { tag ->
+    private fun seedTags(db: SupportSQLiteDatabase, appliedVersion: Int) {
+        SeedData.foodTags.filter { it.seedVersion > appliedVersion }.forEach { tag ->
             db.insert("tag", SQLiteDatabase.CONFLICT_IGNORE, ContentValues().apply {
                 put("id", tag.id)
                 put("name", tag.name)
@@ -92,11 +93,12 @@ class SeedDatabaseCallback(
         }
     }
 
-    private fun seedLabelTags(db: SupportSQLiteDatabase) {
-        SeedData.foodLabelTags.forEach { lt ->
+    private fun seedLabelTags(db: SupportSQLiteDatabase, appliedVersion: Int) {
+        SeedData.foodLabelTags.filter { it.seedVersion > appliedVersion }.forEach { lt ->
             db.insert("label_tag", SQLiteDatabase.CONFLICT_IGNORE, ContentValues().apply {
                 put("label_id", lt.labelId)
                 put("tag_id", lt.tagId)
+                put("seed_version", lt.seedVersion)
             })
         }
     }

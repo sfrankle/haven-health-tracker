@@ -18,5 +18,7 @@ data class LabelTag(
     @ColumnInfo(name = "label_id")
     val labelId: Long,
     @ColumnInfo(name = "tag_id")
-    val tagId: Long
+    val tagId: Long,
+    @ColumnInfo(name = "seed_version", defaultValue = "1")
+    val seedVersion: Int = 1
 )

@@ -14,7 +14,7 @@ fun entrySummaryParts(entry: EntryWithDetails): EntrySummaryParts {
     return when (entry.entryType) {
         EntryType.SLEEP -> EntrySummaryParts("I slept ", "${formatNumber(value)} hours")
         EntryType.HYDRATION -> EntrySummaryParts("I drank ", "${formatNumber(value)} oz")
-        EntryType.FOOD -> EntrySummaryParts("I ate ", labels ?: "something")
+        EntryType.FOOD -> formatFood(labels)
         EntryType.EMOTION -> EntrySummaryParts("I felt ", labels ?: "something")
         EntryType.SYMPTOM -> EntrySummaryParts("I experienced ", labels ?: "something")
         EntryType.ACTIVITY -> formatActivity(labels)
@@ -31,6 +31,22 @@ private fun formatNumber(value: Double?): String {
     } else {
         value.toString()
     }
+}
+
+private val MEAL_SOURCE_LABELS = setOf("Home Cooked", "Eating Out")
+
+private fun formatFood(labels: String?): EntrySummaryParts {
+    if (labels == null) return EntrySummaryParts("I ate ", "something")
+    val parts = labels.split(", ")
+    val foodItems = parts.filter { it !in MEAL_SOURCE_LABELS }
+    val mealSource = parts.firstOrNull { it in MEAL_SOURCE_LABELS }
+    val foodText = if (foodItems.isNotEmpty()) foodItems.joinToString(", ") { it.lowercase() } else "something"
+    val suffix = when (mealSource) {
+        "Eating Out" -> " while eating out"
+        "Home Cooked" -> " at home"
+        else -> ""
+    }
+    return EntrySummaryParts("I ate ", "$foodText$suffix")
 }
 
 private fun formatActivity(labels: String?): EntrySummaryParts {
