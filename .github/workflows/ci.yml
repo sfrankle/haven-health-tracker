@@ -45,11 +45,12 @@ jobs:
           path: app/build
           key: build-${{ hashFiles('app/src/main/**', '**/*.gradle*', 'gradle/**') }}
 
-      - run: ./gradlew assembleDebug
+      - name: Build and Lint
+        if: steps.filter.outputs.source == 'true' || steps.build-cache.outputs.cache-hit != 'true'
+        run: ./gradlew assembleDebug lintDebug
 
-      - run: ./gradlew lintDebug
-
-      - run: ./gradlew testDebugUnitTest
+      - name: Test
+        run: ./gradlew testDebugUnitTest
 
       - name: Save build cache
         if: steps.filter.outputs.source == 'true' || steps.build-cache.outputs.cache-hit != 'true'
