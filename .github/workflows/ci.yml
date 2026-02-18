@@ -33,6 +33,8 @@ jobs:
           java-version: 17
 
       - uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: ${{ github.event.pull_request.head.repo.full_name != github.repository }}
 
       - name: Restore build cache
         id: build-cache
