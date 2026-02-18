@@ -11,5 +11,6 @@ data class EntryWithDetails(
     val createdAt: String,
     val numericValue: Double?,
     val notes: String?,
+    /** Comma-separated label names from GROUP_CONCAT, or null if the entry has no labels. */
     val labelNames: String?
 )

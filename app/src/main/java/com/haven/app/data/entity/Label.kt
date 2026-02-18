@@ -21,6 +21,7 @@ data class Label(
     @ColumnInfo(name = "entry_type_id")
     val entryTypeId: Long,
     val name: String,
+    /** Null for top-level labels; set to another label's id for sub-labels. */
     @ColumnInfo(name = "parent_id")
     val parentId: Long? = null,
     @ColumnInfo(name = "category_id")

@@ -6,6 +6,11 @@ import android.database.sqlite.SQLiteDatabase
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 
+/**
+ * Populates the database with default seed data on every open, but only when [SeedData.VERSION]
+ * has advanced past the last applied version (tracked in SharedPreferences). Uses
+ * INSERT OR IGNORE so re-runs are always safe.
+ */
 class SeedDatabaseCallback(
     private val context: Context
 ) : RoomDatabase.Callback() {
