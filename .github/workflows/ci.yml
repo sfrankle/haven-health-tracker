@@ -2,6 +2,9 @@ name: CI
 
 on:
   pull_request:
+    paths-ignore:
+      - '**/*.md'
+      - 'docs/**'
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -14,15 +17,43 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Detect changed paths
+        uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            source:
+              - 'app/src/main/**'
+              - '**/*.gradle*'
+              - 'gradle/**'
+
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
 
       - uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: ${{ github.event.pull_request.head.repo.full_name != github.repository }}
 
-      - run: ./gradlew assembleDebug
+      - name: Restore build cache
+        id: build-cache
+        if: steps.filter.outputs.source == 'false'
+        uses: actions/cache/restore@v4
+        with:
+          path: app/build
+          key: build-${{ hashFiles('app/src/main/**', '**/*.gradle*', 'gradle/**') }}
 
-      - run: ./gradlew lintDebug
+      - name: Build and Lint
+        if: steps.filter.outputs.source == 'true' || steps.build-cache.outputs.cache-hit != 'true'
+        run: ./gradlew assembleDebug lintDebug
 
-      - run: ./gradlew testDebugUnitTest
+      - name: Test
+        run: ./gradlew testDebugUnitTest
+
+      - name: Save build cache
+        if: steps.filter.outputs.source == 'true' || steps.build-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: app/build
+          key: build-${{ hashFiles('app/src/main/**', '**/*.gradle*', 'gradle/**') }}
