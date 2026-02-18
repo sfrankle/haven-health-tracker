@@ -31,12 +31,6 @@ class EntryRepository @Inject constructor(
     fun getDailyTotal(entryTypeId: Long, dayStart: String, dayEnd: String): Flow<Double> =
         entryDao.getDailyTotal(entryTypeId, dayStart, dayEnd)
 
-    /**
-     * Returns the top [limit] labels by frequency for [entryTypeId] within the given hour window.
-     *
-     * Handles windows that cross midnight (e.g. 21–6) by splitting into two queries
-     * (evening and morning) and merging the counts. [hourStart] and [hourEnd] are 0–23.
-     */
     suspend fun getLabelFrequencyByTimeWindow(
         entryTypeId: Long,
         hourStart: Int,

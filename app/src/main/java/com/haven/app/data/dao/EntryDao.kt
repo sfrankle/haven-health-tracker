@@ -18,10 +18,7 @@ interface EntryDao {
     @Insert
     suspend fun insertEntryLabels(entryLabels: List<EntryLabel>)
 
-    /**
-     * Atomically inserts an entry and its label associations in a single transaction.
-     * If [labelIds] is empty, only the entry is inserted (no label rows are written).
-     */
+    /** If [labelIds] is empty, only the entry is inserted (no label rows are written). */
     @Transaction
     suspend fun insertWithLabels(entry: Entry, labelIds: List<Long>): Long {
         val entryId = insert(entry)
