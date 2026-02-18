@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 -c \"import sys, json\ndata = json.load(sys.stdin)\npath = data.get('tool_input', {}).get('file_path', '')\nif any(x in path for x in ['data/entity', 'data/dao', 'HavenDatabase']):\n    print('MIGRATION SAFETY CHECK: This file affects the Room schema. Invoke the room-migration skill for the full checklist, or verify manually: (1) database version incremented in HavenDatabase.kt, (2) Migration object written, (3) seed data uses INSERT OR IGNORE with correct seedVersion gating.')\n\""
+            "command": "python3 -c \"import sys, json\ndata = json.load(sys.stdin)\npath = data.get('tool_input', {}).get('file_path', '')\nif any(x in path for x in ['data/entity', 'data/dao', 'HavenDatabase']):\n    print('MIGRATION SAFETY CHECK: This file affects the Room schema. Invoke the room-migration skill for the full checklist, or verify manually: (1) database version incremented in HavenDatabase.kt, (2) Migration object written, (3) seed data uses INSERT OR IGNORE with correct seedVersion gating, (4) schema JSON committed from app/schemas/, (5) MigrationTestHelper test written.')\n\""
           }
         ]
       }
