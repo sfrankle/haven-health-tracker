@@ -921,3 +921,57 @@ Mark `Food logging` as done in `docs/roadmap.md`:
 ```
 docs: update changelog and roadmap for food logging
 ```
+
+---
+
+## Code Review Issues (2026-02-16)
+
+Review of PR #11 against technology best practices for Kotlin, Jetpack Compose, Room, Hilt, and Coroutines/Flow.
+
+### Important (Should Fix)
+
+**1. `strftime('%H')` normalizes to UTC — wrong meal suggestions for non-UTC users**
+- **File:** `EntryDao.kt:110`
+- SQLite's `strftime` normalizes ISO-8601 timestamps with offsets to UTC before extracting the hour. A user logging at 7 PM EST (19:00 local) gets hour `0` (midnight UTC), placing the entry in the late-night window instead of evening.
+- **Fix:** Extract the hour in Kotlin (in the repository) from the parsed offset timestamp, or store a `local_hour` column on `entry` at insert time.
+
+**2. No error handling in `save` or `loadLabels`**
+- **File:** `FoodLoggingViewModel.kt:48,112`
+- Neither method catches exceptions. A DB failure (FK violation, disk full) crashes the coroutine silently — the save button appears to do nothing.
+- **Fix:** Wrap in try-catch, add an `error` field to `FoodUiState`, and surface it in the UI.
+
+**3. Meal source parent detection is fragile — assumes only one parent exists**
+- **File:** `FoodLoggingViewModel.kt:57`
+- `groupParents.firstOrNull()` assumes at most one parent-child label group in the food entry type. Adding a second hierarchy (e.g., "Cuisine Type") would silently break this.
+- **Fix:** Query by `meal_source` tag or known parent ID instead of positional assumption.
+
+**4. `LaunchedEffect(uiState.saved)` for one-shot navigation**
+- **File:** `FoodLoggingScreen.kt:54`
+- Works but is a known fragile pattern. If `saved` defaults to `true` or the ViewModel is reused, `onSaved()` fires immediately.
+- **Fix:** Use `Channel<Unit>` + `receiveAsFlow()` in ViewModel for one-shot navigation events.
+
+**5. `loadLabels` not idempotent — no guard against concurrent calls**
+- **File:** `FoodLoggingViewModel.kt:48`
+- Each call launches a new coroutine. Rapid calls (e.g., during config change) can race.
+- **Fix:** Store a `Job` reference and cancel previous, or guard with an already-loaded check.
+
+### Minor (Nice to Have)
+
+**6. `collectAsState()` without lifecycle awareness**
+- **File:** `FoodLoggingScreen.kt:47`
+- Collects even when app is in background. Prefer `collectAsStateWithLifecycle()` from `androidx.lifecycle.compose`.
+
+**7. `filteredLabels` recomputes on every access**
+- **File:** `FoodLoggingViewModel.kt:34`
+- Computed `get()` property filters the list each time Compose reads it. Fine at 25 labels, won't scale.
+
+**8. No `@Preview` composables**
+- **File:** `FoodLoggingScreen.kt`
+- Missing preview functions for `LabelChipGrid` and `MealSourceToggle`.
+
+**9. Unused import `org.mockito.kotlin.eq`**
+- **File:** `FoodLoggingViewModelTest.kt:26`
+
+**10. `seedMeasurementTypes`/`seedCategories`/`seedEntryTypes` accept `appliedVersion` but don't use it**
+- **File:** `SeedDatabaseCallback.kt:34-66`
+- Inconsistent with `seedLabels`/`seedTags`/`seedLabelTags` which filter by version. `CONFLICT_IGNORE` makes it safe but the unused parameter is misleading.

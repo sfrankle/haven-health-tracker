@@ -10,7 +10,7 @@ Scaffolding + 3 entry types + 2 pages. Proves the data model end-to-end.
 ### ~~Sleep logging~~ ✓ PR 2
 ### ~~Hydration logging~~ ✓ PR 2
 
-### ~~Food logging~~ ✓ PR 3
+### ~~Food logging~~ ✓ PR 11
 
 ### ~~Trace page~~ ✓ PR 4
 
