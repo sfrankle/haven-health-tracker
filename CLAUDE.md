@@ -39,6 +39,7 @@ Key docs: `docs/spec.md` (feature spec), `docs/roadmap.md` (what's next), `docs/
 - SNAKE_CASE for database column names
 - One ViewModel per major screen, injected via Hilt
 - Repositories wrap DAOs — ViewModels never access DAOs directly. Repos are use-case-oriented (not DAO mirrors); only expose methods ViewModels need. See `docs/decisions.md` #12.
+- Add KDoc to DAO and repository methods when the behavior, parameter format, or contract isn't obvious from the name and types alone (e.g. string timestamp formats, midnight-crossing logic, snapshot vs. Flow semantics). Skip it for simple CRUD and pass-through methods.
 
 ## Data Model
 

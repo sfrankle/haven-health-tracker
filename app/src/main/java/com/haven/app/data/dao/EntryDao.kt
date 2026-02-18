@@ -18,6 +18,10 @@ interface EntryDao {
     @Insert
     suspend fun insertEntryLabels(entryLabels: List<EntryLabel>)
 
+    /**
+     * Atomically inserts an entry and its label associations in a single transaction.
+     * If [labelIds] is empty, only the entry is inserted (no label rows are written).
+     */
     @Transaction
     suspend fun insertWithLabels(entry: Entry, labelIds: List<Long>): Long {
         val entryId = insert(entry)
@@ -56,6 +60,10 @@ interface EntryDao {
     """)
     fun getByTypeWithDetails(entryTypeId: Long): Flow<List<EntryWithDetails>>
 
+    /**
+     * One-shot paginated fetch — returns a snapshot, not a live [Flow].
+     * Use [getAllWithDetails] if you need reactive updates.
+     */
     @Query("""
         SELECT e.id, e.entry_type_id AS entryTypeId, et.icon AS entryType,
                e.source_type AS sourceType, e.timestamp, e.created_at AS createdAt,
@@ -71,6 +79,10 @@ interface EntryDao {
     """)
     suspend fun getAllWithDetailsPaged(limit: Int, offset: Int): List<EntryWithDetails>
 
+    /**
+     * One-shot paginated fetch filtered by entry type — returns a snapshot, not a live [Flow].
+     * Use [getByTypeWithDetails] if you need reactive updates.
+     */
     @Query("""
         SELECT e.id, e.entry_type_id AS entryTypeId, et.icon AS entryType,
                e.source_type AS sourceType, e.timestamp, e.created_at AS createdAt,
@@ -87,6 +99,11 @@ interface EntryDao {
     """)
     suspend fun getByTypeWithDetailsPaged(entryTypeId: Long, limit: Int, offset: Int): List<EntryWithDetails>
 
+    /**
+     * Returns all entries whose timestamp falls within [[startDate], [endDate]] inclusive.
+     * Both bounds must be ISO 8601 strings (e.g. "2024-01-15 00:00:00") — the query uses
+     * SQLite's lexicographic string comparison on the timestamp column.
+     */
     @Query("""
         SELECT e.id, e.entry_type_id AS entryTypeId, et.icon AS entryType,
                e.source_type AS sourceType, e.timestamp, e.created_at AS createdAt,
@@ -102,6 +119,14 @@ interface EntryDao {
     """)
     fun getByDateRangeWithDetails(startDate: String, endDate: String): Flow<List<EntryWithDetails>>
 
+    /**
+     * Returns the top [limit] labels by usage frequency for entries of [entryTypeId] recorded
+     * within the hour window [[hourStart], [hourEnd]).
+     *
+     * Hour extraction uses `substr(timestamp, 12, 2)` — requires timestamps stored as
+     * ISO 8601 strings ("YYYY-MM-DD HH:mm:ss"). [hourStart] and [hourEnd] are 0–23 (24-hour).
+     * This DAO method does NOT handle windows that cross midnight; see [EntryRepository] for that.
+     */
     @Query("""
         SELECT el.label_id AS labelId, COUNT(*) AS count
         FROM entry e
@@ -120,6 +145,11 @@ interface EntryDao {
         limit: Int
     ): List<LabelFrequency>
 
+    /**
+     * Sums [Entry.numericValue] for all entries of [entryTypeId] within [[dayStart], [dayEnd]].
+     * Returns 0.0 when no entries exist in the range (via COALESCE).
+     * Bounds must be ISO 8601 strings (e.g. "2024-01-15 00:00:00" / "2024-01-15 23:59:59").
+     */
     @Query("""
         SELECT COALESCE(SUM(e.numeric_value), 0)
         FROM entry e
