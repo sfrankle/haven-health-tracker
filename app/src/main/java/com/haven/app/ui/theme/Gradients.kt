@@ -74,13 +74,13 @@ fun tabGradient(destination: HavenDestination): Brush = when (destination) {
     HavenDestination.Settings -> SettingsGradient
 }
 
-/** Pale tint color (first palette color at low alpha) for card/surface backgrounds. */
+/** Solid pastel card background color for each entry type, readable against the Tend gradient. */
 fun entryTypeTint(entryType: EntryType?): Color = when (entryType) {
-    EntryType.HYDRATION -> HydrationBlue.copy(alpha = 0.15f)
-    EntryType.FOOD      -> FoodGreen.copy(alpha = 0.15f)
-    EntryType.SLEEP     -> SleepLavender.copy(alpha = 0.15f)
-    EntryType.EMOTION   -> EmotionBlush.copy(alpha = 0.15f)
-    EntryType.SYMPTOM   -> SymptomSand.copy(alpha = 0.15f)
-    EntryType.ACTIVITY  -> ActivityCoral.copy(alpha = 0.15f)
-    null                -> TendPeach.copy(alpha = 0.15f) // fallback for custom entry types with no icon mapping
+    EntryType.HYDRATION -> HydrationCard
+    EntryType.FOOD      -> FoodCard
+    EntryType.SLEEP     -> SleepCard
+    EntryType.EMOTION   -> EmotionCard
+    EntryType.SYMPTOM   -> SymptomCard
+    EntryType.ACTIVITY  -> ActivityCard
+    null                -> TendPeach
 }

@@ -38,6 +38,15 @@ val ActivityCoral = Color(0xFFEF9A9A)
 val ActivityRose = Color(0xFFF48FB1)
 val ActivityViolet = Color(0xFFE8D5F0)
 
+// Entry type card backgrounds — near-white tints for the Tend screen
+// Pale enough to feel soft/ethereal, distinct enough to tell apart
+val FoodCard = Color(0xFFE9F2E7)       // whisper of sage green
+val HydrationCard = Color(0xFFE3EEF5)  // whisper of sky blue
+val SleepCard = Color(0xFFEBE7F6)      // whisper of lavender
+val EmotionCard = Color(0xFFF5E6ED)    // whisper of cool rose
+val SymptomCard = Color(0xFFF5EDD9)    // whisper of amber
+val ActivityCard = Color(0xFFF1E9F6)   // whisper of violet
+
 // Tab: Tend — warm cream → soft peach
 val TendCream = Color(0xFFFFF8F0)
 val TendPeach = Color(0xFFFFE0CC)
