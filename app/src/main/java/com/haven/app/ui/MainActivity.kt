@@ -19,6 +19,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.haven.app.ui.navigation.HavenDestination
 import com.haven.app.ui.theme.HavenTheme
+import com.haven.app.ui.theme.tabGradient
 import com.haven.app.ui.placeholder.PlaceholderScreen
 import com.haven.app.ui.logging.LoggingRoute
 import com.haven.app.ui.tend.TendScreen
@@ -79,9 +80,9 @@ fun HavenApp() {
                 )
             }
             composable(HavenDestination.Trace.route) { TraceScreen() }
-            composable(HavenDestination.Weave.route) { PlaceholderScreen("Weave") }
-            composable(HavenDestination.Anchor.route) { PlaceholderScreen("Anchor") }
-            composable(HavenDestination.Settings.route) { PlaceholderScreen("Settings") }
+            composable(HavenDestination.Weave.route) { PlaceholderScreen("Weave", gradient = tabGradient(HavenDestination.Weave)) }
+            composable(HavenDestination.Anchor.route) { PlaceholderScreen("Anchor", gradient = tabGradient(HavenDestination.Anchor)) }
+            composable(HavenDestination.Settings.route) { PlaceholderScreen("Settings", gradient = tabGradient(HavenDestination.Settings)) }
             composable(
                 route = "log/{entryTypeId}",
                 arguments = listOf(navArgument("entryTypeId") { type = NavType.LongType })
