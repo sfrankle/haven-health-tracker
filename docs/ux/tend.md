@@ -24,16 +24,6 @@ Tend is not:
 - A coaching screen
 
 ## Layout Specification
-### Global
-- Bottom navigation is always visible.
-- No top app bar.
-- Screen uses a vertical column with calm spacing rhythm.
-
-### Spacing Rhythm
-- Horizontal page padding: 16dp
-- Section gap (major): 24dp
-- Element gap (minor): 12dp
-- Bottom content padding above nav: at least 16dp
 
 ### Zone 1: Orientation (Top)
 Content:
@@ -63,8 +53,3 @@ Interaction:
 - Default path should be tap-first, not keyboard-first
 - Back navigation from logging returns user to Tend
 - Preserve Tend scroll/state when returning
-
-## Motion
-- Soft fade between entry states
-- No bounce, no celebratory animations
-- Motion should not delay interaction readiness

@@ -6,7 +6,7 @@ This file provides guidance to Claude Code when working with code in this reposi
 
 Haven — private-first Android health tracking app. Kotlin + Jetpack Compose + Room. All data local to device.
 
-Key docs: `docs/spec.md` (feature spec), `docs/changelog.md` (what's done), `docs/schema.sql` (database schema), `docs/decisions.md` (design rationale), `docs/design.md` (visual design system).
+Key docs: `docs/spec.md` (feature spec), `docs/changelog.md` (what's done), `docs/schema.sql` (database schema), `docs/decisions.md` (design rationale), `docs/design/` (design system), `docs/ux/` (UX specs).
 
 ## Build Commands
 
@@ -48,7 +48,7 @@ Haven uses an issue-driven development workflow. All work flows through GitHub I
 ### PR Conventions
 - Always start as **draft**
 - Each PR updates `docs/changelog.md` **in the commits** (before opening PR)
-- Each PR updates other docs if relevant (decisions.md, design.md, schema.sql) **in the commits**
+- Each PR updates other docs if relevant (decisions.md, schema.sql, design/, ux/) **in the commits**
 - **Never commit directly to `main`.** All changes go through a feature branch and PR.
 - **Don't use git worktrees** unless explicitly asked.
 - **Branch naming:**
@@ -94,4 +94,4 @@ Seed data uses `seedVersion` column for safe migrations across app updates. Deli
 
 ## Design System
 
-See `docs/design.md` for colors, typography, components, and principles. Key constraint: non-judgmental tone — no scores, streaks, or "good/bad" framing in any user-facing text.
+See `docs/design/design-principles.md` (brand, voice, UX philosophy) and `docs/design/visual-style.md` (colors, typography, components). Key constraint: non-judgmental tone — no scores, streaks, or "good/bad" framing in any user-facing text.

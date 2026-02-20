@@ -35,7 +35,7 @@ Search for common issues across key areas:
 **Documentation drift:**
 - `docs/decisions.md` missing recent architectural choices
 - `docs/schema.sql` out of sync with actual entities
-- `docs/design.md` components not matching implementation
+- `docs/design/visual-style.md` components not matching implementation
 
 ### 2. Prioritize findings
 Group issues by impact:

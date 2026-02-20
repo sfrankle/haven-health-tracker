@@ -48,3 +48,8 @@ Scope: Cross-screen interaction rules for Haven.
 - Touch targets meet Material minimum size guidance.
 - Color is never the only signal.
 - Respect system font scaling and dynamic type.
+
+## Motion
+- Soft fade between entry states
+- No bounce, no celebratory animations
+- Motion should not delay interaction readiness

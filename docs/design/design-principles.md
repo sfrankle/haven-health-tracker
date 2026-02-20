@@ -58,25 +58,6 @@ Microcopy examples:
 
 Silence is acceptable when no message is needed.
 
-## UX Principles
-### 1) Logging Is Effortless
-- One-handed use by default
-- Minimal typing
-- Smart defaults and recently-used ordering
-- Progressive disclosure for advanced inputs
-- No required fields unless medically or technically required
-
-### 2) No Performance Pressure
-- No streak counters
-- No loss indicators
-- No guilt language
-- No urgency nudges for missed days
-
-### 3) Insights Are Optional
-- Insights live in Weave, not Tend
-- Insights are visible when requested, not injected into logging flow
-- Correlations are presented as observations, not recommendations
-
 ## Visual Direction Constraints
 - Calm surfaces over dense dashboards
 - Muted palette with rare warm accent usage

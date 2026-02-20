@@ -65,11 +65,6 @@ Rules:
 - No required setup before first use
 - Returning from an action preserves scroll position and section state
 
-## Accessibility
-- Large tap targets for all menu options
-- Section headers always visible and readable
-- Color is not the only way to distinguish energy levels
-
 ## Acceptance Criteria
 - Anchor presents three energy-based sections (Low/Medium/High)
 - Each section includes at least 3 immediate options
