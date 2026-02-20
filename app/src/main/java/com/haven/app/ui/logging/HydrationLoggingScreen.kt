@@ -16,6 +16,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -23,6 +24,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -45,86 +47,89 @@ fun HydrationLoggingScreen(
     }
 
     GradientScaffold(gradient = entryTypeGradient(EntryType.HYDRATION)) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp)
-        ) {
-            IconButton(onClick = onBack) {
-                Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = "Back")
-            }
-            Text(
-                text = "Hydration",
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
-            )
-            Text(
-                text = "Log water intake",
-                style = MaterialTheme.typography.headlineMedium,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-            Spacer(modifier = Modifier.height(24.dp))
-            Text(
-                text = "Today's total: ${uiState.dailyTotal.toInt()} oz",
-                style = MaterialTheme.typography.headlineMedium,
-                color = MaterialTheme.colorScheme.primary
-            )
-            Spacer(modifier = Modifier.height(24.dp))
-            Text(
-                text = "Quick add",
-                style = MaterialTheme.typography.titleMedium
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.fillMaxWidth()
+        Scaffold(containerColor = Color.Transparent) { innerPadding ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(16.dp)
             ) {
-                PillButton(
-                    onClick = { viewModel.quickAdd(entryTypeId, 8.0) },
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text("+8 oz")
+                IconButton(onClick = onBack) {
+                    Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = "Back")
                 }
-                PillButton(
-                    onClick = { viewModel.quickAdd(entryTypeId, 16.0) },
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text("+16 oz")
-                }
-            }
-            Spacer(modifier = Modifier.height(24.dp))
-            Text(
-                text = "Custom amount",
-                style = MaterialTheme.typography.titleMedium
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                OutlinedTextField(
-                    value = uiState.customAmount,
-                    onValueChange = viewModel::updateCustomAmount,
-                    label = { Text("oz") },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                    singleLine = true,
-                    modifier = Modifier.weight(1f)
+                Text(
+                    text = "Hydration",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
                 )
-                OutlinedButton(
-                    onClick = { viewModel.saveCustom(entryTypeId) },
-                    enabled = uiState.canSaveCustom,
-                    shape = MaterialTheme.shapes.large
+                Text(
+                    text = "Log water intake",
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+                Text(
+                    text = "Today's total: ${uiState.dailyTotal.toInt()} oz",
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = MaterialTheme.colorScheme.primary
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+                Text(
+                    text = "Quick add",
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Add")
+                    PillButton(
+                        onClick = { viewModel.quickAdd(entryTypeId, 8.0) },
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text("+8 oz")
+                    }
+                    PillButton(
+                        onClick = { viewModel.quickAdd(entryTypeId, 16.0) },
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text("+16 oz")
+                    }
                 }
-            }
-            Spacer(modifier = Modifier.height(24.dp))
-            PillButton(
-                onClick = onBack,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Done")
+                Spacer(modifier = Modifier.height(24.dp))
+                Text(
+                    text = "Custom amount",
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    OutlinedTextField(
+                        value = uiState.customAmount,
+                        onValueChange = viewModel::updateCustomAmount,
+                        label = { Text("oz") },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                        singleLine = true,
+                        modifier = Modifier.weight(1f)
+                    )
+                    OutlinedButton(
+                        onClick = { viewModel.saveCustom(entryTypeId) },
+                        enabled = uiState.canSaveCustom,
+                        shape = MaterialTheme.shapes.large
+                    ) {
+                        Text("Add")
+                    }
+                }
+                Spacer(modifier = Modifier.height(24.dp))
+                PillButton(
+                    onClick = onBack,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Done")
+                }
             }
         }
     }

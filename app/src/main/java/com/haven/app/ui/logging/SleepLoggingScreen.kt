@@ -13,12 +13,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -41,53 +43,56 @@ fun SleepLoggingScreen(
     }
 
     GradientScaffold(gradient = entryTypeGradient(EntryType.SLEEP)) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp)
-        ) {
-            IconButton(onClick = onBack) {
-                Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = "Back")
-            }
-            Text(
-                text = "Sleep",
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
-            )
-            Text(
-                text = "Log sleep",
-                style = MaterialTheme.typography.headlineMedium,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-            Spacer(modifier = Modifier.height(24.dp))
-            Text(
-                text = "How many hours did you sleep?",
-                style = MaterialTheme.typography.titleMedium
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            OutlinedTextField(
-                value = uiState.hours,
-                onValueChange = viewModel::updateHours,
-                label = { Text("Hours") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            OutlinedTextField(
-                value = uiState.notes,
-                onValueChange = viewModel::updateNotes,
-                label = { Text("Notes (optional)") },
-                modifier = Modifier.fillMaxWidth(),
-                minLines = 3
-            )
-            Spacer(modifier = Modifier.height(24.dp))
-            PillButton(
-                onClick = { viewModel.save(entryTypeId) },
-                enabled = uiState.canSave,
-                modifier = Modifier.fillMaxWidth()
+        Scaffold(containerColor = Color.Transparent) { innerPadding ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(16.dp)
             ) {
-                Text("Save")
+                IconButton(onClick = onBack) {
+                    Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = "Back")
+                }
+                Text(
+                    text = "Sleep",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
+                )
+                Text(
+                    text = "Log sleep",
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+                Text(
+                    text = "How many hours did you sleep?",
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                OutlinedTextField(
+                    value = uiState.hours,
+                    onValueChange = viewModel::updateHours,
+                    label = { Text("Hours") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                OutlinedTextField(
+                    value = uiState.notes,
+                    onValueChange = viewModel::updateNotes,
+                    label = { Text("Notes (optional)") },
+                    modifier = Modifier.fillMaxWidth(),
+                    minLines = 3
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+                PillButton(
+                    onClick = { viewModel.save(entryTypeId) },
+                    enabled = uiState.canSave,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Save")
+                }
             }
         }
     }

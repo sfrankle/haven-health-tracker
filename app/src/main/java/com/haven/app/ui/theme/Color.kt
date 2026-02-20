@@ -44,7 +44,7 @@ val TendPeach = Color(0xFFFFE0CC)
 
 // Tab: Trace — slate → blue-grey → near-white
 val TraceSlate = Color(0xFF90A4AE)
-val TraceBluGrey = Color(0xFFB0BEC5)
+val TraceBlueGrey = Color(0xFFB0BEC5)
 val TraceNearWhite = Color(0xFFF5F7F8)
 
 // Tab: Weave — amber → honey → gold
