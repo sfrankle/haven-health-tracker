@@ -9,3 +9,4 @@
 | 2026-02-15 | #4 | Trace page: day-grouped entry journal with sticky headers, journal-style summaries, entry type filter chips, paginated lazy loading |
 | 2026-02-16 | #11 | Food logging: search bar, label chip grid, multi-select, time-of-day meal suggestions, meal source toggle, first label-based entry type |
 | 2026-02-16 | — | Incremental seed data: added `seed_version` to `label_tag`, seeding now filters by version so user-removed tag associations aren't re-applied on app update. |
+| 2026-02-20 | #XX | Apply gradient design system — per-entry-type and per-tab palettes, editorial headers, icon-only bottom nav |
