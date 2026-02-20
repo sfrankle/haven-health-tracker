@@ -1,12 +1,12 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code when working with code in this repository.
 
 ## Project
 
 Haven — private-first Android health tracking app. Kotlin + Jetpack Compose + Room. All data local to device.
 
-Key docs: `docs/spec.md` (feature spec), `docs/roadmap.md` (what's next), `docs/changelog.md` (what's done), `docs/schema.sql` (database schema), `docs/decisions.md` (design rationale), `docs/design.md` (visual design system).
+Key docs: `docs/spec.md` (feature spec), `docs/changelog.md` (what's done), `docs/schema.sql` (database schema), `docs/decisions.md` (design rationale), `docs/design.md` (visual design system).
 
 ## Build Commands
 
@@ -28,12 +28,43 @@ Key docs: `docs/spec.md` (feature spec), `docs/roadmap.md` (what's next), `docs/
 
 ## Workflow
 
-- PRs should be small, self-contained units of work — one logical feature or change per PR
-- Each PR gets one row in the `docs/changelog.md` table with the merge date, PR number, and a concise summary
-- As roadmap features are completed, collapse them in `docs/roadmap.md` and move the detail to the changelog
-- Link issues to PRs with `Closes #N` in the PR body — GitHub will auto-close the issue when the PR merges. Never close issues manually.
-- **Never commit directly to `main`.** All changes go through a feature branch and PR, no exceptions.
-- **Don't use git worktrees** unless explicitly asked. Check out branches normally so the user can see current work.
+Haven uses an issue-driven development workflow. All work flows through GitHub Issues and Milestones.
+
+### Issue Hierarchy
+- **User stories** (label: `user-story`) — product-level features, grouped by milestone
+- **Technical tasks** (label: `technical-task`) — implementation units, linked to user stories
+- One technical task = one PR. A user story may span multiple technical tasks.
+
+### Technical Task Lifecycle
+1. Claude analyzes user stories and creates technical task issues with detailed acceptance criteria
+2. Claude writes a detailed plan to `docs/plans/` and posts a summary comment on the issue
+3. Human approves the plan
+4. Claude implements, opens a **draft PR** linking `Closes #N` (the technical task)
+5. PRs reference user stories with "Contributes to #M" — never `Closes` on user stories
+6. Human marks PR ready for review → GitHub Action triggers Claude reviewer
+7. After review approval, human merges
+8. **User stories are closed manually** by the human after all contributing technical tasks are merged and the feature is complete
+
+### PR Conventions
+- Always start as **draft**
+- Each PR updates `docs/changelog.md` **in the commits** (before opening PR)
+- Each PR updates other docs if relevant (decisions.md, design.md, schema.sql) **in the commits**
+- **Never commit directly to `main`.** All changes go through a feature branch and PR.
+- **Don't use git worktrees** unless explicitly asked.
+- **Branch naming:**
+  - `feat/<description>` - new features
+  - `fix/<description>` - bug fixes
+  - `refactor/<description>` - code refactoring
+  - `chore/<description>` - maintenance, docs, tooling
+
+### PR Review Process
+- If review feedback requires **minor changes** (typos, small tweaks), push new commits to the branch
+- If review feedback requires **major changes** (approach is wrong, significant rework needed):
+  1. Close the PR with a comment explaining why
+  2. Update the plan in `docs/plans/` based on feedback
+  3. Create a new branch and implement the revised approach
+  4. Open a new PR
+- **Never force push** to a PR branch that's under review unless explicitly requested
 
 ## Coding Conventions
 
@@ -42,11 +73,22 @@ Key docs: `docs/spec.md` (feature spec), `docs/roadmap.md` (what's next), `docs/
 - SNAKE_CASE for database column names
 - One ViewModel per major screen, injected via Hilt
 - Repositories wrap DAOs — ViewModels never access DAOs directly. Repos are use-case-oriented (not DAO mirrors); only expose methods ViewModels need. See `docs/decisions.md` #12.
-- Add KDoc where behavior, parameter format, or contract isn't obvious from the name and types alone (e.g. string timestamp formats, throwing vs. nullable, snapshot vs. Flow). Skip it for simple CRUD, pass-throughs, and anything self-evident. Be discerning - don't add superfluous comments. Apply it anywhere in the codebase where it adds value for Claude Code.
+- Add KDoc where behavior, parameter format, or contract isn't obvious from the name and types alone. Skip it for simple CRUD, pass-throughs, and anything self-evident.
+- Proactively consider performance for user-facing operations (DB indices, avoid N+1 queries, minimize Compose recomposition)
+
+## Code Quality Standards
+
+**Prefer refactoring over accepting mediocre code.** There's already a lot of code in this codebase. When you encounter code that could be better—unclear naming, poor structure, inconsistent patterns, or violation of our conventions—refactor it. Don't rationalize "well, I guess this is ok..." and leave it. Make it better.
+
+When adding new functionality:
+- If existing code in the area is subpar, improve it as part of your work
+- Don't perpetuate bad patterns just because they already exist
+- Don't add to technical debt by accepting "good enough"
+- Refactoring existing code to meet standards is expected, not optional
 
 ## Data Model
 
-Tags go on **Labels, not Entries** — this is the key design decision. It enables retroactive correlation (tag a food label "dairy" and all past entries using it are automatically included in correlation queries). See `docs/decisions.md` #3 for rationale.
+Tags go on **Labels, not Entries** — this is the key design decision. It enables retroactive correlation. See `docs/decisions.md` #3.
 
 Seed data uses `seedVersion` column for safe migrations across app updates. Delivered in `RoomDatabase.Callback.onOpen` via `INSERT OR IGNORE` on the raw `SupportSQLiteDatabase`, gated by a SharedPreferences version check — only runs when `SeedData.VERSION` is bumped. See `docs/schema.sql` for full schema and seed data reference.
 

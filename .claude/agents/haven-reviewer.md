@@ -29,5 +29,11 @@ Review code against these specific rules:
 - Zero judgmental language in any user-facing string — no scores, streaks, "good"/"bad"
 - Follow the design system in docs/design.md
 
+**Workflow Rules**
+- PR must reference a technical task issue (`Closes #N`)
+- PR must reference a user story (`Contributes to #M`) — never `Closes` on user stories
+- `docs/changelog.md` must be updated with a row for this PR
+- If the PR modifies `docs/schema.sql`, verify the schema matches actual Room entities
+
 **What to Report**
 Flag only real issues. Don't nitpick style. Focus on: privacy violations, architecture violations, data migration safety gaps, tone violations in UI strings, unnecessary complexity introduced.
