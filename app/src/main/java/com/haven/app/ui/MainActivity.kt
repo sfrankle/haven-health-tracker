@@ -8,7 +8,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -20,6 +19,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.haven.app.ui.navigation.HavenDestination
 import com.haven.app.ui.theme.HavenTheme
+import com.haven.app.ui.theme.tabGradient
 import com.haven.app.ui.placeholder.PlaceholderScreen
 import com.haven.app.ui.logging.LoggingRoute
 import com.haven.app.ui.tend.TendScreen
@@ -52,7 +52,6 @@ fun HavenApp() {
                 HavenDestination.entries.forEach { destination ->
                     NavigationBarItem(
                         icon = { Icon(destination.icon, contentDescription = destination.label) },
-                        label = { Text(destination.label) },
                         selected = currentDestination?.hierarchy?.any { it.route == destination.route } == true,
                         onClick = {
                             navController.navigate(destination.route) {
@@ -81,9 +80,9 @@ fun HavenApp() {
                 )
             }
             composable(HavenDestination.Trace.route) { TraceScreen() }
-            composable(HavenDestination.Weave.route) { PlaceholderScreen("Weave") }
-            composable(HavenDestination.Anchor.route) { PlaceholderScreen("Anchor") }
-            composable(HavenDestination.Settings.route) { PlaceholderScreen("Settings") }
+            composable(HavenDestination.Weave.route) { PlaceholderScreen("Weave", gradient = tabGradient(HavenDestination.Weave)) }
+            composable(HavenDestination.Anchor.route) { PlaceholderScreen("Anchor", gradient = tabGradient(HavenDestination.Anchor)) }
+            composable(HavenDestination.Settings.route) { PlaceholderScreen("Settings", gradient = tabGradient(HavenDestination.Settings)) }
             composable(
                 route = "log/{entryTypeId}",
                 arguments = listOf(navArgument("entryTypeId") { type = NavType.LongType })

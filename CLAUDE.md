@@ -53,3 +53,12 @@ Seed data uses `seedVersion` column for safe migrations across app updates. Deli
 ## Design System
 
 See `docs/design.md` for colors, typography, components, and principles. Key constraint: non-judgmental tone — no scores, streaks, or "good/bad" framing in any user-facing text.
+
+# Finishing a PR
+- make sure PR description is up to date
+- make sure all docs are up to date (especially docs/changelog.md, docs/roadmap.md, and docs/decisions.md)
+    - make sure the changelog references the correct PR number
+- if there's a related plan in docs/plan, make sure all items have been completed
+    - consider if any content from the plan should be saved in other docs
+    - when ready, delete the plan file as a final step
+- Make sure all new / editted code has proper testing coverage. Be smart - don't make tests for the sake of "code coverage"; write tests that actually test the behavior.

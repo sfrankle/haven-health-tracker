@@ -5,21 +5,21 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 
 private val HavenColorScheme = lightColorScheme(
-    primary = SageGreen,
+    primary = FoodSage,
     onPrimary = OffWhite,
-    primaryContainer = SageGreenLight,
-    onPrimaryContainer = SageGreenDark,
-    secondary = Lavender,
+    primaryContainer = FoodGreen,
+    onPrimaryContainer = SoftBlack,
+    secondary = SleepLavender,
     onSecondary = SoftBlack,
-    secondaryContainer = LavenderLight,
-    onSecondaryContainer = LavenderDark,
+    secondaryContainer = SleepDustyBlue,
+    onSecondaryContainer = SleepIndigo,
     background = OffWhite,
     onBackground = SoftBlack,
     surface = OffWhite,
     onSurface = SoftBlack,
-    surfaceVariant = LavenderLight,
+    surfaceVariant = SleepDustyBlue,
     onSurfaceVariant = WarmGray,
-    outline = SageGreenLight
+    outline = FoodGreen
 )
 
 @Composable
