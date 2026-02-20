@@ -256,6 +256,27 @@ See [design.md](design.md) for colors, typography, components, and design princi
 
 ---
 
+## Design Philosophy
+
+### Non-Judgmental System
+- **No scoring, streaks, or gamification** — tracking is low-pressure and optional
+- **Neutral language** — "logged" not "succeeded", no guilt-inducing messaging
+- **Missing days are fine** — no warnings or penalties for not logging
+- **Design for ADHD/neurodivergence** — minimal friction, low-demand interface
+
+### Privacy-First Design
+- **Local-only storage** — all data on device, never cloud-synced without explicit user action
+- **No accounts or tracking** — user owns their data completely
+- **Offline-first** — app fully functional without internet
+- **Clear privacy messaging** — be explicit about what stays private
+
+### Exploration Over Prescription
+- **Correlations suggest, don't prescribe** — "notice" not "fix"
+- **No medical claims** — user sees patterns, not diagnoses
+- **Exploratory language** — "You might notice..." vs "You should..."
+
+---
+
 ## User Journey
 
 ### Daily Flow
@@ -270,5 +291,3 @@ See [design.md](design.md) for colors, typography, components, and design princi
 5. **Anytime:** Visit Anchor page for grounding activity suggestions → log doing them
 
 ---
-
-See `docs/roadmap.md` for development phases and feature scope.
