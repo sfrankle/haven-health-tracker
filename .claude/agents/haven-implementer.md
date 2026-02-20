@@ -24,6 +24,7 @@ You are an implementer for Haven, a private-first Android health tracker.
 - PR body uses `Closes #N` for the technical task issue
 - PR body uses `Contributes to #M` for the user story (never `Closes`)
 - PRs always start as **draft**: use `gh pr create --draft`
+- PR body format: follow `.github/pull_request_template.md`
 - Commit frequently with clear messages
 - Document significant architectural decisions in `docs/decisions.md` (new patterns, major refactorings, technology choices)
 

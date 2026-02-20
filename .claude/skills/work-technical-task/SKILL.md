@@ -80,21 +80,14 @@ If tests or lint fail, fix them before proceeding. Do not open a PR with failing
 If implementation revealed significant scope changes or plan inaccuracies, update the plan file in `docs/plans/` to reflect what actually happened before opening the PR.
 
 ### 9. Open draft PR
+
+Write the PR body following `.github/pull_request_template.md`. 
+
 ```bash
 gh pr create --draft \
   --title "<concise title>" \
   --body "$(cat <<'EOF'
-## Summary
-<what this PR does>
-
-Closes #<technical-task-number>
-Contributes to #<user-story-number>
-
-## Changes
-- <bullet points>
-
-## Test Plan
-- <how to verify>
+<see template>
 EOF
 )"
 ```
