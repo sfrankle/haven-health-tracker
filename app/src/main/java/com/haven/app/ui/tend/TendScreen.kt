@@ -25,7 +25,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.haven.app.data.entity.EntryTypeEntity
+import com.haven.app.ui.common.GradientScaffold
 import com.haven.app.ui.common.entryTypeIcon
+import com.haven.app.ui.navigation.HavenDestination
+import com.haven.app.ui.theme.entryTypeTint
+import com.haven.app.ui.theme.tabGradient
 
 @Composable
 fun TendScreen(
@@ -34,28 +38,35 @@ fun TendScreen(
 ) {
     val entryTypes by viewModel.entryTypes.collectAsState(initial = emptyList())
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        Text(
-            text = "What would you like to log?",
-            style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.onBackground
-        )
-        Spacer(modifier = Modifier.height(24.dp))
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            contentPadding = PaddingValues(4.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+    GradientScaffold(gradient = tabGradient(HavenDestination.Tend)) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
         ) {
-            items(entryTypes, key = { it.id }) { entryType ->
-                EntryTypeButton(
-                    entryType = entryType,
-                    onClick = { onEntryTypeClick(entryType) }
-                )
+            Text(
+                text = "Log",
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
+            )
+            Text(
+                text = "What would you like to log?",
+                style = MaterialTheme.typography.headlineMedium,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+            Spacer(modifier = Modifier.height(24.dp))
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                contentPadding = PaddingValues(4.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                items(entryTypes, key = { it.id }) { entryType ->
+                    EntryTypeButton(
+                        entryType = entryType,
+                        onClick = { onEntryTypeClick(entryType) }
+                    )
+                }
             }
         }
     }
@@ -70,8 +81,8 @@ private fun EntryTypeButton(
         onClick = onClick,
         shape = MaterialTheme.shapes.large,
         colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+            containerColor = entryTypeTint(entryType.icon),
+            contentColor = MaterialTheme.colorScheme.onBackground
         ),
         modifier = Modifier
             .fillMaxWidth()
