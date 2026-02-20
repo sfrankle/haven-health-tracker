@@ -27,7 +27,7 @@ Review code against these specific rules:
 
 **Design Rules**
 - Zero judgmental language in any user-facing string — no scores, streaks, "good"/"bad"
-- Follow the design system in docs/design.md
+- Follow the design system in docs/design/ (design-principles.md and visual-style.md)
 
 **Workflow Rules**
 - PR must reference a technical task issue (`Closes #N`)

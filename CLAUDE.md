@@ -6,7 +6,7 @@ This file provides guidance to Claude Code when working with code in this reposi
 
 Haven — private-first Android health tracking app. Kotlin + Jetpack Compose + Room. All data local to device.
 
-Key docs: `docs/spec.md` (feature spec), `docs/changelog.md` (what's done), `docs/schema.sql` (database schema), `docs/decisions.md` (design rationale), `docs/design.md` (visual design system).
+Key docs: `docs/spec.md` (feature spec), `docs/changelog.md` (what's done), `docs/schema.sql` (database schema), `docs/decisions.md` (design rationale), `docs/design/` (design system), `docs/ux/` (UX specs).
 
 ## Build Commands
 
@@ -41,14 +41,14 @@ Haven uses an issue-driven development workflow. All work flows through GitHub I
 3. Human approves the plan
 4. Claude implements, opens a **draft PR** linking `Closes #N` (the technical task)
 5. PRs reference user stories with "Contributes to #M" — never `Closes` on user stories
-6. Human marks PR ready for review → GitHub Action triggers Claude reviewer
+6. Human asks Claude to review the PR using the `superpowers:requesting-code-review` skill
 7. After review approval, human merges
 8. **User stories are closed manually** by the human after all contributing technical tasks are merged and the feature is complete
 
 ### PR Conventions
 - Always start as **draft**
 - Each PR updates `docs/changelog.md` **in the commits** (before opening PR)
-- Each PR updates other docs if relevant (decisions.md, design.md, schema.sql) **in the commits**
+- Each PR updates other docs if relevant (decisions.md, schema.sql, design/, ux/) **in the commits**
 - **Never commit directly to `main`.** All changes go through a feature branch and PR.
 - **Don't use git worktrees** unless explicitly asked.
 - **Branch naming:**
@@ -94,4 +94,4 @@ Seed data uses `seedVersion` column for safe migrations across app updates. Deli
 
 ## Design System
 
-See `docs/design.md` for colors, typography, components, and principles. Key constraint: non-judgmental tone — no scores, streaks, or "good/bad" framing in any user-facing text.
+See `docs/design/design-principles.md` (brand, voice, UX philosophy) and `docs/design/visual-style.md` (colors, typography, components). Key constraint: non-judgmental tone — no scores, streaks, or "good/bad" framing in any user-facing text.

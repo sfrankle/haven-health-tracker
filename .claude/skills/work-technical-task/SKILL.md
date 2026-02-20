@@ -20,7 +20,7 @@ Understand existing patterns, related code, and what needs to change. Read relev
 - Existing screens, ViewModels, repositories, DAOs, entities
 - Test files for the area
 - `docs/spec.md` for product requirements
-- `docs/design.md` for visual guidelines
+- `docs/design/` for visual guidelines and UX principles
 - `docs/schema.sql` for data model
 
 ### 4. Create detailed implementation plan
@@ -66,7 +66,7 @@ After approval:
 3. Follow TDD: write failing tests, then implement
 4. Commit frequently with clear messages
 5. Update `docs/changelog.md` in your commits
-6. Update other docs if needed (decisions.md, schema.sql, design.md)
+6. Update other docs if needed (decisions.md, schema.sql, docs/design/, docs/ux/)
 7. Document significant architectural decisions in `docs/decisions.md` (new patterns, major refactorings, technology choices)
 
 ### 8. Verify before opening PR
@@ -80,21 +80,14 @@ If tests or lint fail, fix them before proceeding. Do not open a PR with failing
 If implementation revealed significant scope changes or plan inaccuracies, update the plan file in `docs/plans/` to reflect what actually happened before opening the PR.
 
 ### 9. Open draft PR
+
+Write the PR body following `.github/pull_request_template.md`. 
+
 ```bash
 gh pr create --draft \
   --title "<concise title>" \
   --body "$(cat <<'EOF'
-## Summary
-<what this PR does>
-
-Closes #<technical-task-number>
-Contributes to #<user-story-number>
-
-## Changes
-- <bullet points>
-
-## Test Plan
-- <how to verify>
+<see template>
 EOF
 )"
 ```

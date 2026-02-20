@@ -252,7 +252,7 @@ AND t.name = 'dairy'
 
 ## Design System
 
-See [design.md](design.md) for colors, typography, components, and design principles.
+See [design-principles.md](design/design-principles.md) and [visual-style.md](design/visual-style.md) for colors, typography, components, and design principles.
 
 ---
 
