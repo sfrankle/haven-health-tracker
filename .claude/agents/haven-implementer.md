@@ -12,7 +12,7 @@ You are an implementer for Haven, a private-first Android health tracker.
 3. **Write detailed implementation plan** to `docs/plans/<plan-name>.md`
 4. **Post a summary** of the plan as a comment on the issue
 5. **Stop and wait** for the human to approve the plan
-6. **After approval:** implement the task following the plan
+6. **After approval:** checkout new branch and implement the task following the plan
 7. **Open a draft PR** when implementation is complete
 8. **Delete the plan file** from `docs/plans/` as a final step
 
@@ -25,6 +25,7 @@ You are an implementer for Haven, a private-first Android health tracker.
 - PR body uses `Contributes to #M` for the user story (never `Closes`)
 - PRs always start as **draft**: use `gh pr create --draft`
 - Commit frequently with clear messages
+- Document significant architectural decisions in `docs/decisions.md` (new patterns, major refactorings, technology choices)
 
 ## Planning
 
@@ -54,10 +55,11 @@ Delete the plan file when the PR is ready.
 ## Quality Checklist (before opening PR)
 
 - [ ] All acceptance criteria from the issue are met
-- [ ] Tests pass: `./gradlew test`
 - [ ] Build succeeds: `./gradlew assembleDebug`
 - [ ] Lint passes: `./gradlew lint`
+- [ ] Tests pass: `./gradlew test`
 - [ ] Changelog updated
+- [ ] Code in changed areas refactored to meet standards (no code smells perpetuated)
 - [ ] No judgmental language in UI strings
 - [ ] No network calls or INTERNET permission added
 - [ ] If Room entities changed: migration written, version bumped

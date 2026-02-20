@@ -40,16 +40,31 @@ Haven uses an issue-driven development workflow. All work flows through GitHub I
 2. Claude writes a detailed plan to `docs/plans/` and posts a summary comment on the issue
 3. Human approves the plan
 4. Claude implements, opens a **draft PR** linking `Closes #N` (the technical task)
-5. PRs reference user stories with "Contributes to #M" — never `Closes` on user stories (those are closed manually)
+5. PRs reference user stories with "Contributes to #M" — never `Closes` on user stories
 6. Human marks PR ready for review → GitHub Action triggers Claude reviewer
 7. After review approval, human merges
+8. **User stories are closed manually** by the human after all contributing technical tasks are merged and the feature is complete
 
 ### PR Conventions
 - Always start as **draft**
-- Each PR updates `docs/changelog.md`
-- Each PR updates other docs if relevant (decisions.md, design.md, schema.sql)
+- Each PR updates `docs/changelog.md` **in the commits** (before opening PR)
+- Each PR updates other docs if relevant (decisions.md, design.md, schema.sql) **in the commits**
 - **Never commit directly to `main`.** All changes go through a feature branch and PR.
 - **Don't use git worktrees** unless explicitly asked.
+- **Branch naming:**
+  - `feat/<description>` - new features
+  - `fix/<description>` - bug fixes
+  - `refactor/<description>` - code refactoring
+  - `chore/<description>` - maintenance, docs, tooling
+
+### PR Review Process
+- If review feedback requires **minor changes** (typos, small tweaks), push new commits to the branch
+- If review feedback requires **major changes** (approach is wrong, significant rework needed):
+  1. Close the PR with a comment explaining why
+  2. Update the plan in `docs/plans/` based on feedback
+  3. Create a new branch and implement the revised approach
+  4. Open a new PR
+- **Never force push** to a PR branch that's under review unless explicitly requested
 
 ## Coding Conventions
 
@@ -59,6 +74,17 @@ Haven uses an issue-driven development workflow. All work flows through GitHub I
 - One ViewModel per major screen, injected via Hilt
 - Repositories wrap DAOs — ViewModels never access DAOs directly. Repos are use-case-oriented (not DAO mirrors); only expose methods ViewModels need. See `docs/decisions.md` #12.
 - Add KDoc where behavior, parameter format, or contract isn't obvious from the name and types alone. Skip it for simple CRUD, pass-throughs, and anything self-evident.
+- Proactively consider performance for user-facing operations (DB indices, avoid N+1 queries, minimize Compose recomposition)
+
+## Code Quality Standards
+
+**Prefer refactoring over accepting mediocre code.** There's already a lot of code in this codebase. When you encounter code that could be better—unclear naming, poor structure, inconsistent patterns, or violation of our conventions—refactor it. Don't rationalize "well, I guess this is ok..." and leave it. Make it better.
+
+When adding new functionality:
+- If existing code in the area is subpar, improve it as part of your work
+- Don't perpetuate bad patterns just because they already exist
+- Don't add to technical debt by accepting "good enough"
+- Refactoring existing code to meet standards is expected, not optional
 
 ## Data Model
 

@@ -57,14 +57,29 @@ Tell the user: "Plan posted on issue #N. Please review and approve before I impl
 
 ### 7. Implement
 After approval:
-1. Create a feature branch: `git checkout -b feat/<short-description>`
+1. Create a branch using the appropriate prefix:
+   - `feat/<short-description>` - new features
+   - `fix/<short-description>` - bug fixes
+   - `refactor/<short-description>` - code refactoring
+   - `chore/<short-description>` - maintenance, docs, tooling
 2. Follow the detailed plan in `docs/plans/`
 3. Follow TDD: write failing tests, then implement
 4. Commit frequently with clear messages
-5. Update `docs/changelog.md`
+5. Update `docs/changelog.md` in your commits
 6. Update other docs if needed (decisions.md, schema.sql, design.md)
+7. Document significant architectural decisions in `docs/decisions.md` (new patterns, major refactorings, technology choices)
 
-### 8. Open draft PR
+### 8. Verify before opening PR
+Run tests and lint to ensure everything passes:
+```bash
+./gradlew test lint
+```
+
+If tests or lint fail, fix them before proceeding. Do not open a PR with failing tests.
+
+If implementation revealed significant scope changes or plan inaccuracies, update the plan file in `docs/plans/` to reflect what actually happened before opening the PR.
+
+### 9. Open draft PR
 ```bash
 gh pr create --draft \
   --title "<concise title>" \
@@ -84,8 +99,15 @@ EOF
 )"
 ```
 
-### 9. Clean up
+Then associate the PR with the same milestone as the technical task:
+```bash
+MILESTONE=$(gh api "repos/$(gh repo view --json nameWithOwner -q .nameWithOwner)/issues/<N>" -q .milestone.title)
+PR_NUMBER=$(gh pr view --json number -q .number)
+gh pr edit "$PR_NUMBER" --milestone "$MILESTONE"
+```
+
+### 10. Clean up
 Delete the plan file from `docs/plans/` — it has served its purpose.
 
-### 10. Report
+### 11. Report
 Tell the user: "Draft PR #X is open. When you're ready, mark it ready for review to trigger the automated reviewer."
