@@ -37,7 +37,7 @@ Haven uses an issue-driven development workflow. All work flows through GitHub I
 
 ### Technical Task Lifecycle
 1. Claude analyzes user stories and creates technical task issues with detailed acceptance criteria
-2. Claude posts an implementation plan as a comment on the issue
+2. Claude writes a detailed plan to `docs/plans/` and posts a summary comment on the issue
 3. Human approves the plan
 4. Claude implements, opens a **draft PR** linking `Closes #N` (the technical task)
 5. PRs reference user stories with "Contributes to #M" — never `Closes` on user stories (those are closed manually)

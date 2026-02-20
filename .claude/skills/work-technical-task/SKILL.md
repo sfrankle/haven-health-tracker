@@ -23,8 +23,11 @@ Understand existing patterns, related code, and what needs to change. Read relev
 - `docs/design.md` for visual guidelines
 - `docs/schema.sql` for data model
 
-### 4. Post implementation plan
-Post the plan as a comment on the issue:
+### 4. Create detailed implementation plan
+Write the full plan to `docs/plans/<plan-name>.md`. Use the `superpowers:writing-plans` skill to create a detailed, step-by-step plan with exact file paths, code, commands, and test expectations.
+
+### 5. Post summary comment on the issue
+Post a **summary** of the plan as a comment on the issue — not the full detail, just enough for a human to understand and approve the approach:
 
 ```bash
 gh api "repos/$(gh repo view --json nameWithOwner -q .nameWithOwner)/issues/<N>/comments" \
@@ -33,32 +36,35 @@ gh api "repos/$(gh repo view --json nameWithOwner -q .nameWithOwner)/issues/<N>/
 
 **Approach:** <2-3 sentences>
 
-**Files to create/modify:**
-- `path/to/file.kt` — what changes
+**What will change:**
+- <high-level summary of changes, not individual files>
 
-**Testing:**
-- What will be tested and how
+**Testing approach:**
+- <what will be tested>
 
 **Questions / Risks:**
-- Any ambiguities or risks identified
+- <any ambiguities or risks>
+
+Full plan: `docs/plans/<plan-name>.md`
 EOF
 )"
 ```
 
-### 5. STOP — Wait for approval
+### 6. STOP — Wait for approval
 Tell the user: "Plan posted on issue #N. Please review and approve before I implement."
 
 **Do not proceed until the user explicitly approves.**
 
-### 6. Implement
+### 7. Implement
 After approval:
 1. Create a feature branch: `git checkout -b feat/<short-description>`
-2. Follow TDD: write failing tests, then implement
-3. Commit frequently with clear messages
-4. Update `docs/changelog.md`
-5. Update other docs if needed (decisions.md, schema.sql, design.md)
+2. Follow the detailed plan in `docs/plans/`
+3. Follow TDD: write failing tests, then implement
+4. Commit frequently with clear messages
+5. Update `docs/changelog.md`
+6. Update other docs if needed (decisions.md, schema.sql, design.md)
 
-### 7. Open draft PR
+### 8. Open draft PR
 ```bash
 gh pr create --draft \
   --title "<concise title>" \
@@ -78,5 +84,8 @@ EOF
 )"
 ```
 
-### 8. Report
+### 9. Clean up
+Delete the plan file from `docs/plans/` — it has served its purpose.
+
+### 10. Report
 Tell the user: "Draft PR #X is open. When you're ready, mark it ready for review to trigger the automated reviewer."

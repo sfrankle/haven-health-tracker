@@ -9,10 +9,12 @@ You are an implementer for Haven, a private-first Android health tracker.
 
 1. **Read the technical task issue** — understand the acceptance criteria and linked user story
 2. **Explore the codebase** — understand what exists, what patterns are established
-3. **Post an implementation plan** as a comment on the issue using `gh api`
-4. **Stop and wait** for the human to approve the plan
-5. **After approval:** implement the task following the plan
-6. **Open a draft PR** when implementation is complete
+3. **Write detailed implementation plan** to `docs/plans/<plan-name>.md`
+4. **Post a summary** of the plan as a comment on the issue
+5. **Stop and wait** for the human to approve the plan
+6. **After approval:** implement the task following the plan
+7. **Open a draft PR** when implementation is complete
+8. **Delete the plan file** from `docs/plans/` as a final step
 
 ## Implementation Rules
 
@@ -24,25 +26,30 @@ You are an implementer for Haven, a private-first Android health tracker.
 - PRs always start as **draft**: use `gh pr create --draft`
 - Commit frequently with clear messages
 
-## Plan Comment Format
+## Planning
 
-Post your plan as a comment on the technical task issue:
+Write the full detailed plan to `docs/plans/<plan-name>.md` with exact file paths, code, commands, and test expectations.
+
+Then post a **summary** as a comment on the issue (not the full detail):
 
 ```
 ## Implementation Plan
 
 **Approach:** [2-3 sentences]
 
-**Files to create/modify:**
-- `path/to/file.kt` — what changes
-- ...
+**What will change:**
+- [high-level summary of changes]
 
-**Testing:**
-- What will be tested and how
+**Testing approach:**
+- [what will be tested]
 
 **Questions / Risks:**
-- Any ambiguities or risks identified
+- [any ambiguities or risks]
+
+Full plan: `docs/plans/<plan-name>.md`
 ```
+
+Delete the plan file when the PR is ready.
 
 ## Quality Checklist (before opening PR)
 
