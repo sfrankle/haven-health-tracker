@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -30,6 +31,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -37,7 +39,10 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.haven.app.data.model.EntryWithDetails
+import com.haven.app.ui.common.GradientScaffold
 import com.haven.app.ui.common.entryTypeIcon
+import com.haven.app.ui.navigation.HavenDestination
+import com.haven.app.ui.theme.tabGradient
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 
@@ -64,75 +69,91 @@ fun TraceScreen(
         }
     }
 
-    Column(modifier = Modifier.fillMaxSize()) {
-        // Filter chips
-        LazyRow(
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            item {
-                FilterChip(
-                    selected = uiState.selectedEntryTypeId == null,
-                    onClick = { viewModel.selectFilter(null) },
-                    label = { Text("All") }
-                )
-            }
-            items(uiState.entryTypes) { entryType ->
-                FilterChip(
-                    selected = uiState.selectedEntryTypeId == entryType.id,
-                    onClick = { viewModel.selectFilter(entryType.id) },
-                    label = { Text(entryType.name) },
-                    leadingIcon = {
-                        Icon(
-                            imageVector = entryTypeIcon(entryType.icon),
-                            contentDescription = null,
-                            modifier = Modifier.size(18.dp)
-                        )
-                    }
-                )
-            }
-        }
-
-        if (uiState.dayGroups.isEmpty() && !uiState.isLoading) {
-            // Empty state
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
+    GradientScaffold(gradient = tabGradient(HavenDestination.Trace)) {
+        Column(modifier = Modifier.fillMaxSize()) {
+            Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)) {
                 Text(
-                    text = "No entries yet \u2014 head to Tend to start logging",
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    text = "History",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
                 )
+                Text(
+                    text = "Trace",
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                Spacer(modifier = Modifier.height(8.dp))
             }
-        } else {
-            LazyColumn(
-                state = listState,
-                contentPadding = PaddingValues(bottom = 16.dp),
-                modifier = Modifier.fillMaxSize()
-            ) {
-                uiState.dayGroups.forEach { dayGroup ->
-                    // Sticky day header
-                    stickyHeader(key = dayGroup.date.toString()) {
-                        DayHeader(label = dayGroup.label)
-                    }
-                    items(
-                        items = dayGroup.entries,
-                        key = { it.id }
-                    ) { entry ->
-                        EntryRow(entry = entry)
-                    }
-                }
 
-                if (uiState.isLoading) {
-                    item {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            CircularProgressIndicator(modifier = Modifier.size(24.dp))
+            // Filter chips
+            LazyRow(
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                item {
+                    FilterChip(
+                        selected = uiState.selectedEntryTypeId == null,
+                        onClick = { viewModel.selectFilter(null) },
+                        label = { Text("All") }
+                    )
+                }
+                items(uiState.entryTypes) { entryType ->
+                    FilterChip(
+                        selected = uiState.selectedEntryTypeId == entryType.id,
+                        onClick = { viewModel.selectFilter(entryType.id) },
+                        label = { Text(entryType.name) },
+                        leadingIcon = {
+                            Icon(
+                                imageVector = entryTypeIcon(entryType.icon),
+                                contentDescription = null,
+                                modifier = Modifier.size(18.dp)
+                            )
+                        }
+                    )
+                }
+            }
+
+            if (uiState.dayGroups.isEmpty() && !uiState.isLoading) {
+                // Empty state
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "No entries yet \u2014 head to Tend to start logging",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            } else {
+                LazyColumn(
+                    state = listState,
+                    contentPadding = PaddingValues(bottom = 16.dp),
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    uiState.dayGroups.forEach { dayGroup ->
+                        // Sticky day header
+                        stickyHeader(key = dayGroup.date.toString()) {
+                            DayHeader(label = dayGroup.label)
+                        }
+                        items(
+                            items = dayGroup.entries,
+                            key = { it.id }
+                        ) { entry ->
+                            EntryRow(entry = entry)
+                        }
+                    }
+
+                    if (uiState.isLoading) {
+                        item {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                CircularProgressIndicator(modifier = Modifier.size(24.dp))
+                            }
                         }
                     }
                 }
@@ -149,7 +170,7 @@ private fun DayHeader(label: String) {
         color = MaterialTheme.colorScheme.primary,
         modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surface)
+            .background(Color.Transparent)
             .padding(horizontal = 16.dp, vertical = 8.dp)
     )
 }
