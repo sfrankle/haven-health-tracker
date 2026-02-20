@@ -28,17 +28,20 @@ import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.haven.app.data.entity.EntryType
 import com.haven.app.data.entity.Label
+import com.haven.app.ui.common.GradientScaffold
 import com.haven.app.ui.common.PillButton
+import com.haven.app.ui.theme.entryTypeGradient
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -66,103 +69,111 @@ fun FoodLoggingScreen(
         }
     }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Log Food") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = "Back")
-                    }
+    GradientScaffold(gradient = entryTypeGradient(EntryType.FOOD)) {
+        Scaffold(
+            containerColor = Color.Transparent,
+            snackbarHost = { SnackbarHost(snackbarHostState) }
+        ) { innerPadding ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(horizontal = 16.dp)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                IconButton(onClick = onBack) {
+                    Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = "Back")
                 }
-            )
-        },
-        snackbarHost = { SnackbarHost(snackbarHostState) }
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(horizontal = 16.dp)
-                .verticalScroll(rememberScrollState())
-        ) {
-            // Search bar
-            OutlinedTextField(
-                value = uiState.searchQuery,
-                onValueChange = viewModel::updateSearch,
-                placeholder = { Text("Search foods") },
-                leadingIcon = { Icon(Icons.Rounded.Search, contentDescription = null) },
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth()
-            )
+                Text(
+                    text = "Food",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
+                )
+                Text(
+                    text = "Log a meal",
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                Spacer(modifier = Modifier.height(24.dp))
 
-            Spacer(modifier = Modifier.height(16.dp))
+                // Search bar
+                OutlinedTextField(
+                    value = uiState.searchQuery,
+                    onValueChange = viewModel::updateSearch,
+                    placeholder = { Text("Search foods") },
+                    leadingIcon = { Icon(Icons.Rounded.Search, contentDescription = null) },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth()
+                )
 
-            // Suggestions (when no search) or search results
-            if (uiState.searchQuery.isBlank()) {
-                if (uiState.suggestions.isNotEmpty()) {
-                    Text("Suggestions", style = MaterialTheme.typography.titleSmall)
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Suggestions (when no search) or search results
+                if (uiState.searchQuery.isBlank()) {
+                    if (uiState.suggestions.isNotEmpty()) {
+                        Text("Suggestions", style = MaterialTheme.typography.titleSmall)
+                        Spacer(modifier = Modifier.height(8.dp))
+                        LabelChipGrid(
+                            labels = uiState.suggestions,
+                            selectedIds = uiState.selectedLabelIds,
+                            onToggle = viewModel::toggleLabel
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                    }
+
+                    // Full label grid
+                    Text("All foods", style = MaterialTheme.typography.titleSmall)
                     Spacer(modifier = Modifier.height(8.dp))
                     LabelChipGrid(
-                        labels = uiState.suggestions,
+                        labels = uiState.foodLabels,
                         selectedIds = uiState.selectedLabelIds,
                         onToggle = viewModel::toggleLabel
+                    )
+                } else {
+                    // Search results
+                    LabelChipGrid(
+                        labels = uiState.filteredLabels,
+                        selectedIds = uiState.selectedLabelIds,
+                        onToggle = viewModel::toggleLabel
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                // Meal source toggle
+                if (uiState.mealSourceOptions.isNotEmpty()) {
+                    Text("Where", style = MaterialTheme.typography.titleSmall)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    MealSourceToggle(
+                        options = uiState.mealSourceOptions,
+                        selectedId = uiState.selectedMealSourceId,
+                        onSelect = viewModel::setMealSource
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                 }
 
-                // Full label grid
-                Text("All foods", style = MaterialTheme.typography.titleSmall)
-                Spacer(modifier = Modifier.height(8.dp))
-                LabelChipGrid(
-                    labels = uiState.foodLabels,
-                    selectedIds = uiState.selectedLabelIds,
-                    onToggle = viewModel::toggleLabel
+                // Notes
+                OutlinedTextField(
+                    value = uiState.notes,
+                    onValueChange = viewModel::updateNotes,
+                    label = { Text("Notes (optional)") },
+                    modifier = Modifier.fillMaxWidth(),
+                    minLines = 2
                 )
-            } else {
-                // Search results
-                LabelChipGrid(
-                    labels = uiState.filteredLabels,
-                    selectedIds = uiState.selectedLabelIds,
-                    onToggle = viewModel::toggleLabel
-                )
-            }
 
-            Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(24.dp))
 
-            // Meal source toggle
-            if (uiState.mealSourceOptions.isNotEmpty()) {
-                Text("Where", style = MaterialTheme.typography.titleSmall)
-                Spacer(modifier = Modifier.height(8.dp))
-                MealSourceToggle(
-                    options = uiState.mealSourceOptions,
-                    selectedId = uiState.selectedMealSourceId,
-                    onSelect = viewModel::setMealSource
-                )
+                // Save button
+                PillButton(
+                    onClick = { viewModel.save(entryTypeId) },
+                    enabled = uiState.canSave,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Save")
+                }
+
                 Spacer(modifier = Modifier.height(16.dp))
             }
-
-            // Notes
-            OutlinedTextField(
-                value = uiState.notes,
-                onValueChange = viewModel::updateNotes,
-                label = { Text("Notes (optional)") },
-                modifier = Modifier.fillMaxWidth(),
-                minLines = 2
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // Save button
-            PillButton(
-                onClick = { viewModel.save(entryTypeId) },
-                enabled = uiState.canSave,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Save")
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }
