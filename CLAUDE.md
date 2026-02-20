@@ -41,7 +41,7 @@ Haven uses an issue-driven development workflow. All work flows through GitHub I
 3. Human approves the plan
 4. Claude implements, opens a **draft PR** linking `Closes #N` (the technical task)
 5. PRs reference user stories with "Contributes to #M" — never `Closes` on user stories
-6. Human marks PR ready for review → GitHub Action triggers Claude reviewer
+6. Human asks Claude to review the PR using the `superpowers:requesting-code-review` skill
 7. After review approval, human merges
 8. **User stories are closed manually** by the human after all contributing technical tasks are merged and the feature is complete
 
