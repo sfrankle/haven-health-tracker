@@ -7,7 +7,7 @@ description: Pick up a technical task issue, plan it, implement it, and open a d
 
 ### 1. Read the issue
 ```bash
-gh api "repos/$(gh repo view --json nameWithOwner -q .nameWithOwner)/issues/<N>"
+gh issue view <N> --json number,title,body,labels,milestone
 ```
 
 Extract: title, acceptance criteria, linked user story, labels, notes.
@@ -30,9 +30,7 @@ Write the full plan to `docs/plans/<plan-name>.md`. Use the `superpowers:writing
 Post a **summary** of the plan as a comment on the issue — not the full detail, just enough for a human to understand and approve the approach:
 
 ```bash
-gh api "repos/$(gh repo view --json nameWithOwner -q .nameWithOwner)/issues/<N>/comments" \
-  -f body="$(cat <<'EOF'
-## Implementation Plan
+gh issue comment <N> --body "## Implementation Plan
 
 **Approach:** <2-3 sentences>
 
@@ -45,9 +43,7 @@ gh api "repos/$(gh repo view --json nameWithOwner -q .nameWithOwner)/issues/<N>/
 **Questions / Risks:**
 - <any ambiguities or risks>
 
-Full plan: `docs/plans/<plan-name>.md`
-EOF
-)"
+Full plan: \`docs/plans/<plan-name>.md\`"
 ```
 
 ### 6. STOP — Wait for approval
@@ -94,9 +90,8 @@ EOF
 
 Then associate the PR with the same milestone as the technical task:
 ```bash
-MILESTONE=$(gh api "repos/$(gh repo view --json nameWithOwner -q .nameWithOwner)/issues/<N>" -q .milestone.title)
-PR_NUMBER=$(gh pr view --json number -q .number)
-gh pr edit "$PR_NUMBER" --milestone "$MILESTONE"
+MILESTONE=$(gh issue view <N> --json milestone --jq .milestone.title)
+gh pr edit --milestone "$MILESTONE"
 ```
 
 ### 10. Clean up
