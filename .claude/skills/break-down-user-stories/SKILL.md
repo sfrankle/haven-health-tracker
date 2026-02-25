@@ -6,29 +6,36 @@ description: Analyze user stories in a GitHub milestone and create detailed tech
 ## Process
 
 ### 1. Read the milestone
-Fetch all issues in the target milestone labeled `user-story`:
+Fetch all user stories and existing technical tasks in the target milestone:
 ```bash
-gh api "repos/$(gh repo view --json nameWithOwner -q .nameWithOwner)/issues?milestone=<NUMBER>&labels=user-story&state=open&per_page=100"
+gh issue list --milestone "<MILESTONE TITLE>" --label "user-story" --state open --limit 100 --json number,title,body
+gh issue list --milestone "<MILESTONE TITLE>" --label "technical-task" --state all --limit 100 --json number,title,body,state
 ```
 
-Also fetch existing technical tasks in the same milestone:
-```bash
-gh api "repos/$(gh repo view --json nameWithOwner -q .nameWithOwner)/issues?milestone=<NUMBER>&labels=technical-task&state=all&per_page=100"
-```
+Parse each technical task body for "Contributes to #N" to map tasks → user stories.
 
-Parse the body of each technical task to identify which user story it contributes to (look for "Contributes to #N" in the body).
+### 2. Check for missing user stories
+Before breaking down tasks, compare the milestone's user stories against `docs/spec.md` and related docs. Ask: are there user stories missing from this milestone that the spec implies? Flag any gaps — don't silently skip them.
 
-### 2. Audit the codebase
+### 3. Audit the codebase
 For each user story, explore the codebase to understand:
 - What already exists (screens, entities, DAOs, repos, ViewModels)
 - What's missing or incomplete relative to the story's requirements
 - Dependencies between stories
 
-### 3. Propose technical tasks
+### 4. Think ahead to future milestones
+For each proposed technical task, consider: does the implementation approach here constrain or create work in later milestones? Call out cases where:
+- Seed data decisions affect future correlation/insights quality (e.g. tag coverage)
+- A "flat for MVP" UI decision relies on a data model that supports hierarchy later — note that explicitly
+- Shared infrastructure (shared composables, shared patterns) should be built once, not per-story
+
+### 5. Propose technical tasks
 Evaluate existing technical tasks:
 - Are they well-formed (clear acceptance criteria, proper user story link, appropriate scope)?
 - Do they match current user story requirements?
 - Are they still relevant or have they been superseded?
+
+Identify cross-cutting concerns — shared infrastructure needed by multiple stories (e.g. a shared date picker, a shared label grid) should be one task, not duplicated.
 
 Present a summary to the user:
 - Which user stories already have technical tasks (and what they are)
@@ -37,46 +44,29 @@ Present a summary to the user:
 - Which user stories are already fully implemented
 - Which user stories need new technical tasks, and what tasks are needed
 - Suggested ordering / dependencies between tasks
+- Any forward-looking risks or constraints identified in step 4
 
 **Wait for user approval before making changes (closing/editing issues, creating new ones).**
 
-### 4. Clean up existing issues
-For issues marked for removal or update:
-
+### 6. Clean up existing issues
 **Close issues:**
 ```bash
-gh issue close <NUMBER> --comment "Closing: <reason (poorly scoped/duplicate/superseded)>"
+gh issue close <NUMBER> --comment "Closing: <reason>"
 ```
 
 **Update issues:**
 ```bash
-gh api "repos/$(gh repo view --json nameWithOwner -q .nameWithOwner)/issues/<NUMBER>" \
-  -f body="$(cat <<'EOF'
-## Summary
-<updated summary>
-
-## User Story
-Contributes to #N
-
-## Acceptance Criteria
-- [ ] Updated criterion 1
-- [ ] Updated criterion 2
-- [ ] Tests: <what to test>
-
-## Notes
-<updated notes>
-EOF
-)"
+gh issue edit <NUMBER> --body "<updated body>"
 ```
 
-### 5. Create new issues
-For each approved technical task, create a GitHub issue:
-
+### 7. Create new issues
+For each approved technical task, create in one command:
 ```bash
-gh api "repos/$(gh repo view --json nameWithOwner -q .nameWithOwner)/issues" \
-  -f title="<title>" \
-  -f body="$(cat <<'EOF'
-## Summary
+gh issue create \
+  --title "<title>" \
+  --milestone "<MILESTONE TITLE>" \
+  --label "technical-task,<area-label>,ai-authored" \
+  --body "## Summary
 <what this task accomplishes>
 
 ## User Story
@@ -88,20 +78,14 @@ Contributes to #N
 - [ ] Tests: <what to test>
 
 ## Notes
-<files likely affected, design considerations, dependencies>
-EOF
-)" \
-  -f milestone=<MILESTONE_NUMBER>
-```
-
-Then add labels:
-```bash
-gh issue edit <NUMBER> --add-label "technical-task" --add-label "<area-label>"
+<files likely affected, design considerations, dependencies, forward-looking constraints>"
 ```
 
 Area labels: `Tend-Page`, `Trace-Page`, `Weave-Page`, `Anchor-Page`, `Settings-Page`, `Data`, `UI`
 
-### 6. Summary
+Follow label conventions from CLAUDE.md (e.g. `ai-authored` on all created issues).
+
+### 8. Summary
 After creating all issues, present a table:
 | Issue | Title | User Story | Labels |
 |-------|-------|------------|--------|
