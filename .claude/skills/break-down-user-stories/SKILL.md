@@ -85,8 +85,40 @@ Area labels: `Tend-Page`, `Trace-Page`, `Weave-Page`, `Anchor-Page`, `Settings-P
 
 Follow label conventions from CLAUDE.md (e.g. `ai-authored` on all created issues).
 
-### 8. Summary
+### 8. Set blocking relationships between technical tasks
+For each dependency identified in step 5, register it using GitHub's native relationship:
+
+```bash
+# Get node IDs for the two issues
+BLOCKED_ID=$(gh issue view <BLOCKED_ISSUE> --json id -q .id)
+BLOCKING_ID=$(gh issue view <BLOCKING_ISSUE> --json id -q .id)
+
+# "#BLOCKED_ISSUE is blocked by #BLOCKING_ISSUE"
+gh api graphql -f query="mutation {
+  addBlockedBy(input: { issueId: \"$BLOCKED_ID\", blockingIssueId: \"$BLOCKING_ID\" }) {
+    clientMutationId
+  }
+}"
+```
+
+Also note the dependency in the blocked issue's Notes section: `Blocked by: #N`
+
+### 9. Link technical tasks to their user stories
+After all tasks are created, update each user story body to append a `## Technical Tasks` checklist. GitHub automatically checks off items as the referenced issues close — giving a clear "ready to close" signal without closing the story itself (that remains a manual human action per CLAUDE.md).
+
+```bash
+gh issue edit <USER_STORY_NUMBER> --body "<existing body>
+
+## Technical Tasks
+- [ ] #T1 Task title
+- [ ] #T2 Task title
+- [ ] #T3 Task title"
+```
+
+Fetch the existing body first with `gh issue view <N> --json body -q .body` so you don't overwrite it.
+
+### 10. Summary
 After creating all issues, present a table:
-| Issue | Title | User Story | Labels |
-|-------|-------|------------|--------|
-| #N    | ...   | #M         | ...    |
+| Issue | Title | User Story | Blocked by |
+|-------|-------|------------|------------|
+| #N    | ...   | #M         | #X, #Y     |
