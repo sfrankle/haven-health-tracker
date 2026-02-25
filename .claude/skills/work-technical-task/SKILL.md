@@ -5,12 +5,19 @@ description: Pick up a technical task issue, plan it, implement it, and open a d
 
 ## Process
 
-### 1. Read the issue
+### 1. Read the issue and verify it's not blocked
 ```bash
-gh api "repos/$(gh repo view --json nameWithOwner -q .nameWithOwner)/issues/<N>"
+gh issue view <N> --json number,title,body,labels,milestone,id
 ```
 
 Extract: title, acceptance criteria, linked user story, labels, notes.
+
+Then check for open blockers:
+```bash
+gh api "repos/sfrankle/haven-health-tracker/issues/<N>" --jq '.issue_dependencies_summary'
+```
+
+If `blocked_by > 0`, find which issues are blocking it by scanning other open issues' `issue_dependencies_summary.blocking` count, or look for "Blocked by: #X" in the body. **Stop and tell the user** which open issues are blocking this task — do not proceed.
 
 ### 2. Read the user story
 Follow the "Contributes to #M" link and read the user story for full product context.
@@ -30,9 +37,7 @@ Write the full plan to `docs/plans/<plan-name>.md`. Use the `superpowers:writing
 Post a **summary** of the plan as a comment on the issue — not the full detail, just enough for a human to understand and approve the approach:
 
 ```bash
-gh api "repos/$(gh repo view --json nameWithOwner -q .nameWithOwner)/issues/<N>/comments" \
-  -f body="$(cat <<'EOF'
-## Implementation Plan
+gh issue comment <N> --body "## Implementation Plan
 
 **Approach:** <2-3 sentences>
 
@@ -45,9 +50,7 @@ gh api "repos/$(gh repo view --json nameWithOwner -q .nameWithOwner)/issues/<N>/
 **Questions / Risks:**
 - <any ambiguities or risks>
 
-Full plan: `docs/plans/<plan-name>.md`
-EOF
-)"
+Full plan: \`docs/plans/<plan-name>.md\`"
 ```
 
 ### 6. STOP — Wait for approval
@@ -94,9 +97,8 @@ EOF
 
 Then associate the PR with the same milestone as the technical task:
 ```bash
-MILESTONE=$(gh api "repos/$(gh repo view --json nameWithOwner -q .nameWithOwner)/issues/<N>" -q .milestone.title)
-PR_NUMBER=$(gh pr view --json number -q .number)
-gh pr edit "$PR_NUMBER" --milestone "$MILESTONE"
+MILESTONE=$(gh issue view <N> --json milestone --jq .milestone.title)
+gh pr edit --milestone "$MILESTONE"
 ```
 
 ### 10. Clean up
