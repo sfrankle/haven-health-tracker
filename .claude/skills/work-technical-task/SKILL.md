@@ -5,12 +5,19 @@ description: Pick up a technical task issue, plan it, implement it, and open a d
 
 ## Process
 
-### 1. Read the issue
+### 1. Read the issue and verify it's not blocked
 ```bash
-gh issue view <N> --json number,title,body,labels,milestone
+gh issue view <N> --json number,title,body,labels,milestone,id
 ```
 
 Extract: title, acceptance criteria, linked user story, labels, notes.
+
+Then check for open blockers:
+```bash
+gh api "repos/sfrankle/haven-health-tracker/issues/<N>" --jq '.issue_dependencies_summary'
+```
+
+If `blocked_by > 0`, find which issues are blocking it by scanning other open issues' `issue_dependencies_summary.blocking` count, or look for "Blocked by: #X" in the body. **Stop and tell the user** which open issues are blocking this task — do not proceed.
 
 ### 2. Read the user story
 Follow the "Contributes to #M" link and read the user story for full product context.
