@@ -86,7 +86,7 @@ After approval:
 4. Commit frequently with clear messages
 5. Update other docs if needed (decisions.md, schema.sql, docs/design/, docs/ux/, docs/spec.md)
 6. Document significant architectural decisions in `docs/decisions.md` (new patterns, major refactorings, technology choices)
-7. Update `docs/changelog.md` in your commits, before opening the PR.
+7. Add exactly one entry to `docs/changelog.md` summarising this PR's changes — do this in a commit before opening the PR.
 
 ### 8. Verify before opening PR
 Run tests and lint to ensure everything passes:
