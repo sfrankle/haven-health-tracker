@@ -6,7 +6,7 @@ description: Pick up a technical task issue, plan it, implement it, and open a d
 ## Process
 
 ### 0. Check branch state
-Follow the shared procedure in `.claude/skills/_shared/branch-check.md`. Do not proceed until you are on `main`.
+Follow the shared procedure in `.claude/skills/_shared/branch-check.md`. You may proceed either on `main` (starting a new task) or on the current branch (continuing an in-progress task the user confirmed).
 
 ### 1. Read the issue and verify it's not blocked
 ```bash
