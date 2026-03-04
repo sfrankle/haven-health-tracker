@@ -5,12 +5,22 @@ description: Pick up a technical task issue, plan it, implement it, and open a d
 
 ## Process
 
-### 1. Read the issue
+### 0. Check branch state
+Follow the shared procedure in `.claude/skills/_shared/branch-check.md`. You may proceed either on `main` (starting a new task) or on the current branch (continuing an in-progress task the user confirmed).
+
+### 1. Read the issue and verify it's not blocked
 ```bash
-gh api "repos/$(gh repo view --json nameWithOwner -q .nameWithOwner)/issues/<N>"
+gh issue view <N> --json number,title,body,labels,milestone,id
 ```
 
 Extract: title, acceptance criteria, linked user story, labels, notes.
+
+Then check for open blockers by looking for "Blocked by: #X" in the issue body. For each referenced blocker, verify it's still open:
+```bash
+gh issue view <X> --json state -q .state
+```
+
+If any blocker is still open, **stop and tell the user** which issues are blocking this task — do not proceed.
 
 ### 2. Read the user story
 Follow the "Contributes to #M" link and read the user story for full product context.
@@ -30,9 +40,7 @@ Write the full plan to `docs/plans/<plan-name>.md`. Use the `superpowers:writing
 Post a **summary** of the plan as a comment on the issue — not the full detail, just enough for a human to understand and approve the approach:
 
 ```bash
-gh api "repos/$(gh repo view --json nameWithOwner -q .nameWithOwner)/issues/<N>/comments" \
-  -f body="$(cat <<'EOF'
-## Implementation Plan
+gh issue comment <N> --body "## Implementation Plan
 
 **Approach:** <2-3 sentences>
 
@@ -45,9 +53,7 @@ gh api "repos/$(gh repo view --json nameWithOwner -q .nameWithOwner)/issues/<N>/
 **Questions / Risks:**
 - <any ambiguities or risks>
 
-Full plan: `docs/plans/<plan-name>.md`
-EOF
-)"
+Full plan: \`docs/plans/<plan-name>.md\`"
 ```
 
 ### 6. STOP — Wait for approval
@@ -65,9 +71,9 @@ After approval:
 2. Follow the detailed plan in `docs/plans/`
 3. Follow TDD: write failing tests, then implement
 4. Commit frequently with clear messages
-5. Update `docs/changelog.md` in your commits
-6. Update other docs if needed (decisions.md, schema.sql, docs/design/, docs/ux/)
-7. Document significant architectural decisions in `docs/decisions.md` (new patterns, major refactorings, technology choices)
+5. Update other docs if needed (decisions.md, schema.sql, docs/design/, docs/ux/, docs/spec.md)
+6. Document significant architectural decisions in `docs/decisions.md` (new patterns, major refactorings, technology choices)
+7. Add exactly one entry to `docs/changelog.md` summarising this PR's changes — do this in a commit before opening the PR.
 
 ### 8. Verify before opening PR
 Run tests and lint to ensure everything passes:
@@ -94,13 +100,11 @@ EOF
 
 Then associate the PR with the same milestone as the technical task:
 ```bash
-MILESTONE=$(gh api "repos/$(gh repo view --json nameWithOwner -q .nameWithOwner)/issues/<N>" -q .milestone.title)
-PR_NUMBER=$(gh pr view --json number -q .number)
-gh pr edit "$PR_NUMBER" --milestone "$MILESTONE"
+MILESTONE=$(gh issue view <N> --json milestone --jq .milestone.title)
+gh pr edit --milestone "$MILESTONE"
 ```
 
-### 10. Clean up
-Delete the plan file from `docs/plans/` — it has served its purpose.
-
-### 11. Report
+### 10. Report
 Tell the user: "Draft PR #X is open. When you're ready, mark it ready for review to trigger the automated reviewer."
+
+The plan file in `docs/plans/` should **not** be deleted yet — keep it until the PR is approved and merged, in case follow-up work or revisions are needed. Delete it only when the PR is closed.

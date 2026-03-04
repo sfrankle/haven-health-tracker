@@ -35,6 +35,10 @@ Haven uses an issue-driven development workflow. All work flows through GitHub I
 - **Technical tasks** (label: `technical-task`) — implementation units, linked to user stories
 - One technical task = one PR. A user story may span multiple technical tasks.
 
+### Labels for AI-created Issues
+- Always add `ai-authored` to every issue or milestone Claude creates
+- Always add `needs-human-review` to every user story Claude creates
+
 ### Technical Task Lifecycle
 1. Claude analyzes user stories and creates technical task issues with detailed acceptance criteria
 2. Claude writes a detailed plan to `docs/plans/` and posts a summary comment on the issue
