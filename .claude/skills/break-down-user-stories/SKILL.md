@@ -106,16 +106,18 @@ Also note the dependency in the blocked issue's Notes section: `Blocked by: #N`
 ### 9. Link technical tasks to their user stories
 After all tasks are created, update each user story body to append a `## Technical Tasks` checklist. GitHub automatically checks off items as the referenced issues close — giving a clear "ready to close" signal without closing the story itself (that remains a manual human action per CLAUDE.md).
 
+Fetch the existing body first, then append via a temp file to handle multi-line content and quotes safely:
 ```bash
-gh issue edit <USER_STORY_NUMBER> --body "<existing body>
+gh issue view <USER_STORY_NUMBER> --json body -q .body > /tmp/story_body.md
+cat >> /tmp/story_body.md << 'EOF'
 
 ## Technical Tasks
 - [ ] #T1 Task title
 - [ ] #T2 Task title
-- [ ] #T3 Task title"
+- [ ] #T3 Task title
+EOF
+gh issue edit <USER_STORY_NUMBER> --body "$(cat /tmp/story_body.md)"
 ```
-
-Fetch the existing body first with `gh issue view <N> --json body -q .body` so you don't overwrite it.
 
 ### 10. Summary
 After creating all issues, present a table:

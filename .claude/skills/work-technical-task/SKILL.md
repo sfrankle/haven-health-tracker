@@ -28,12 +28,12 @@ gh issue view <N> --json number,title,body,labels,milestone,id
 
 Extract: title, acceptance criteria, linked user story, labels, notes.
 
-Then check for open blockers:
+Then check for open blockers by looking for "Blocked by: #X" in the issue body. For each referenced blocker, verify it's still open:
 ```bash
-gh api "repos/sfrankle/haven-health-tracker/issues/<N>" --jq '.issue_dependencies_summary'
+gh issue view <X> --json state -q .state
 ```
 
-If `blocked_by > 0`, find which issues are blocking it by scanning other open issues' `issue_dependencies_summary.blocking` count, or look for "Blocked by: #X" in the body. **Stop and tell the user** which open issues are blocking this task — do not proceed.
+If any blocker is still open, **stop and tell the user** which issues are blocking this task — do not proceed.
 
 ### 2. Read the user story
 Follow the "Contributes to #M" link and read the user story for full product context.
@@ -86,7 +86,7 @@ After approval:
 4. Commit frequently with clear messages
 5. Update other docs if needed (decisions.md, schema.sql, docs/design/, docs/ux/, docs/spec.md)
 6. Document significant architectural decisions in `docs/decisions.md` (new patterns, major refactorings, technology choices)
-7. Update `docs/changelog.md` once per PR with a summary of the changes.
+7. Update `docs/changelog.md` in your commits, before opening the PR.
 
 ### 8. Verify before opening PR
 Run tests and lint to ensure everything passes:
