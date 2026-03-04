@@ -5,21 +5,8 @@ description: Pick up a technical task issue, plan it, implement it, and open a d
 
 ## Process
 
-### 0. Check what branch we're on
-```bash
-git branch --show-current
-```
-
-If the current branch is **not `main`**:
-- Check if there's an open PR for this branch:
-  ```bash
-  gh pr list --head <branch> --json number,title,state
-  ```
-- Tell the user the current state. Ask if we should continue on current branch / taks / PR?
-  - If yes, now you are working on the current technical task.
-  - In no, check if there are any local changes. Ask the user if we should commit and push OR stash the changes. Then checkout main.
-
-Do NOT proceed until the user explicitly confirms they want to start this new task.
+### 0. Check branch state
+Follow the shared procedure in `.claude/skills/_shared/branch-check.md`. Do not proceed until you are on `main`.
 
 ### 1. Read the issue and verify it's not blocked
 ```bash
