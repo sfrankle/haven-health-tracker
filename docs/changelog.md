@@ -10,3 +10,4 @@
 | 2026-02-16 | #11 | Food logging: search bar, label chip grid, multi-select, time-of-day meal suggestions, meal source toggle, first label-based entry type |
 | 2026-02-16 | — | Incremental seed data: added `seed_version` to `label_tag`, seeding now filters by version so user-removed tag associations aren't re-applied on app update. |
 | 2026-02-20 | #58 | Documentation & workflow restructure: slim CLAUDE.md, add implementer agent, add break-down-user-stories and work-technical-task skills, add Claude PR review GitHub Action, delete roadmap and plans |
+| 2026-03-04 | #TBD | Seed emotion, physical state, and activity labels: nested valence-based emotion labels (Pleasant/Neutral/Unpleasant → 18 child emotions), flat physical state labels including positive states, activity labels with categories; rename "Symptom" entry type to "Physical State"; bump seed VERSION to 3 |

@@ -10,7 +10,7 @@ import com.haven.app.data.entity.Tag
 
 object SeedData {
 
-    const val VERSION = 2
+    const val VERSION = 3
 
     val measurementTypes = listOf(
         MeasurementType(id = 1, name = "numeric", displayName = "Enter a number"),
@@ -35,7 +35,7 @@ object SeedData {
         EntryTypeEntity(id = 2, name = "Emotion", measurementTypeId = 2, prompt = "How are you feeling?", icon = EntryType.EMOTION, sortOrder = 2),
         EntryTypeEntity(id = 3, name = "Hydration", measurementTypeId = 1, prompt = "How much did you drink?", icon = EntryType.HYDRATION, sortOrder = 3),
         EntryTypeEntity(id = 4, name = "Sleep", measurementTypeId = 1, prompt = "How many hours did you sleep?", icon = EntryType.SLEEP, sortOrder = 4),
-        EntryTypeEntity(id = 5, name = "Symptom", measurementTypeId = 3, prompt = "What are you experiencing?", icon = EntryType.SYMPTOM, sortOrder = 5),
+        EntryTypeEntity(id = 5, name = "Physical State", measurementTypeId = 3, prompt = "What are you experiencing?", icon = EntryType.SYMPTOM, sortOrder = 5),
         EntryTypeEntity(id = 6, name = "Activity", measurementTypeId = 4, prompt = "What did you do?", icon = EntryType.ACTIVITY, sortOrder = 6),
     )
 
@@ -110,5 +110,177 @@ object SeedData {
         LabelTag(labelId = 25, tagId = 6),                                      // Alcohol -> alcohol
         LabelTag(labelId = 27, tagId = 9),                                      // Home Cooked -> meal_source
         LabelTag(labelId = 28, tagId = 9),                                      // Eating Out -> meal_source
+    )
+
+    // -------------------------------------------------------------------------
+    // Emotion labels (entryTypeId = 2) — nested: valence parent → emotion child
+    // -------------------------------------------------------------------------
+
+    val emotionParentLabels = listOf(
+        Label(id = 29, entryTypeId = 2, name = "Pleasant", sortOrder = 1, seedVersion = 3),
+        Label(id = 30, entryTypeId = 2, name = "Neutral", sortOrder = 2, seedVersion = 3),
+        Label(id = 31, entryTypeId = 2, name = "Unpleasant", sortOrder = 3, seedVersion = 3),
+    )
+
+    val emotionChildLabels = listOf(
+        // Pleasant (parentId = 29)
+        Label(id = 32, entryTypeId = 2, name = "Happy", parentId = 29, sortOrder = 1, seedVersion = 3),
+        Label(id = 33, entryTypeId = 2, name = "Content", parentId = 29, sortOrder = 2, seedVersion = 3),
+        Label(id = 34, entryTypeId = 2, name = "Hopeful", parentId = 29, sortOrder = 3, seedVersion = 3),
+        Label(id = 35, entryTypeId = 2, name = "Excited", parentId = 29, sortOrder = 4, seedVersion = 3),
+        Label(id = 36, entryTypeId = 2, name = "Energised", parentId = 29, sortOrder = 5, seedVersion = 3),
+        Label(id = 37, entryTypeId = 2, name = "Peaceful", parentId = 29, sortOrder = 6, seedVersion = 3),
+        Label(id = 38, entryTypeId = 2, name = "Playful", parentId = 29, sortOrder = 7, seedVersion = 3),
+        Label(id = 39, entryTypeId = 2, name = "Proud", parentId = 29, sortOrder = 8, seedVersion = 3),
+        Label(id = 40, entryTypeId = 2, name = "Trusting", parentId = 29, sortOrder = 9, seedVersion = 3),
+        // Neutral (parentId = 30)
+        Label(id = 41, entryTypeId = 2, name = "Calm", parentId = 30, sortOrder = 1, seedVersion = 3),
+        Label(id = 42, entryTypeId = 2, name = "Balanced", parentId = 30, sortOrder = 2, seedVersion = 3),
+        Label(id = 43, entryTypeId = 2, name = "Comfortable", parentId = 30, sortOrder = 3, seedVersion = 3),
+        Label(id = 44, entryTypeId = 2, name = "Thoughtful", parentId = 30, sortOrder = 4, seedVersion = 3),
+        Label(id = 45, entryTypeId = 2, name = "Mellow", parentId = 30, sortOrder = 5, seedVersion = 3),
+        Label(id = 46, entryTypeId = 2, name = "Fulfilled", parentId = 30, sortOrder = 6, seedVersion = 3),
+        // Unpleasant (parentId = 31)
+        Label(id = 47, entryTypeId = 2, name = "Anxious", parentId = 31, sortOrder = 1, seedVersion = 3),
+        Label(id = 48, entryTypeId = 2, name = "Overwhelmed", parentId = 31, sortOrder = 2, seedVersion = 3),
+        Label(id = 49, entryTypeId = 2, name = "Irritable", parentId = 31, sortOrder = 3, seedVersion = 3),
+        Label(id = 50, entryTypeId = 2, name = "Sad", parentId = 31, sortOrder = 4, seedVersion = 3),
+        Label(id = 51, entryTypeId = 2, name = "Frustrated", parentId = 31, sortOrder = 5, seedVersion = 3),
+        Label(id = 52, entryTypeId = 2, name = "Angry", parentId = 31, sortOrder = 6, seedVersion = 3),
+        Label(id = 53, entryTypeId = 2, name = "Fearful", parentId = 31, sortOrder = 7, seedVersion = 3),
+        Label(id = 54, entryTypeId = 2, name = "Down", parentId = 31, sortOrder = 8, seedVersion = 3),
+    )
+
+    // -------------------------------------------------------------------------
+    // Physical State labels (entryTypeId = 5) — flat
+    // Includes both difficult states and positive/neutral states
+    // -------------------------------------------------------------------------
+
+    val physicalStateLabels = listOf(
+        // Difficult states
+        Label(id = 55, entryTypeId = 5, name = "Headache", sortOrder = 1, seedVersion = 3),
+        Label(id = 56, entryTypeId = 5, name = "Fatigue", sortOrder = 2, seedVersion = 3),
+        Label(id = 57, entryTypeId = 5, name = "Nausea", sortOrder = 3, seedVersion = 3),
+        Label(id = 58, entryTypeId = 5, name = "Bloating", sortOrder = 4, seedVersion = 3),
+        Label(id = 59, entryTypeId = 5, name = "Cramps", sortOrder = 5, seedVersion = 3),
+        Label(id = 60, entryTypeId = 5, name = "Brain fog", sortOrder = 6, seedVersion = 3),
+        Label(id = 61, entryTypeId = 5, name = "Back pain", sortOrder = 7, seedVersion = 3),
+        Label(id = 62, entryTypeId = 5, name = "Joint pain", sortOrder = 8, seedVersion = 3),
+        Label(id = 63, entryTypeId = 5, name = "Sore throat", sortOrder = 9, seedVersion = 3),
+        Label(id = 64, entryTypeId = 5, name = "Congestion", sortOrder = 10, seedVersion = 3),
+        Label(id = 65, entryTypeId = 5, name = "Low energy", sortOrder = 11, seedVersion = 3),
+        // Positive/neutral states
+        Label(id = 66, entryTypeId = 5, name = "Settled stomach", sortOrder = 12, seedVersion = 3),
+        Label(id = 67, entryTypeId = 5, name = "High energy", sortOrder = 13, seedVersion = 3),
+        Label(id = 68, entryTypeId = 5, name = "Clear-headed", sortOrder = 14, seedVersion = 3),
+        Label(id = 69, entryTypeId = 5, name = "Pain-free", sortOrder = 15, seedVersion = 3),
+        Label(id = 70, entryTypeId = 5, name = "Well-rested", sortOrder = 16, seedVersion = 3),
+    )
+
+    // -------------------------------------------------------------------------
+    // Activity labels (entryTypeId = 6) — flat with categoryId
+    // -------------------------------------------------------------------------
+
+    val activityLabels = listOf(
+        Label(id = 71, entryTypeId = 6, name = "Walk", categoryId = 2, sortOrder = 1, seedVersion = 3),
+        Label(id = 72, entryTypeId = 6, name = "Run", categoryId = 2, sortOrder = 2, seedVersion = 3),
+        Label(id = 73, entryTypeId = 6, name = "Cycling", categoryId = 2, sortOrder = 3, seedVersion = 3),
+        Label(id = 74, entryTypeId = 6, name = "Swimming", categoryId = 2, sortOrder = 4, seedVersion = 3),
+        Label(id = 75, entryTypeId = 6, name = "Strength training", categoryId = 2, sortOrder = 5, seedVersion = 3),
+        Label(id = 76, entryTypeId = 6, name = "Yoga", categoryId = 2, sortOrder = 6, seedVersion = 3),
+        Label(id = 77, entryTypeId = 6, name = "Stretching", categoryId = 2, sortOrder = 7, seedVersion = 3),
+        Label(id = 78, entryTypeId = 6, name = "Meditation", categoryId = 3, sortOrder = 8, seedVersion = 3),
+        Label(id = 79, entryTypeId = 6, name = "Deep breathing", categoryId = 4, sortOrder = 9, seedVersion = 3),
+        Label(id = 80, entryTypeId = 6, name = "Gardening", categoryId = 7, sortOrder = 10, seedVersion = 3),
+        Label(id = 81, entryTypeId = 6, name = "Housework", categoryId = 8, sortOrder = 11, seedVersion = 3),
+    )
+
+    // -------------------------------------------------------------------------
+    // Emotion tags (tag_group = "emotion")
+    // -------------------------------------------------------------------------
+
+    val emotionTags = listOf(
+        Tag(id = 10, name = "nervous-system", tagGroup = "emotion", seedVersion = 3),
+        Tag(id = 11, name = "high-arousal", tagGroup = "emotion", seedVersion = 3),
+        Tag(id = 12, name = "low-arousal", tagGroup = "emotion", seedVersion = 3),
+    )
+
+    val emotionLabelTags = listOf(
+        LabelTag(labelId = 47, tagId = 10), LabelTag(labelId = 47, tagId = 11), // Anxious -> nervous-system, high-arousal
+        LabelTag(labelId = 48, tagId = 10), LabelTag(labelId = 48, tagId = 11), // Overwhelmed -> nervous-system, high-arousal
+        LabelTag(labelId = 49, tagId = 11),                                       // Irritable -> high-arousal
+        LabelTag(labelId = 50, tagId = 12),                                       // Sad -> low-arousal
+        LabelTag(labelId = 52, tagId = 11),                                       // Angry -> high-arousal
+        LabelTag(labelId = 54, tagId = 12),                                       // Down -> low-arousal
+        LabelTag(labelId = 35, tagId = 11),                                       // Excited -> high-arousal
+        LabelTag(labelId = 36, tagId = 11),                                       // Energised -> high-arousal
+        LabelTag(labelId = 37, tagId = 10), LabelTag(labelId = 37, tagId = 12), // Peaceful -> nervous-system, low-arousal
+        LabelTag(labelId = 41, tagId = 10), LabelTag(labelId = 41, tagId = 12), // Calm -> nervous-system, low-arousal
+        LabelTag(labelId = 42, tagId = 10), LabelTag(labelId = 42, tagId = 12), // Balanced -> nervous-system, low-arousal
+        LabelTag(labelId = 43, tagId = 12),                                       // Comfortable -> low-arousal
+        LabelTag(labelId = 45, tagId = 12),                                       // Mellow -> low-arousal
+    )
+
+    // -------------------------------------------------------------------------
+    // Physical State tags (tag_group = "symptom")
+    // -------------------------------------------------------------------------
+
+    val symptomTags = listOf(
+        Tag(id = 13, name = "pain", tagGroup = "symptom", seedVersion = 3),
+        Tag(id = 14, name = "energy", tagGroup = "symptom", seedVersion = 3),
+        Tag(id = 15, name = "nervous-system", tagGroup = "symptom", seedVersion = 3),
+        Tag(id = 16, name = "gut", tagGroup = "symptom", seedVersion = 3),
+        Tag(id = 17, name = "digestive", tagGroup = "symptom", seedVersion = 3),
+        Tag(id = 18, name = "FODMAP", tagGroup = "symptom", seedVersion = 3),
+        Tag(id = 19, name = "hormonal", tagGroup = "symptom", seedVersion = 3),
+        Tag(id = 20, name = "musculoskeletal", tagGroup = "symptom", seedVersion = 3),
+        Tag(id = 21, name = "immune", tagGroup = "symptom", seedVersion = 3),
+        Tag(id = 22, name = "head", tagGroup = "symptom", seedVersion = 3),
+    )
+
+    val physicalStateLabelTags = listOf(
+        LabelTag(labelId = 55, tagId = 22), LabelTag(labelId = 55, tagId = 13),                               // Headache -> head, pain
+        LabelTag(labelId = 56, tagId = 14), LabelTag(labelId = 56, tagId = 15),                               // Fatigue -> energy, nervous-system
+        LabelTag(labelId = 57, tagId = 16), LabelTag(labelId = 57, tagId = 17),                               // Nausea -> gut, digestive
+        LabelTag(labelId = 58, tagId = 16), LabelTag(labelId = 58, tagId = 17), LabelTag(labelId = 58, tagId = 18), // Bloating -> gut, digestive, FODMAP
+        LabelTag(labelId = 59, tagId = 16), LabelTag(labelId = 59, tagId = 17), LabelTag(labelId = 59, tagId = 19), LabelTag(labelId = 59, tagId = 13), // Cramps -> gut, digestive, hormonal, pain
+        LabelTag(labelId = 60, tagId = 14), LabelTag(labelId = 60, tagId = 15),                               // Brain fog -> energy, nervous-system
+        LabelTag(labelId = 61, tagId = 20), LabelTag(labelId = 61, tagId = 13),                               // Back pain -> musculoskeletal, pain
+        LabelTag(labelId = 62, tagId = 20), LabelTag(labelId = 62, tagId = 13),                               // Joint pain -> musculoskeletal, pain
+        LabelTag(labelId = 63, tagId = 21),                                                                    // Sore throat -> immune
+        LabelTag(labelId = 64, tagId = 21),                                                                    // Congestion -> immune
+        LabelTag(labelId = 65, tagId = 14), LabelTag(labelId = 65, tagId = 15),                               // Low energy -> energy, nervous-system
+        LabelTag(labelId = 66, tagId = 16), LabelTag(labelId = 66, tagId = 17),                               // Settled stomach -> gut, digestive
+        LabelTag(labelId = 67, tagId = 14), LabelTag(labelId = 67, tagId = 15),                               // High energy -> energy, nervous-system
+        LabelTag(labelId = 68, tagId = 14), LabelTag(labelId = 68, tagId = 15),                               // Clear-headed -> energy, nervous-system
+        LabelTag(labelId = 69, tagId = 13),                                                                    // Pain-free -> pain
+        LabelTag(labelId = 70, tagId = 14),                                                                    // Well-rested -> energy
+    )
+
+    // -------------------------------------------------------------------------
+    // Activity tags (tag_group = "activity")
+    // -------------------------------------------------------------------------
+
+    val activityTags = listOf(
+        Tag(id = 23, name = "cardio", tagGroup = "activity", seedVersion = 3),
+        Tag(id = 24, name = "high-intensity", tagGroup = "activity", seedVersion = 3),
+        Tag(id = 25, name = "low-intensity", tagGroup = "activity", seedVersion = 3),
+        Tag(id = 26, name = "strength", tagGroup = "activity", seedVersion = 3),
+        Tag(id = 27, name = "flexibility", tagGroup = "activity", seedVersion = 3),
+        Tag(id = 28, name = "grounding", tagGroup = "activity", seedVersion = 3),
+    )
+
+    val activityLabelTags = listOf(
+        LabelTag(labelId = 71, tagId = 23), LabelTag(labelId = 71, tagId = 25), // Walk -> cardio, low-intensity
+        LabelTag(labelId = 72, tagId = 23), LabelTag(labelId = 72, tagId = 24), // Run -> cardio, high-intensity
+        LabelTag(labelId = 73, tagId = 23), LabelTag(labelId = 73, tagId = 24), // Cycling -> cardio, high-intensity
+        LabelTag(labelId = 74, tagId = 23), LabelTag(labelId = 74, tagId = 24), // Swimming -> cardio, high-intensity
+        LabelTag(labelId = 75, tagId = 26), LabelTag(labelId = 75, tagId = 24), // Strength training -> strength, high-intensity
+        LabelTag(labelId = 76, tagId = 27), LabelTag(labelId = 76, tagId = 28), // Yoga -> flexibility, grounding
+        LabelTag(labelId = 77, tagId = 27), LabelTag(labelId = 77, tagId = 25), // Stretching -> flexibility, low-intensity
+        LabelTag(labelId = 78, tagId = 28),                                       // Meditation -> grounding
+        LabelTag(labelId = 79, tagId = 28),                                       // Deep breathing -> grounding
+        LabelTag(labelId = 80, tagId = 28), LabelTag(labelId = 80, tagId = 25), // Gardening -> grounding, low-intensity
+        LabelTag(labelId = 81, tagId = 25),                                       // Housework -> low-intensity
     )
 }

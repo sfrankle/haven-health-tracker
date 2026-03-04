@@ -23,6 +23,7 @@ class SeedDatabaseCallback(
 
         db.beginTransaction()
         try {
+            renameSymptomEntryType(db)
             seedMeasurementTypes(db)
             seedCategories(db)
             seedEntryTypes(db)
@@ -34,6 +35,11 @@ class SeedDatabaseCallback(
             db.endTransaction()
         }
         prefs.edit().putInt(KEY_SEED_VERSION, SeedData.VERSION).apply()
+    }
+
+    /** Renames the legacy "Symptom" entry type to "Physical State". Idempotent. */
+    private fun renameSymptomEntryType(db: SupportSQLiteDatabase) {
+        db.execSQL("UPDATE entry_type SET name = 'Physical State' WHERE name = 'Symptom'")
     }
 
     private fun seedMeasurementTypes(db: SupportSQLiteDatabase) {
@@ -71,7 +77,13 @@ class SeedDatabaseCallback(
     }
 
     private fun seedLabels(db: SupportSQLiteDatabase, appliedVersion: Int) {
-        val allLabels = SeedData.foodLabels + listOf(SeedData.mealSourceLabel) + SeedData.mealSourceChildren
+        val allLabels = SeedData.foodLabels +
+            listOf(SeedData.mealSourceLabel) +
+            SeedData.mealSourceChildren +
+            SeedData.emotionParentLabels +
+            SeedData.emotionChildLabels +
+            SeedData.physicalStateLabels +
+            SeedData.activityLabels
         allLabels.filter { it.seedVersion > appliedVersion }.forEach { label ->
             db.insert("label", SQLiteDatabase.CONFLICT_IGNORE, ContentValues().apply {
                 put("id", label.id)
@@ -88,7 +100,8 @@ class SeedDatabaseCallback(
     }
 
     private fun seedTags(db: SupportSQLiteDatabase, appliedVersion: Int) {
-        SeedData.foodTags.filter { it.seedVersion > appliedVersion }.forEach { tag ->
+        val allTags = SeedData.foodTags + SeedData.emotionTags + SeedData.symptomTags + SeedData.activityTags
+        allTags.filter { it.seedVersion > appliedVersion }.forEach { tag ->
             db.insert("tag", SQLiteDatabase.CONFLICT_IGNORE, ContentValues().apply {
                 put("id", tag.id)
                 put("name", tag.name)
@@ -99,7 +112,11 @@ class SeedDatabaseCallback(
     }
 
     private fun seedLabelTags(db: SupportSQLiteDatabase, appliedVersion: Int) {
-        SeedData.foodLabelTags.filter { it.seedVersion > appliedVersion }.forEach { lt ->
+        val allLabelTags = SeedData.foodLabelTags +
+            SeedData.emotionLabelTags +
+            SeedData.physicalStateLabelTags +
+            SeedData.activityLabelTags
+        allLabelTags.filter { it.seedVersion > appliedVersion }.forEach { lt ->
             db.insert("label_tag", SQLiteDatabase.CONFLICT_IGNORE, ContentValues().apply {
                 put("label_id", lt.labelId)
                 put("tag_id", lt.tagId)
