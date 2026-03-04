@@ -5,6 +5,23 @@ description: Pick up a technical task issue, plan it, implement it, and open a d
 
 ## Process
 
+### 0. Check we're on main
+```bash
+git branch --show-current
+```
+
+If the current branch is **not `main`**:
+- Check if there's an open PR for this branch:
+  ```bash
+  gh pr list --head <branch> --json number,title,state
+  ```
+- If a PR exists (draft or open), tell the user:
+  > "It looks like you're mid-task on branch `<branch>` with PR #N open. Want to keep going on that, or are you intentionally starting something new?"
+- If no PR exists, tell the user:
+  > "You're on branch `<branch>` with no open PR. Please switch to `main` before starting a new task."
+
+Do not proceed until the user explicitly confirms they want to start this new task.
+
 ### 1. Read the issue and verify it's not blocked
 ```bash
 gh issue view <N> --json number,title,body,labels,milestone,id
