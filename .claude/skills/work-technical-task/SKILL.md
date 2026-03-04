@@ -5,7 +5,7 @@ description: Pick up a technical task issue, plan it, implement it, and open a d
 
 ## Process
 
-### 0. Check we're on main
+### 0. Check what branch we're on
 ```bash
 git branch --show-current
 ```
@@ -15,12 +15,11 @@ If the current branch is **not `main`**:
   ```bash
   gh pr list --head <branch> --json number,title,state
   ```
-- If a PR exists (draft or open), tell the user:
-  > "It looks like you're mid-task on branch `<branch>` with PR #N open. Want to keep going on that, or are you intentionally starting something new?"
-- If no PR exists, tell the user:
-  > "You're on branch `<branch>` with no open PR. Please switch to `main` before starting a new task."
+- Tell the user the current state. Ask if we should continue on current branch / taks / PR?
+  - If yes, now you are working on the current technical task.
+  - In no, check if there are any local changes. Ask the user if we should commit and push OR stash the changes. Then checkout main.
 
-Do not proceed until the user explicitly confirms they want to start this new task.
+Do NOT proceed until the user explicitly confirms they want to start this new task.
 
 ### 1. Read the issue and verify it's not blocked
 ```bash
@@ -85,9 +84,9 @@ After approval:
 2. Follow the detailed plan in `docs/plans/`
 3. Follow TDD: write failing tests, then implement
 4. Commit frequently with clear messages
-5. Update `docs/changelog.md` in your commits
-6. Update other docs if needed (decisions.md, schema.sql, docs/design/, docs/ux/)
-7. Document significant architectural decisions in `docs/decisions.md` (new patterns, major refactorings, technology choices)
+5. Update other docs if needed (decisions.md, schema.sql, docs/design/, docs/ux/, docs/spec.md)
+6. Document significant architectural decisions in `docs/decisions.md` (new patterns, major refactorings, technology choices)
+7. Update `docs/changelog.md` once per PR with a summary of the changes.
 
 ### 8. Verify before opening PR
 Run tests and lint to ensure everything passes:
@@ -118,8 +117,7 @@ MILESTONE=$(gh issue view <N> --json milestone --jq .milestone.title)
 gh pr edit --milestone "$MILESTONE"
 ```
 
-### 10. Clean up
-Delete the plan file from `docs/plans/` — it has served its purpose.
-
-### 11. Report
+### 10. Report
 Tell the user: "Draft PR #X is open. When you're ready, mark it ready for review to trigger the automated reviewer."
+
+The plan file in `docs/plans/` should **not** be deleted yet — keep it until the PR is approved and merged, in case follow-up work or revisions are needed. Delete it only when the PR is closed.
